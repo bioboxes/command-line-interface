@@ -8,9 +8,17 @@ publish: $(build)
 		--password ${PYPI_PASSWORD} \
 		$^
 
+feature: test-install
+
+test-install: $(build)
+	docker run \
+		--volume=$(abspath $(dir $^)):/dist:ro \
+		python:2.7 \
+		/bin/bash -c "pip install --user /$^ && /root/.local/bin/biobox"
+
 build: $(build)
 
-$(build): $(shell find biobox_cli) requirements.txt setup.py
+$(build): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
 	$(path) python setup.py sdist
 	touch $@
 
@@ -21,3 +29,5 @@ vendor/python: requirements.txt
 	virtualenv $@ 2>&1 > log/virtualenv.txt
 	$@/bin/pip install -r $< 2>&1 > log/pip.txt
 	touch $@
+
+.PHONY: bootstrap build feature test-install
