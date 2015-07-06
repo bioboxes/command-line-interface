@@ -17,7 +17,7 @@ test-build: $(build)
 	docker run \
 		--volume=$(abspath $(dir $^)):/dist:ro \
 		python:2.7 \
-		/bin/bash -c "pip install --user /$^ && /root/.local/bin/biobox"
+		/bin/bash -c "pip install --user /$^ && /root/.local/bin/biobox -h"
 
 $(build): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
 	$(path) python setup.py sdist
