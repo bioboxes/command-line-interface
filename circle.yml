@@ -1,0 +1,9 @@
+dependencies:
+  override:
+    - ./script/bootstrap
+  cache_directories:
+    - vendor
+
+test:
+  override:
+    - ./script/build
