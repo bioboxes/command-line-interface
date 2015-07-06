@@ -7,3 +7,4 @@ dependencies:
 test:
   override:
     - ./script/build
+    - ./script/feature
