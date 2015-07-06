@@ -9,7 +9,7 @@ publish: $(build)
 		$^
 
 feature:
-	$(path) behave features
+	@$(path) behave features
 
 build: $(build) test-build
 
@@ -31,4 +31,4 @@ vendor/python: requirements.txt
 	$(path) pip install -r $< 2>&1 > log/pip.txt
 	touch $@
 
-.PHONY: bootstrap build feature test-build
+.PHONY: bootstrap build feature test-build publish
