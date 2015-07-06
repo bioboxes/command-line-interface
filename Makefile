@@ -1,11 +1,17 @@
-python  := ./vendor/python/bin/python
-version := $(shell $(python) setup.py --version)
+path    := PATH=./vendor/python/bin:$(shell echo "${PATH}")
+version := $(shell $(path) python setup.py --version)
 build   := dist/biobox_cli-$(version).tar.gz
+
+publish: $(build)
+	@$(path) twine upload \
+		--username ${PYPI_USERNAME} \
+		--password ${PYPI_PASSWORD} \
+		$^
 
 build: $(build)
 
 $(build): $(shell find biobox_cli) requirements.txt setup.py
-	$(python) setup.py sdist
+	$(path) python setup.py sdist
 	touch $@
 
 bootstrap: vendor/python

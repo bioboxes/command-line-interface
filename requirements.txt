@@ -1,1 +1,2 @@
-pypicloud
+pypicloud == 0.3.1
+twine     == 1.5.0
