@@ -19,6 +19,9 @@ autotest:
 	@clear && $(test) || true # Using true starts tests even on failure
 	@fswatch -o ./jira_gincy -o ./test | xargs -n 1 -I {} bash -c "clear && $(test)"
 
+console:
+	@$(path) python -i console.py
+
 build: $(build) test-build
 
 test-build: $(build)
