@@ -1,6 +1,7 @@
 path    := PATH=./vendor/python/bin:$(shell echo "${PATH}")
 version := $(shell $(path) python setup.py --version)
 build   := dist/biobox_cli-$(version).tar.gz
+test    = $(path) nosetests --rednose
 
 publish: $(build)
 	@$(path) twine upload \
@@ -10,6 +11,13 @@ publish: $(build)
 
 feature:
 	@$(path) behave features
+
+test:
+	@$(test)
+
+autotest:
+	@clear && $(test) || true # Using true starts tests even on failure
+	@fswatch -o ./jira_gincy -o ./test | xargs -n 1 -I {} bash -c "clear && $(test)"
 
 build: $(build) test-build
 
@@ -31,4 +39,4 @@ vendor/python: requirements.txt
 	$(path) pip install -r $< 2>&1 > log/pip.txt
 	touch $@
 
-.PHONY: bootstrap build feature test-build publish
+.PHONY: bootstrap build feature test-build publish test
