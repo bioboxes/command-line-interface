@@ -1,13 +1,23 @@
 path    := PATH=./vendor/python/bin:$(shell echo "${PATH}")
 version := $(shell $(path) python setup.py --version)
-build   := dist/biobox_cli-$(version).tar.gz
-test    = $(path) nosetests --rednose
 
 publish: $(build)
 	@$(path) twine upload \
 		--username ${PYPI_USERNAME} \
 		--password ${PYPI_PASSWORD} \
 		$^
+
+console:
+	@$(path) python -i console.py
+
+#################################################
+#
+# Run tests and features
+#
+#################################################
+
+
+test    = $(path) nosetests --rednose
 
 feature:
 	@$(path) behave features
@@ -19,8 +29,15 @@ autotest:
 	@clear && $(test) || true # Using true starts tests even on failure
 	@fswatch -o ./biobox_cli -o ./test | xargs -n 1 -I {} bash -c "clear && $(test)"
 
-console:
-	@$(path) python -i console.py
+
+#################################################
+#
+# Build and test the pip package
+#
+#################################################
+
+
+build   := dist/biobox_cli-$(version).tar.gz
 
 build: $(build) test-build
 
@@ -33,6 +50,14 @@ test-build: $(build)
 $(build): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
 	$(path) python setup.py sdist
 	touch $@
+
+
+#################################################
+#
+# Bootstrap project requirements for development
+#
+#################################################
+
 
 bootstrap: vendor/python
 
