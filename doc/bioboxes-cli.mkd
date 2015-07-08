@@ -1,0 +1,25 @@
+## Bioboxes command line interface (CLI)
+
+The bioboxes CLI is a tool to run biobox-compatible Docker containers on the
+command line. The aim is to simplify the installation and use of bioinformatics
+tools for biologists.
+
+## Interface
+
+The CLI is used as follows:
+
+``` bash
+# The general interface
+biobox <box_type> <container> [options]
+
+# An example using spades for genome assembly
+biobox short-read-assember bioboxes/spades -i reads.fq -o contigs.fa
+```
+
+## Installation
+
+The biobox CLI is installed using pip.
+
+``` bash
+pip install --user biobox_cli
+```
