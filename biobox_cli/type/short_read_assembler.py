@@ -9,3 +9,8 @@ Options:
   -o FILE, --output=FILE  Destination FASTA file for assembled contigs
 
 """
+
+import biobox_cli.util as util
+
+def run(argv):
+    opts = util.command_line_args(__doc__, argv, False)

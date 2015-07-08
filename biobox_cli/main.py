@@ -13,21 +13,16 @@ Available biobox types
   short_read_assembler  Assemble short reads into contigs
 """
 
-from docopt  import docopt
+import biobox_cli.util as util
+import sys
 
 def run():
-    biobox = select_biobox(sys.argv[1:])
+    args = sys.argv[1:]
+    biobox = select_biobox(args)
+    biobox.run(args)
 
 def select_biobox(argv):
-    from version import __version__
-    opts = docopt(__doc__,
-                  argv          = argv,
-                  version       = __version__,
-                  options_first = True)
-
-    biobox = get_biobox_module(opts['<biobox_type>'])
-    return biobox
-
-def get_biobox_module(name):
-    key = ".".join(["biobox_cli", "type", name])
-    return __import__(key)
+    opts = util.command_line_args(__doc__, argv, True)
+    mod_name = ".".join(["biobox_cli", "type", opts['<biobox_type>']])
+    __import__(mod_name)
+    return sys.modules[mod_name]

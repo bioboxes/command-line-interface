@@ -15,7 +15,7 @@ def step_impl(context):
 def step_impl(context, stream):
     output = get_stream(context, stream)
     nt.assert_equal(output, "",
-            "The {} should be empty but contains {}".format(stream, output))
+            "The {} should be empty but contains:\n\n{}".format(stream, output))
 
 @then(u'the exit code should be {code}')
 def step_impl(context, code):
