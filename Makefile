@@ -17,7 +17,7 @@ test:
 
 autotest:
 	@clear && $(test) || true # Using true starts tests even on failure
-	@fswatch -o ./jira_gincy -o ./test | xargs -n 1 -I {} bash -c "clear && $(test)"
+	@fswatch -o ./biobox_cli -o ./test | xargs -n 1 -I {} bash -c "clear && $(test)"
 
 console:
 	@$(path) python -i console.py
