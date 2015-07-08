@@ -27,3 +27,8 @@ def step_impl(context, code):
 def step_impl(context, stream):
     output = get_stream(context, stream)
     nt.assert_in(context.text, output)
+
+@then(u'the {stream} should equal')
+def step_impl(context, stream):
+    output = get_stream(context, stream)
+    nt.assert_equal(context.text, output)

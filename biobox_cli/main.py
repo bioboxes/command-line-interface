@@ -18,11 +18,22 @@ import sys
 
 def run():
     args = sys.argv[1:]
-    biobox = select_biobox(args)
-    biobox.run(args)
+    valid, biobox = select_biobox(args)
+    if valid:
+        biobox.run(args)
+    else:
+        sys.stderr.write(biobox)
+        exit(1)
 
 def select_biobox(argv):
     opts = util.command_line_args(__doc__, argv, True)
     mod_name = ".".join(["biobox_cli", "type", opts['<biobox_type>']])
-    __import__(mod_name)
-    return sys.modules[mod_name]
+    try:
+        __import__(mod_name)
+    except ImportError:
+        msg = """\
+Unknown biobox container type: "unknown_container".
+Run `biobox --help` for a list of available biobox types.
+"""
+        return False, msg.format(opts['<biobox_type>'])
+    return True, sys.modules[mod_name]
