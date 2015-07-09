@@ -69,6 +69,7 @@ vendor/python: requirements.txt
 
 .image:
 	docker pull python:2.7
+	docker pull bioboxes/velvet
 	touch $@
 
 .PHONY: bootstrap build feature test-build publish test

@@ -11,7 +11,15 @@ def get_image_tags(docker_dict):
     return reduce(lambda acc, x: acc + [x, x.split(":")[0]],
             docker_dict['RepoTags'], [])
 
-def image_available(image):
+def image_available_locally(image):
     image_tags = map(get_image_tags, client().images())
     images = set(reduce(lambda acc, x: acc + x, image_tags, []))
     return image in images
+
+def image_available(image):
+    from docker.errors import APIError
+    if not image_available_locally(image):
+        output = client().pull(image)
+        if "error" in output:
+            return False
+    return True

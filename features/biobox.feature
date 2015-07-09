@@ -48,6 +48,22 @@ Feature: A CLI to run biobox-compatible Docker containers
       | dummy     |
       | unknown   |
 
+  Scenario: Trying to run an unknown biobox container
+    When I run the command:
+      """
+      biobox \
+        short_read_assembler \
+        biobox/unknown \
+        --input=reads.fq \
+        --output=contigs.fa
+      """
+    Then the stdout should be empty
+    And the stderr should equal:
+      """
+      No known container found with the name: biobox/unknown
+      """
+    And the exit code should be 1
+
   Scenario Outline: Running a biobox container
     Given I have the example genome paired fastq file "reads.fq.gz"
     When I run the command:
@@ -67,4 +83,3 @@ Feature: A CLI to run biobox-compatible Docker containers
     Examples:
       | assembler       |
       | bioboxes/velvet |
-

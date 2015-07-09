@@ -2,7 +2,7 @@
 biobox - A command line interface for running biobox Docker containers
 
 Usage:
-    biobox <biobox_type> <container> [<args>...]
+    biobox <biobox_type> <image> [<args>...]
 
 Options:
   -h, --help     Show this screen.
@@ -22,8 +22,7 @@ def run():
     if valid:
         biobox.run(args)
     else:
-        sys.stderr.write(biobox)
-        exit(1)
+        util.err_exit(biobox)
 
 def input_args():
     """
