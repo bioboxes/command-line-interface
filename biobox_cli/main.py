@@ -2,7 +2,7 @@
 biobox - A command line interface for running biobox Docker containers
 
 Usage:
-    biobox <biobox_type> <container> [options]
+    biobox <biobox_type> <container> [<args>...]
 
 Options:
   -h, --help     Show this screen.
