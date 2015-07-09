@@ -59,12 +59,16 @@ $(build): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
 #################################################
 
 
-bootstrap: vendor/python
+bootstrap: vendor/python .image
 
 vendor/python: requirements.txt
 	mkdir -p log
 	virtualenv $@ 2>&1 > log/virtualenv.txt
 	$(path) pip install -r $< 2>&1 > log/pip.txt
+	touch $@
+
+.image:
+	docker pull python:2.7
 	touch $@
 
 .PHONY: bootstrap build feature test-build publish test
