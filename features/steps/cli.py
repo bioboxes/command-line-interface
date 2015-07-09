@@ -1,5 +1,6 @@
 import nose.tools as nt
 import helper     as hp
+import os
 
 @when(u'I run the command')
 def step_impl(context):
