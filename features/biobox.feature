@@ -29,19 +29,24 @@ Feature: A CLI to run biobox-compatible Docker containers
       biobox short_read_assembler <container> [options]
       """
 
-  Scenario: Trying to run an unknown container type
+  Scenario Outline: Trying to run an unknown container type
     When I run the command:
       """
-      biobox unknown_container --help
+      biobox <container> --help
       """
     Then the stdout should be empty
     And the exit code should be 1
     And the stderr should equal:
       """
-      Unknown biobox container type: "unknown_container".
+      Unknown biobox container type: "<container>".
       Run `biobox --help` for a list of available biobox types.
 
       """
+
+      Examples:
+      | container |
+      | dummy     |
+      | unknown   |
 
   Scenario Outline: Running a biobox container
     Given I have the example genome paired fastq file "reads.fq.gz"

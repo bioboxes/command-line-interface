@@ -32,7 +32,7 @@ def select_biobox(argv):
         __import__(mod_name)
     except ImportError:
         msg = """\
-Unknown biobox container type: "unknown_container".
+Unknown biobox container type: "{}".
 Run `biobox --help` for a list of available biobox types.
 """
         return False, msg.format(opts['<biobox_type>'])
