@@ -17,13 +17,20 @@ import biobox_cli.util as util
 import sys
 
 def run():
-    args = sys.argv[1:]
+    args = input_args()
     valid, biobox = select_biobox(args)
     if valid:
         biobox.run(args)
     else:
         sys.stderr.write(biobox)
         exit(1)
+
+def input_args():
+    """
+    Get CL args excluding those consisting of only whitespace
+    """
+    return filter(lambda x: len(x) > 0,
+        map(lambda x: x.strip(), sys.argv[1:]))
 
 def select_biobox(argv):
     opts = util.command_line_args(__doc__, argv, True)
