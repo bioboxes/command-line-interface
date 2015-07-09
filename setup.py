@@ -7,6 +7,7 @@ setup(
     description          = 'Run biobox Docker containers on the command line',
     author               = 'bioboxes',
     author_email         = 'mail@bioboxes.org',
+    url                  = 'http://bioboxes.org',
     packages             = ['biobox_cli'],
     scripts              = ['bin/biobox'],
     install_requires     = open('requirements.txt').read().splitlines(),
