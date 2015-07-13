@@ -26,7 +26,7 @@ Feature: A CLI to run biobox-compatible Docker containers
     And the exit code should be 0
     And the stdout should contain
       """
-      biobox short_read_assembler <container> [options]
+      biobox short_read_assembler <image> [options]
       """
 
   Scenario Outline: Trying to run an unknown container type
