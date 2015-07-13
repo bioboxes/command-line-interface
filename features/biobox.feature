@@ -71,7 +71,7 @@ Feature: A CLI to run biobox-compatible Docker containers
       biobox \
         short_read_assembler \
         <assembler>
-        --input=reads.fq \
+        --input=reads.fq.gz \
         --output=contigs.fa
       """
     Then the stdout should be empty
