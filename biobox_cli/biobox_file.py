@@ -12,3 +12,10 @@ def fastq_arguments(mount_directory, *args):
 
 def entry(id_, value, type_):
     return {"id" : id_, "value" : value, "type" : type_}
+
+def create_biobox_directory(content):
+    import tempfile as tmp
+    dir_ = tmp.mkdtemp()
+    with open(os.path.join(dir_, "biobox.yaml"), "w") as f:
+        f.write(content)
+    return dir_
