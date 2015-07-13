@@ -21,3 +21,5 @@ def run(argv):
     if not ctn.image_available(image):
         msg = "No Docker image available with the name: {}"
         util.err_exit(msg.format(image))
+
+    input_directory = os.path.dirname(opts['<input>'])
