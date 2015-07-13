@@ -13,3 +13,9 @@ arguments:
 version: 0.9.0
 """
     nt.assert_equal(expected, output)
+
+def test_fastq_arguments_with_single_arg():
+    args = ["file_path", "paired"]
+    expected = {"fastq" :
+      [{"id" : "fastq_0", "type": "paired", "value" : "/mount/file_path"}]}
+    nt.assert_equal(bbf.fastq_arguments("/mount", args), expected)
