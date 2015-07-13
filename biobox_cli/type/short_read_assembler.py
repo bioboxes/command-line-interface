@@ -19,5 +19,5 @@ def run(argv):
     image = opts['<image>']
 
     if not ctn.image_available(image):
-        msg = "No known container found with the name: {}"
+        msg = "No Docker image available with the name: {}"
         util.err_exit(msg.format(image))

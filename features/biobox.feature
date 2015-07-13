@@ -60,7 +60,7 @@ Feature: A CLI to run biobox-compatible Docker containers
     Then the stdout should be empty
     And the stderr should equal:
       """
-      No known container found with the name: biobox/unknown
+      No Docker image available with the name: biobox/unknown
       """
     And the exit code should be 1
 
