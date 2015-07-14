@@ -41,10 +41,12 @@ def test_create_container_with_no_volumes():
     container = ctn.create("bioboxes/velvet", "default")
     attr = ctn.client().inspect_container(container)
     nose.assert_equal(attr["Volumes"], {})
-    attr = ctn.client().remove_container(container)
+    if not hlpr.is_ci_server():
+        attr = ctn.client().remove_container(container)
 
 def test_create_container_with_volumes():
     container = ctn.create("bioboxes/velvet", "default", ["/host:/cont:ro"])
     attr = ctn.client().inspect_container(container)
     nose.assert_in("/host", attr["Volumes"])
-    attr = ctn.client().remove_container(container)
+    if not hlpr.is_ci_server():
+        attr = ctn.client().remove_container(container)
