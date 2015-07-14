@@ -23,3 +23,9 @@ def image_available(image):
         if "error" in output:
             return False
     return True
+
+def mount_string(host_dir, container_dir, read_only = True):
+    import os
+    access = "ro" if read_only else "rw"
+    return ":".join([os.path.abspath(host_dir), container_dir, access])
+

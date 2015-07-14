@@ -46,9 +46,9 @@ def run(argv):
     container = ctn.client().create_container(image, 'default',
       volumes     = [cntr_src_dir, cntr_dst_dir, cntr_yml_dir],
       host_config = docker.utils.create_host_config(binds=[
-          ":".join([host_src_dir, cntr_src_dir, "ro"]),
-          ":".join([host_yml_dir, cntr_yml_dir, "ro"]),
-          ":".join([host_dst_dir, cntr_dst_dir, "rw"])
+          ctn.mount_string(host_src_dir, cntr_src_dir),
+          ctn.mount_string(host_yml_dir, cntr_yml_dir),
+          ctn.mount_string(host_dst_dir, cntr_dst_dir, False)
           ])
       )
     ctn.client().start(container)
