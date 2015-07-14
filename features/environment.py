@@ -1,9 +1,15 @@
 import os
+import os.path as pt
 from scripttest import TestFileEnvironment
 
 def before_scenario(context, _):
-    path = os.path.dirname(os.path.abspath(__file__))
+    root_dir = pt.abspath(pt.join(pt.dirname(__file__), '..'))
 
-    os.environ['PATH'] += ":" + os.path.join(path, '..', 'bin')
-    os.environ['PYTHONPATH'] = os.path.join(path, '..', 'vendor', 'python', 'lib', 'python2.7', 'site-packages')
-    context.env = TestFileEnvironment(base_path = 'tmp')
+    path        = ":" + pt.join(root_dir, 'bin')
+    tmp         = pt.join(root_dir, "tmp")
+    python_path = pt.join(root_dir, 'vendor', 'python', 'lib', 'python2.7', 'site-packages')
+
+    os.environ['PATH']       += path
+    os.environ['PYTHONPATH'] = python_path
+    os.environ['TMPDIR']     = tmp  # Required to work with boot2docker
+    context.env = TestFileEnvironment(base_path = tmp)
