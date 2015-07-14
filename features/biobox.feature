@@ -81,5 +81,6 @@ Feature: A CLI to run biobox-compatible Docker containers
     And the file "contigs.fa" should not be empty
 
     Examples:
-      | assembler       |
-      | bioboxes/velvet |
+      | assembler        |
+      | bioboxes/velvet  |
+      | bioboxes/megahit |

@@ -70,6 +70,7 @@ vendor/python: requirements.txt
 .image:
 	docker pull python:2.7
 	docker pull bioboxes/velvet
+	docker pull bioboxes/megahit
 	touch $@
 
 .PHONY: bootstrap build feature test-build publish test
