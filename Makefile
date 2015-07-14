@@ -20,7 +20,7 @@ console:
 test    = $(path) nosetests --rednose
 
 feature:
-	@$(path) behave features
+	@$(path) behave --stop $(ARGS)
 
 test:
 	@$(test)
