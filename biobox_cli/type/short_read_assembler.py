@@ -30,29 +30,18 @@ def run(argv):
 
 
     cntr_src_dir = "/fastq"
-    cntr_dst_dir = "/bbx/output"
-    cntr_yml_dir = "/bbx/input"
+    biobox_yaml = fle.generate([
+        fle.fastq_arguments(cntr_src_dir, [fastq_file, "paired"])])
 
-    biobox_args = fle.fastq_arguments(cntr_src_dir, [fastq_file, "paired"])
-
-    # Need to ensure is always an absolute path
     host_src_dir = os.path.abspath(os.path.dirname(fastq_file))
     host_dst_dir = tmp.mkdtemp()
-    host_yml_dir = fle.create_biobox_directory(fle.generate([biobox_args]))
 
+    mounts = [
+        ctn.mount_string(host_src_dir, cntr_src_dir),
+        ctn.biobox_file_mount_string(fle.create_biobox_directory(biobox_yaml)),
+        ctn.output_directory_mount_string(host_dst_dir)]
 
-    import docker.utils
-
-    container = ctn.client().create_container(image, 'default',
-      volumes     = [cntr_src_dir, cntr_dst_dir, cntr_yml_dir],
-      host_config = docker.utils.create_host_config(binds=[
-          ctn.mount_string(host_src_dir, cntr_src_dir),
-          ctn.mount_string(host_yml_dir, cntr_yml_dir),
-          ctn.mount_string(host_dst_dir, cntr_dst_dir, False)
-          ])
-      )
-    ctn.client().start(container)
-    ctn.client().wait(container)
+    ctn.run(ctn.create(image, "default", mounts))
 
     with open(os.path.join(host_dst_dir, 'biobox.yaml'),'r') as f:
         import yaml

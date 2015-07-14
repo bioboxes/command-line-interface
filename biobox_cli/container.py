@@ -1,10 +1,12 @@
 import logging
+import os
 logging.getLogger("requests").setLevel(logging.WARNING)
 
+import docker
+import docker.utils
+
 def client():
-    import docker
-    from docker.utils import kwargs_from_env
-    client = docker.Client(**kwargs_from_env(assert_hostname = False))
+    client = docker.Client(**docker.utils.kwargs_from_env(assert_hostname = False))
     return client
 
 def get_image_tags(docker_dict):
@@ -25,7 +27,22 @@ def image_available(image):
     return True
 
 def mount_string(host_dir, container_dir, read_only = True):
-    import os
     access = "ro" if read_only else "rw"
     return ":".join([os.path.abspath(host_dir), container_dir, access])
 
+def output_directory_mount_string(directory):
+    return mount_string(directory, "/bbx/output", False)
+
+def biobox_file_mount_string(directory):
+    return mount_string(directory, "/bbx/input")
+
+def create(image, command, mounts = []):
+    return client().create_container(
+            image,
+            command,
+            volumes     = map(lambda x: x.split(":")[0], mounts),
+            host_config = docker.utils.create_host_config(binds=mounts))
+
+def run(container):
+    client().start(container)
+    client().wait(container)

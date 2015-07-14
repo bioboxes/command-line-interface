@@ -28,3 +28,23 @@ def test_create_mount_string_with_relative_dir():
 def test_create_mount_string_with_absolute_dir():
     expected = "/tmp:/tmp:ro"
     nose.assert_equal(ctn.mount_string("/tmp", "/tmp"), expected)
+
+def test_create_output_mount_string():
+    expected = "/tmp:/bbx/output:rw"
+    nose.assert_equal(ctn.output_directory_mount_string("/tmp"), expected)
+
+def test_create_output_mount_string():
+    expected = "/tmp:/bbx/input:ro"
+    nose.assert_equal(ctn.biobox_file_mount_string("/tmp"), expected)
+
+def test_create_container_with_no_volumes():
+    container = ctn.create("bioboxes/velvet", "default")
+    attr = ctn.client().inspect_container(container)
+    nose.assert_equal(attr["Volumes"], {})
+    attr = ctn.client().remove_container(container)
+
+def test_create_container_with_volumes():
+    container = ctn.create("bioboxes/velvet", "default", ["/host:/cont:ro"])
+    attr = ctn.client().inspect_container(container)
+    nose.assert_in("/host", attr["Volumes"])
+    attr = ctn.client().remove_container(container)
