@@ -11,4 +11,5 @@ dependencies:
 test:
   override:
     - ./script/build
+    - ./script/test
     - ./script/feature

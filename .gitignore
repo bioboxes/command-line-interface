@@ -2,6 +2,7 @@
 vendor
 log
 tmp
+.image
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
