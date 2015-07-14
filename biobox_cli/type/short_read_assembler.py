@@ -20,8 +20,10 @@ import tempfile as tmp
 def run(argv):
     opts  = util.command_line_args(__doc__, argv, False)
 
-    image      = opts['<image>']
-    fastq_file = opts['--input']
+    image       = opts['<image>']
+    fastq_file  = opts['--input']
+    contig_file = opts['--output']
+
     if not ctn.image_available(image):
         msg = "No Docker image available with the name: {}"
         util.err_exit(msg.format(image))
@@ -49,5 +51,13 @@ def run(argv):
           ":".join([host_dst_dir, cntr_dst_dir, "rw"])
           ])
       )
+    ctn.client().start(container)
+    ctn.client().wait(container)
 
-    ctn.client().start(container.get("Id"))
+    with open(os.path.join(host_dst_dir, 'biobox.yaml'),'r') as f:
+        import yaml
+        output = yaml.load(f.read())
+
+    contigs = output['arguments'][0]['fasta'][0]['value']
+    import shutil
+    shutil.move(os.path.join(host_dst_dir, contigs), contig_file)
