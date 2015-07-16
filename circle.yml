@@ -13,3 +13,10 @@ test:
     - ./script/build
     - ./script/test
     - ./script/feature
+
+deployment:
+  deploy:
+    branch: master
+    owner: bioboxes
+    commands:
+      - ./script/publish
