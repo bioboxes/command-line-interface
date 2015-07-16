@@ -1,8 +1,9 @@
 path    := PATH=./vendor/python/bin:$(shell echo "${PATH}")
 version := $(shell $(path) python setup.py --version)
+dist    := dist/biobox_cli-$(version).tar.gz
 
-publish: $(build)
-	@$(path) twine upload \
+publish: $(dist)
+	$(path) twine upload \
 		--username ${PYPI_USERNAME} \
 		--password ${PYPI_PASSWORD} \
 		$^
@@ -37,17 +38,16 @@ autotest:
 #################################################
 
 
-build   := dist/biobox_cli-$(version).tar.gz
 
-build: $(build) test-build
+build: $(dist) test-build
 
-test-build: $(build)
+test-build: $(dist)
 	docker run \
 		--volume=$(abspath $(dir $^)):/dist:ro \
 		python:2.7 \
 		/bin/bash -c "pip install --user /$^ && /root/.local/bin/biobox -h"
 
-$(build): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
+$(dist): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
 	$(path) python setup.py sdist
 	touch $@
 
