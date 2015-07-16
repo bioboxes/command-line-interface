@@ -3,7 +3,7 @@ version := $(shell $(path) python setup.py --version)
 dist    := dist/biobox_cli-$(version).tar.gz
 
 publish: $(dist)
-	$(path) twine upload \
+	@$(path) twine upload \
 		--username ${PYPI_USERNAME} \
 		--password ${PYPI_PASSWORD} \
 		$^
