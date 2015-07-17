@@ -1,6 +1,7 @@
 path    := PATH=./vendor/python/bin:$(shell echo "${PATH}")
 version := $(shell $(path) python setup.py --version)
-dist    := dist/biobox_cli-$(version).tar.gz
+name    := $(shell $(path) python setup.py --name)
+dist    := dist/$(name)-$(version).tar.gz
 
 publish: $(dist)
 	@$(path) twine upload \
