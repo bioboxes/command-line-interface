@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import biobox_cli
 
 setup(
-    name                 = 'biobox_cli',
+    name                 = 'biobox-cli',
     version              = biobox_cli.__version__,
     description          = 'Run biobox Docker containers on the command line',
     author               = 'bioboxes',
@@ -14,7 +14,6 @@ setup(
 
     classifiers = [
         'Natural Language :: English',
-        'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.6',
