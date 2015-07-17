@@ -12,6 +12,9 @@ publish: $(dist)
 console:
 	@$(path) python -i console.py
 
+clean:
+	rm -rf dist *.egg-info
+
 #################################################
 #
 # Run tests and features
