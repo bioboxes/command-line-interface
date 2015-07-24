@@ -22,12 +22,12 @@ Feature: A CLI to run biobox-compatible Docker containers
       """
       biobox short_read_assembler --help
       """
-    Then the stderr should be empty
-    And the exit code should be 0
-    And the stdout should contain
+    Then the stdout should be empty
+    And the stderr should contain
       """
       biobox short_read_assembler <image> [options]
       """
+    And the exit code should be 0
 
   Scenario Outline: Trying to run an unknown container type
     When I run the command:
@@ -48,21 +48,26 @@ Feature: A CLI to run biobox-compatible Docker containers
       | dummy     |
       | unknown   |
 
-  Scenario: Trying to run an unknown biobox container
+  Scenario Outline: Trying to run an unknown biobox container
     When I run the command:
       """
       biobox \
         short_read_assembler \
         biobox/unknown \
-        --input=reads.fq \
-        --output=contigs.fa
+        <args>
       """
     Then the stdout should be empty
     And the stderr should equal:
       """
       No Docker image available with the name: biobox/unknown
+      Did you include the namespace too? E.g. bioboxes/velvet.
       """
     And the exit code should be 1
+
+    Examples:
+      | args                                 |
+      |                                      |
+      | --input=reads.fq --output=contigs.fa |
 
   Scenario Outline: Running a biobox container
     Given I have the example genome paired fastq file "reads.fq.gz"
