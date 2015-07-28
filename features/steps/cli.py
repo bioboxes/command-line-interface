@@ -1,6 +1,7 @@
 import nose.tools as nt
 import helper     as hp
 import os
+import re
 
 @when(u'I run the command')
 def step_impl(context):
@@ -29,6 +30,12 @@ def step_impl(context, stream):
 def step_impl(context, stream):
     output = hp.get_stream(context, stream)
     nt.assert_equal(context.text, output)
+
+@then(u'the {stream} should match /{regexp}/')
+def step_impl(context, stream, regexp):
+    output = hp.get_stream(context, stream)
+    nt.assert_not_equal(None, re.match(regexp, output),
+      "Regular expression {} not found in:\n'{}'".format(regexp, output))
 
 @then(u'the file "{}" should exist')
 def step_impl(context, file_):
