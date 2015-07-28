@@ -1,6 +1,15 @@
 import nose.tools as nt
-import helper     as hp
 import os
+
+def get_stream(context, stream):
+    nt.assert_in(stream, ['stderr', 'stdout'],
+            "Unknown output stream {}".format(stream))
+    return getattr(context.output, stream)
+
+def get_file_path(context, file_):
+    return os.path.join(context.env.cwd, file_)
+
+
 
 @when(u'I run the command')
 def step_impl(context):
@@ -10,7 +19,7 @@ def step_impl(context):
 
 @then(u'the {stream} should be empty')
 def step_impl(context, stream):
-    output = hp.get_stream(context, stream)
+    output = get_stream(context, stream)
     nt.assert_equal(output, "",
             "The {} should be empty but contains:\n\n{}".format(stream, output))
 
@@ -22,20 +31,20 @@ def step_impl(context, code):
 
 @then(u'the {stream} should contain')
 def step_impl(context, stream):
-    output = hp.get_stream(context, stream)
+    output = get_stream(context, stream)
     nt.assert_in(context.text, output)
 
 @then(u'the {stream} should equal')
 def step_impl(context, stream):
-    output = hp.get_stream(context, stream)
+    output = get_stream(context, stream)
     nt.assert_equal(context.text, output)
 
 @then(u'the file "{}" should exist')
 def step_impl(context, file_):
-    nt.assert_true(os.path.isfile(hp.get_file_path(context, file_)),
+    nt.assert_true(os.path.isfile(get_file_path(context, file_)),
             "The file \"{}\" does not exist.".format(file_))
 
 @then(u'the file "{}" should not be empty')
 def step_impl(context, file_):
-    with open(hp.get_file_path(context, file_), 'r') as f:
+    with open(get_file_path(context, file_), 'r') as f:
         nt.assert_not_equal(f.read().strip(), "")
