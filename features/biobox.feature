@@ -22,8 +22,8 @@ Feature: A CLI to run biobox-compatible Docker containers
       """
       biobox short_read_assembler --help
       """
-    Then the stdout should be empty
-    And the stderr should contain
+    Then the stderr should be empty
+    And the stdout should contain
       """
       biobox short_read_assembler <image> [options]
       """
