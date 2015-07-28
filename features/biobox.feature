@@ -48,6 +48,7 @@ Feature: A CLI to run biobox-compatible Docker containers
       | dummy     |
       | unknown   |
 
+  @internet
   Scenario Outline: Trying to run an unknown biobox container
     When I run the command:
       """
