@@ -1,7 +1,6 @@
 import os
 import os.path as pt
 from scripttest import TestFileEnvironment
-from behave import *
 
 root_dir = pt.abspath(pt.join(pt.dirname(__file__), '..'))
 

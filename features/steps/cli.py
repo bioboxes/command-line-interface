@@ -35,7 +35,7 @@ def step_impl(context):
 @when(u'I run the command')
 def step_impl(context):
     context.output = context.env.run(
-            "bash -c '{}'".format(context.text),
+            "bash -c '{}'".format(os.path.expandvars(context.text)),
             expect_error  = True,
             expect_stderr = True)
 
