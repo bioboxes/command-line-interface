@@ -73,7 +73,7 @@ Feature: A CLI to run biobox-compatible Docker containers
       """
       biobox \
         short_read_assembler \
-        <assembler>
+        <assembler> \
         --input=reads.fq.gz \
         --output=contigs.fa
       """
