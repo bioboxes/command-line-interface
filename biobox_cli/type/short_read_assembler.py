@@ -15,21 +15,15 @@ Options:
 import biobox_cli.container   as ctn
 import biobox_cli.util        as util
 import biobox_cli.biobox_file as fle
+import biobox_cli.verify      as verify
 
 import os
 import tempfile as tmp
 
 def run(argv):
     opts = util.command_line_args(__doc__, argv, False)
-    f = verify if opts['--verify'] else run_container
+    f = verify.run if opts['--verify'] else run_container
     f(opts)
-
-def verify(opts):
-    from behave.__main__ import main as behave_main
-    import sys, os
-    path = os.path.join(os.path.dirname(__file__), '..', '..', 'verification', 'short_read_assembler.feature')
-    tmp_dir = os.path.abspath(os.path.join(os.getcwd(), 'biobox_verify'))
-    behave_main("{} --define TMP_DIR={} --outfile /dev/null --no-summary".format(os.path.abspath(path), tmp_dir))
 
 def run_container(opts):
     image       = opts['<image>']
