@@ -5,8 +5,11 @@ from scripttest import TestFileEnvironment
 root_dir = pt.abspath(pt.join(pt.dirname(__file__), '..'))
 
 def before_scenario(context, _):
-    tmp         = pt.join(root_dir, "tmp")
+    tmp         = context.config.userdata["TMP_DIR"]
     context.env = TestFileEnvironment(base_path = tmp)
 
-    # Required to work with boot2docker
-    os.environ['TMPDIR'] = pt.join(root_dir, "tmp")
+    # Mounting volumes in Docker needs an explict full path.
+    # The path cannot be hard coded into the features as it varies
+    # Therefore dynamically pass the full path prefix as an
+    # environment variable.
+    os.environ['TMPDIR'] = tmp
