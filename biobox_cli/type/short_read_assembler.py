@@ -8,7 +8,7 @@ Options:
   -v, --version           Show version.
   -i FILE, --input=FILE   Source FASTQ file containing paired short reads
   -o FILE, --output=FILE  Destination FASTA file for assembled contigs
-  --verify, -f            Test whether an image is biobox-compatible
+  --verify, -f            Test whether an assembler image is biobox-compatible
 
 """
 
@@ -22,8 +22,10 @@ import tempfile as tmp
 
 def run(argv):
     opts = util.command_line_args(__doc__, argv, False)
-    f = verify.run if opts['--verify'] else run_container
-    f(opts)
+    if opts['--verify']:
+        verify.run('short_read_assembler', argv)
+    else:
+        run_container(opts)
 
 def run_container(opts):
     image       = opts['<image>']
