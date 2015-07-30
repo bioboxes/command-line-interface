@@ -22,7 +22,7 @@ Feature: Verification steps for short read assembler bioboxes
       docker run \
         --volume="${TMPDIR}/input:/bbx/input:ro" \
         --volume="${TMPDIR}/output:/bbx/output:rw" \
-        bioboxes/velvet \
+        ${IMAGE} \
         default
       """
     Then the stderr should be empty

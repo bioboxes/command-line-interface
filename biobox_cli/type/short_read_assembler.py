@@ -23,7 +23,7 @@ import tempfile as tmp
 def run(argv):
     opts = util.command_line_args(__doc__, argv, False)
     if opts['--verify']:
-        verify.run('short_read_assembler', argv)
+        verify.run('short_read_assembler', opts)
     else:
         run_container(opts)
 

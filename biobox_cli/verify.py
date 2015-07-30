@@ -9,6 +9,6 @@ def tmp_feature_dir():
 
 def run(biobox, opts):
     from behave.__main__ import main as behave_main
-    cmd = "{} --define TMP_DIR={} --outfile /dev/null --no-summary"
-    behave_main(cmd.format(verification_file(biobox), tmp_feature_dir()))
+    cmd = "{} --define TMP_DIR={} --define IMAGE={} --outfile /dev/null --no-summary"
+    behave_main(cmd.format(verification_file(biobox), tmp_feature_dir(), opts['<image>']))
 

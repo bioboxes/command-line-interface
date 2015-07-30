@@ -10,5 +10,6 @@ Feature: A CLI to verify images are biobox-compatible
     And the exit code should be 0
 
     Examples:
-      | image           |
-      | bioboxes/velvet |
+      | image            |
+      | bioboxes/velvet  |
+      | bioboxes/megahit |
