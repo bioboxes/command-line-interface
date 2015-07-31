@@ -17,7 +17,7 @@ Feature: A CLI to verify images are biobox-compatible
   Scenario: Verifying a invalid image
     When I run the command:
       """
-      biobox short_read_assembler python:2.7 --verify --verify-output=cucumber.txt
+      biobox short_read_assembler python:2.7 --verify
       """
     Then the stdout should be empty
     And the stderr should contain:
