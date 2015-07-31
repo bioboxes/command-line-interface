@@ -1,16 +1,47 @@
 import nose.tools as nt
-import helper     as hp
 import os
+import os.path
+import shutil
+
+def get_stream(context, stream):
+    nt.assert_in(stream, ['stderr', 'stdout'],
+            "Unknown output stream {}".format(stream))
+    return getattr(context.output, stream)
+
+def get_env_path(context, file_):
+    return os.path.join(context.env.cwd, file_)
+
+def get_data_file_path(file_):
+    dir_ = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(dir_, '..', '..', 'verification', 'data', file_)
+
+
+
+@given(u'I create the directory "{directory}"')
+def step_impl(context, directory):
+    os.makedirs(get_env_path(context, directory))
+
+@given(u'I create the file "{file_}" with the contents')
+def step_impl(context, file_):
+    with open(get_env_path(context, file_), 'w') as f:
+        f.write(context.text)
+
+@given(u'I copy the example data files')
+def step_impl(context):
+    for row in context.table.rows:
+        shutil.copy(get_data_file_path(row['source']),
+                get_env_path(context, row['dest']))
 
 @when(u'I run the command')
 def step_impl(context):
-    context.output = context.env.run(context.text,
+    context.output = context.env.run(
+            "bash -c '{}'".format(os.path.expandvars(context.text)),
             expect_error  = True,
             expect_stderr = True)
 
 @then(u'the {stream} should be empty')
 def step_impl(context, stream):
-    output = hp.get_stream(context, stream)
+    output = get_stream(context, stream)
     nt.assert_equal(output, "",
             "The {} should be empty but contains:\n\n{}".format(stream, output))
 
@@ -22,20 +53,20 @@ def step_impl(context, code):
 
 @then(u'the {stream} should contain')
 def step_impl(context, stream):
-    output = hp.get_stream(context, stream)
+    output = get_stream(context, stream)
     nt.assert_in(context.text, output)
 
 @then(u'the {stream} should equal')
 def step_impl(context, stream):
-    output = hp.get_stream(context, stream)
+    output = get_stream(context, stream)
     nt.assert_equal(context.text, output)
 
 @then(u'the file "{}" should exist')
 def step_impl(context, file_):
-    nt.assert_true(os.path.isfile(hp.get_file_path(context, file_)),
+    nt.assert_true(os.path.isfile(get_env_path(context, file_)),
             "The file \"{}\" does not exist.".format(file_))
 
 @then(u'the file "{}" should not be empty')
 def step_impl(context, file_):
-    with open(hp.get_file_path(context, file_), 'r') as f:
+    with open(get_env_path(context, file_), 'r') as f:
         nt.assert_not_equal(f.read().strip(), "")

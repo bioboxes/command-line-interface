@@ -1,25 +1,33 @@
 """
 Usage:
-    biobox short_read_assembler <image> [options]
+    biobox short_read_assembler <image> --input=FILE --output=FILE
+    biobox short_read_assembler <image> --verify
 
 Options:
   -h, --help              Show this screen.
   -v, --version           Show version.
   -i FILE, --input=FILE   Source FASTQ file containing paired short reads
   -o FILE, --output=FILE  Destination FASTA file for assembled contigs
+  --verify, -f            Test whether an assembler image is biobox-compatible
 
 """
 
 import biobox_cli.container   as ctn
 import biobox_cli.util        as util
 import biobox_cli.biobox_file as fle
+import biobox_cli.verify      as verify
 
 import os
 import tempfile as tmp
 
 def run(argv):
-    opts  = util.command_line_args(__doc__, argv, False)
+    opts = util.command_line_args(__doc__, argv, False)
+    if opts['--verify']:
+        verify.run('short_read_assembler', opts)
+    else:
+        run_container(opts)
 
+def run_container(opts):
     image       = opts['<image>']
     fastq_file  = opts['--input']
     contig_file = opts['--output']
