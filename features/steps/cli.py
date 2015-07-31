@@ -1,7 +1,5 @@
+import os, re, os.path, shutil
 import nose.tools as nt
-import os
-import os.path
-import shutil
 
 def get_stream(context, stream):
     nt.assert_in(stream, ['stderr', 'stdout'],
@@ -60,6 +58,12 @@ def step_impl(context, stream):
 def step_impl(context, stream):
     output = get_stream(context, stream)
     nt.assert_equal(context.text, output)
+
+@then(u'the {stream} should match /{regexp}/')
+def step_impl(context, stream, regexp):
+    output = get_stream(context, stream)
+    nt.assert_not_equal(None, re.match(regexp, output),
+      "Regular expression {} not found in:\n'{}'".format(regexp, output))
 
 @then(u'the file "{}" should exist')
 def step_impl(context, file_):
