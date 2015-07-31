@@ -40,7 +40,8 @@ Feature: A CLI to run biobox-compatible Docker containers
     Then the stderr should be empty
     And the stdout should contain
       """
-      biobox short_read_assembler <image> [options]
+      Usage:
+          biobox short_read_assembler <image>
       """
     And the exit code should be 0
 
@@ -86,12 +87,14 @@ Feature: A CLI to run biobox-compatible Docker containers
       | --input=reads.fq --output=contigs.fa |
 
   Scenario Outline: Running a biobox container
-    Given I have the example genome paired fastq file "reads.fq.gz"
+    Given I copy the example data files:
+      | source                    | dest        |
+      | genome_paired_reads.fq.gz | reads.fq.gz |
     When I run the command:
       """
       biobox \
         short_read_assembler \
-        <assembler>
+        <assembler> \
         --input=reads.fq.gz \
         --output=contigs.fa
       """
