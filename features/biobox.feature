@@ -83,7 +83,6 @@ Feature: A CLI to run biobox-compatible Docker containers
 
     Examples:
       | args                                 |
-      |                                      |
       | --input=reads.fq --output=contigs.fa |
 
   Scenario Outline: Running a biobox container

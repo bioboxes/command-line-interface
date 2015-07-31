@@ -33,7 +33,7 @@ def run_container(opts):
     contig_file = opts['--output']
 
     if not ctn.image_available(image):
-        msg = "No Docker image available with the name: {}"
+        msg = "No Docker image available with the name: {}\nDid you include the namespace too? E.g. bioboxes/velvet."
         util.err_exit(msg.format(image))
 
 
