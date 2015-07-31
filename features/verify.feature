@@ -13,3 +13,15 @@ Feature: A CLI to verify images are biobox-compatible
       | image            |
       | bioboxes/velvet  |
       | bioboxes/megahit |
+
+  Scenario: Verifying a invalid image
+    When I run the command:
+      """
+      biobox short_read_assembler python:2.7 --verify --verify-output=cucumber.txt
+      """
+    Then the stdout should be empty
+    And the stderr should contain:
+      """
+      Verification failed - python:2.7 is not a valid biobox short read assembler.
+      """
+    And the exit code should be 1
