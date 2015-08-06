@@ -22,11 +22,8 @@ import sys
 
 def run():
     args = input_args()
-    valid, command = select_command(args)
-    if valid:
-        command.run(args)
-    else:
-        util.err_exit(command)
+    opts = util.parse_docopt(__doc__, args, True)
+    util.select_module("command", opts["<command>"]).run(args)
 
 def input_args():
     """
@@ -34,19 +31,3 @@ def input_args():
     """
     return filter(lambda x: len(x) > 0,
         map(lambda x: x.strip(), sys.argv[1:]))
-
-def select_command(argv):
-    """
-    Select the command line interface module
-    """
-    opts = util.parse_docopt(__doc__, argv, True)
-    mod_name = ".".join(["biobox_cli", "command", opts['<command>']])
-    try:
-        __import__(mod_name)
-    except ImportError:
-        msg = """\
-Unknown command: "{}".
-Run `biobox --help` for a list of available commands.
-"""
-        return False, msg.format(opts['<command>'])
-    return True, sys.modules[mod_name]

@@ -1,8 +1,8 @@
 """
-biobox run - Run a biobox Docker image with input parameters
+biobox verify - Verify that a Docker image matches the given specification type
 
 Usage:
-    biobox run <biobox_type> <image> [<args>...]
+    biobox verify <biobox_type> <image> [<args>...]
 
 Options:
   -h, --help     Show this screen.
