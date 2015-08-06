@@ -12,7 +12,7 @@ def select_module(module, name):
 Unknown {}: "{}".
 Run `biobox --help` for a list of available.
 """
-        err_exit( msg.format(module, name))
+        err_exit(msg.format(str.replace(module, '_', ' '), name))
     return sys.modules[mod_name]
 
 def parse_docopt(doc, argv, is_main_module):
@@ -22,6 +22,11 @@ def parse_docopt(doc, argv, is_main_module):
                   argv          = argv,
                   version       = __version__,
                   options_first = is_main_module)
+
+def help_exit(doc, opts):
+    if '--help' in opts:
+        sys.stdout.write(doc)
+        exit(0)
 
 def err_exit(msg):
     sys.stderr.write(msg)

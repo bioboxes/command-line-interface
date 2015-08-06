@@ -2,19 +2,18 @@
 biobox - A command line interface for running biobox Docker containers
 
 Usage:
-    biobox <command> [<biobox_type> <image> <args>...]
+    biobox <command> <biobox_type> <image> [<args>...]
 
 Options:
-  -h, --help     Show this screen.
-  -v, --version  Show version.
+  -h, --help       Show this screen.
+  -v, --version    Show version.
 
 Commands:
-    run     Run a biobox Docker image with input parameters
-    verify  Verify that a Docker image matches the given specification type
+    run       Run a biobox Docker image with input parameters
+    verify    Verify that a Docker image matches the given specification type
 
 Biobox types:
-
-  short_read_assembler  Assemble short reads into contigs
+    short_read_assembler    Assemble short reads into contigs
 """
 
 import biobox_cli.util as util

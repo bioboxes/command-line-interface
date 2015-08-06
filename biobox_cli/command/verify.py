@@ -16,3 +16,4 @@ import biobox_cli.util as util
 
 def run(argv):
     opts = util.parse_docopt(__doc__, argv, False)
+    util.select_module("biobox_type", opts["<biobox_type>"]).run(argv)
