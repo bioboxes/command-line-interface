@@ -1,5 +1,4 @@
-
-def command_line_args(doc, argv, is_main_module):
+def parse_docopt(doc, argv, is_main_module):
     from docopt  import docopt
     from version import __version__
     return docopt(doc,
