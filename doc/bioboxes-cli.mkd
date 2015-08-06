@@ -10,10 +10,10 @@ The CLI is used as follows:
 
 ``` bash
 # The general interface
-biobox <box_type> <container> [options]
+biobox run <box_type> <container> [options]
 
 # An example using spades for genome assembly
-biobox short-read-assember bioboxes/megahit -i reads.fq -o contigs.fa
+biobox run short-read-assember bioboxes/megahit -i reads.fq -o contigs.fa
 ```
 
 ## Installation
