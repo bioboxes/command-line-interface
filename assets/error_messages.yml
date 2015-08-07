@@ -1,0 +1,11 @@
+---
+unknown_image: |
+  No Docker image available with the name: {image}
+  Did you include the namespace too? E.g. bioboxes/velvet.
+
+unknown_command: |
+  Unknown {command_type}: "{command}".
+  Run `biobox --help` for a list of available.
+
+failed_verification: |
+  Verification failed - {image} is not a valid biobox {biobox}.

@@ -36,5 +36,4 @@ def run(argv):
         output = f.read()
 
     if "Assertion Failed" in output:
-        msg = "Verification failed - {} is not a valid biobox {}."
-        util.err_exit(msg.format(image, biobox.replace('_', ' ')))
+        util.err_exit('failed_verification', {'image': image, 'biobox': biobox.replace('_', ' ')})

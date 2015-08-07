@@ -30,9 +30,7 @@ def run(argv):
     contig_file = opts['--output']
 
     if not ctn.image_available(image):
-        msg = "No Docker image available with the name: {}\nDid you include the namespace too? E.g. bioboxes/velvet."
-        util.err_exit(msg.format(image))
-
+        util.err_exit('unknown_image', {'image': image})
 
     cntr_src_dir = "/fastq"
     biobox_yaml = fle.generate([
