@@ -98,6 +98,7 @@ Feature: A CLI to run biobox-compatible Docker containers
       """
       No Docker image available with the name: biobox/unknown
       Did you include the namespace too? E.g. bioboxes/velvet.
+
       """
     And the exit code should be 1
 

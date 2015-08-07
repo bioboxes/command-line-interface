@@ -13,10 +13,15 @@ Options:
 import biobox_cli.container   as ctn
 import biobox_cli.util        as util
 import biobox_cli.biobox_file as fle
-import biobox_cli.verify      as verify
 
 import os
 import tempfile as tmp
+
+def copy_contigs_file(biobox_output_dir, biobox_output, dst):
+    contigs = biobox_output['arguments'][0]['fasta'][0]['value']
+    src = os.path.join(biobox_output_dir, contigs)
+    import shutil
+    shutil.move(src, dst)
 
 def run(argv):
     opts = util.parse_docopt(__doc__, argv, False)
@@ -25,9 +30,7 @@ def run(argv):
     contig_file = opts['--output']
 
     if not ctn.image_available(image):
-        msg = "No Docker image available with the name: {}\nDid you include the namespace too? E.g. bioboxes/velvet."
-        util.err_exit(msg.format(image))
-
+        util.err_exit('unknown_image', {'image': image})
 
     cntr_src_dir = "/fastq"
     biobox_yaml = fle.generate([
@@ -36,17 +39,11 @@ def run(argv):
     host_src_dir = os.path.abspath(os.path.dirname(fastq_file))
     host_dst_dir = tmp.mkdtemp()
 
-    mounts = [
+    mount_strings = [
         ctn.mount_string(host_src_dir, cntr_src_dir),
         ctn.biobox_file_mount_string(fle.create_biobox_directory(biobox_yaml)),
         ctn.output_directory_mount_string(host_dst_dir)]
 
-    ctn.run(ctn.create(image, "default", mounts))
-
-    with open(os.path.join(host_dst_dir, 'biobox.yaml'),'r') as f:
-        import yaml
-        output = yaml.load(f.read())
-
-    contigs = output['arguments'][0]['fasta'][0]['value']
-    import shutil
-    shutil.move(os.path.join(host_dst_dir, contigs), contig_file)
+    ctn.run(ctn.create(image, "default", mount_strings))
+    biobox_output = fle.parse(host_dst_dir)
+    copy_contigs_file(host_dst_dir, biobox_output, contig_file)

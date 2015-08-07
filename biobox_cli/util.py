@@ -1,4 +1,4 @@
-import sys
+import sys, yaml, os.path
 
 def select_module(module, name):
     """
@@ -8,11 +8,8 @@ def select_module(module, name):
     try:
         __import__(mod_name)
     except ImportError:
-        msg = """\
-Unknown {}: "{}".
-Run `biobox --help` for a list of available.
-"""
-        err_exit(msg.format(str.replace(module, '_', ' '), name))
+        err_exit('unknown_command',
+                {'command_type': str.replace(module, '_', ' '), 'command': name})
     return sys.modules[mod_name]
 
 def parse_docopt(doc, argv, is_main_module):
@@ -23,11 +20,12 @@ def parse_docopt(doc, argv, is_main_module):
                   version       = __version__,
                   options_first = is_main_module)
 
-def help_exit(doc, opts):
-    if '--help' in opts:
-        sys.stdout.write(doc)
-        exit(0)
+def err_message(msg_key, locals_):
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'error_messages.yml')
+    with open(path, 'r') as f:
+            errors = yaml.load(f.read())
+    return errors[msg_key].format(**locals_)
 
-def err_exit(msg):
-    sys.stderr.write(msg)
+def err_exit(msg_key, locals_):
+    sys.stderr.write(err_message(msg_key, locals_))
     exit(1)
