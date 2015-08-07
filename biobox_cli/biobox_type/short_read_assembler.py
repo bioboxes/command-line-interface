@@ -1,14 +1,12 @@
 """
 Usage:
-    biobox short_read_assembler <image> --input=FILE --output=FILE
-    biobox short_read_assembler <image> --verify
+    biobox run short_read_assembler <image> --input=FILE --output=FILE
 
 Options:
   -h, --help              Show this screen.
   -v, --version           Show version.
   -i FILE, --input=FILE   Source FASTQ file containing paired short reads
   -o FILE, --output=FILE  Destination FASTA file for assembled contigs
-  --verify, -f            Test whether an assembler image is biobox-compatible
 
 """
 
@@ -21,13 +19,7 @@ import os
 import tempfile as tmp
 
 def run(argv):
-    opts = util.command_line_args(__doc__, argv, False)
-    if opts['--verify']:
-        verify.run('short_read_assembler', opts)
-    else:
-        run_container(opts)
-
-def run_container(opts):
+    opts = util.parse_docopt(__doc__, argv, False)
     image       = opts['<image>']
     fastq_file  = opts['--input']
     contig_file = opts['--output']

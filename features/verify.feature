@@ -3,7 +3,7 @@ Feature: A CLI to verify images are biobox-compatible
   Scenario Outline: Verifying a valid biobox image
     When I run the command:
       """
-      biobox short_read_assembler <image> --verify
+      biobox verify short_read_assembler <image>
       """
     Then the stdout should be empty
     And the stderr should be empty
@@ -17,7 +17,7 @@ Feature: A CLI to verify images are biobox-compatible
   Scenario: Verifying a invalid image
     When I run the command:
       """
-      biobox short_read_assembler python:2.7 --verify
+      biobox verify short_read_assembler python:2.7
       """
     Then the stdout should be empty
     And the stderr should contain:
