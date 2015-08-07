@@ -23,11 +23,6 @@ def parse_docopt(doc, argv, is_main_module):
                   version       = __version__,
                   options_first = is_main_module)
 
-def help_exit(doc, opts):
-    if '--help' in opts:
-        sys.stdout.write(doc)
-        exit(0)
-
 def err_exit(msg):
     sys.stderr.write(msg)
     exit(1)
