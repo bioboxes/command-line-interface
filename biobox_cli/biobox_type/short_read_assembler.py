@@ -13,7 +13,6 @@ Options:
 import biobox_cli.container   as ctn
 import biobox_cli.util        as util
 import biobox_cli.biobox_file as fle
-import biobox_cli.verify      as verify
 
 import os
 import tempfile as tmp
