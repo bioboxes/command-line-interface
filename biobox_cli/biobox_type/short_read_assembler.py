@@ -17,6 +17,12 @@ import biobox_cli.biobox_file as fle
 import os
 import tempfile as tmp
 
+def copy_contigs_file(biobox_output_dir, biobox_output, dst):
+    contigs = biobox_output['arguments'][0]['fasta'][0]['value']
+    src = os.path.join(biobox_output_dir, contigs)
+    import shutil
+    shutil.move(src, dst)
+
 def run(argv):
     opts = util.parse_docopt(__doc__, argv, False)
     image       = opts['<image>']
@@ -42,10 +48,8 @@ def run(argv):
 
     ctn.run(ctn.create(image, "default", mounts))
 
-    with open(os.path.join(host_dst_dir, 'biobox.yaml'),'r') as f:
+    with open(os.path.join(host_dst_dir, 'biobox.yaml'), 'r') as f:
         import yaml
         output = yaml.load(f.read())
 
-    contigs = output['arguments'][0]['fasta'][0]['value']
-    import shutil
-    shutil.move(os.path.join(host_dst_dir, contigs), contig_file)
+    copy_contigs_file(host_dst_dir, output, contig_file)
