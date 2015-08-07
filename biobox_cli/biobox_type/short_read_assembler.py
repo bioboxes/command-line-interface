@@ -41,15 +41,11 @@ def run(argv):
     host_src_dir = os.path.abspath(os.path.dirname(fastq_file))
     host_dst_dir = tmp.mkdtemp()
 
-    mounts = [
+    mount_strings = [
         ctn.mount_string(host_src_dir, cntr_src_dir),
         ctn.biobox_file_mount_string(fle.create_biobox_directory(biobox_yaml)),
         ctn.output_directory_mount_string(host_dst_dir)]
 
-    ctn.run(ctn.create(image, "default", mounts))
-
-    with open(os.path.join(host_dst_dir, 'biobox.yaml'), 'r') as f:
-        import yaml
-        output = yaml.load(f.read())
-
-    copy_contigs_file(host_dst_dir, output, contig_file)
+    ctn.run(ctn.create(image, "default", mount_strings))
+    biobox_output = fle.parse(host_dst_dir)
+    copy_contigs_file(host_dst_dir, biobox_output, contig_file)
