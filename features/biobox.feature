@@ -1,5 +1,19 @@
 Feature: A CLI to run biobox-compatible Docker containers
 
+  Scenario Outline: Getting the version number
+    When I run the command:
+      """
+      biobox <cmd>
+      """
+    Then the stderr should be empty
+    And the exit code should be 0
+    And the stdout should match /\d+\.\d+\.\d+/
+
+    Examples:
+      | cmd       |
+      | --version |
+      | -v        |
+
   Scenario Outline: Getting help documentation
     When I run the command:
       """
@@ -17,60 +31,91 @@ Feature: A CLI to run biobox-compatible Docker containers
       | --help |
       | -h     |
 
-  Scenario: Getting help documentation for a biobox type
+  Scenario Outline: Trying to run an unknown command
     When I run the command:
       """
-      biobox short_read_assembler --help
-      """
-    Then the stderr should be empty
-    And the exit code should be 0
-    And the stdout should contain
-      """
-      biobox short_read_assembler <image> [options]
-      """
-
-  Scenario Outline: Trying to run an unknown container type
-    When I run the command:
-      """
-      biobox <container> --help
+      biobox <cmd> short_read_assembler biobox/velvet --help
       """
     Then the stdout should be empty
     And the exit code should be 1
     And the stderr should equal:
       """
-      Unknown biobox container type: "<container>".
-      Run `biobox --help` for a list of available biobox types.
+      Unknown command: "<cmd>".
+      Run `biobox --help` for a list of available.
 
       """
 
       Examples:
-      | container |
-      | dummy     |
-      | unknown   |
+      | cmd     |
+      | dummy   |
+      | unknown |
 
-  Scenario: Trying to run an unknown biobox container
+  Scenario Outline: Trying to run an unknown biobox type
+    When I run the command:
+      """
+      biobox run <biobox> biobox/velvet --help
+      """
+    Then the stdout should be empty
+    And the exit code should be 1
+    And the stderr should equal:
+      """
+      Unknown biobox type: "<biobox>".
+      Run `biobox --help` for a list of available.
+
+      """
+
+      Examples:
+      | command | biobox  |
+      | run     | dummy   |
+      | run     | unknown |
+      | verify  | unknown |
+
+  Scenario: Getting help documentation for a biobox type
+    When I run the command:
+      """
+      biobox run short_read_assembler --help
+      """
+    Then the stderr should be empty
+    And the stdout should contain
+      """
+      Usage:
+          biobox run short_read_assembler <image>
+      """
+    And the exit code should be 0
+
+  @internet
+  Scenario Outline: Trying to run an unknown biobox image
     When I run the command:
       """
       biobox \
+        run \
         short_read_assembler \
         biobox/unknown \
-        --input=reads.fq \
-        --output=contigs.fa
+        <args>
       """
     Then the stdout should be empty
     And the stderr should equal:
       """
       No Docker image available with the name: biobox/unknown
+      Did you include the namespace too? E.g. bioboxes/velvet.
+
       """
     And the exit code should be 1
 
+    Examples:
+      | args                                 |
+      | --input=reads.fq --output=contigs.fa |
+
   Scenario Outline: Running a biobox container
-    Given I have the example genome paired fastq file "reads.fq.gz"
+    Given I copy the example data files:
+      | source                    | dest        |
+      | genome_paired_reads.fq.gz | reads.fq.gz |
     When I run the command:
       """
       biobox \
+        run \
         short_read_assembler \
-        <assembler>
+        <assembler> \
         --input=reads.fq.gz \
         --output=contigs.fa
       """

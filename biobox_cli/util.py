@@ -1,5 +1,18 @@
+import sys, yaml, os.path
 
-def command_line_args(doc, argv, is_main_module):
+def select_module(module, name):
+    """
+    Select and return a biobox module
+    """
+    mod_name = ".".join(["biobox_cli", module, name])
+    try:
+        __import__(mod_name)
+    except ImportError:
+        err_exit('unknown_command',
+                {'command_type': str.replace(module, '_', ' '), 'command': name})
+    return sys.modules[mod_name]
+
+def parse_docopt(doc, argv, is_main_module):
     from docopt  import docopt
     from version import __version__
     return docopt(doc,
@@ -7,7 +20,12 @@ def command_line_args(doc, argv, is_main_module):
                   version       = __version__,
                   options_first = is_main_module)
 
-def err_exit(msg):
-    import sys
-    sys.stderr.write(msg)
+def err_message(msg_key, locals_):
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'error_messages.yml')
+    with open(path, 'r') as f:
+            errors = yaml.load(f.read())
+    return errors[msg_key].format(**locals_)
+
+def err_exit(msg_key, locals_):
+    sys.stderr.write(err_message(msg_key, locals_))
     exit(1)
