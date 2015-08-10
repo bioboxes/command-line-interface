@@ -13,7 +13,7 @@ The CLI is used as follows:
 biobox run <box_type> <container> [options]
 
 # An example using spades for genome assembly
-biobox run short-read-assember bioboxes/megahit -i reads.fq -o contigs.fa
+biobox run short_read_assember bioboxes/megahit -i reads.fq -o contigs.fa
 ```
 
 ## Installation
