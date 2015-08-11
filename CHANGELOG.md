@@ -10,6 +10,11 @@ project adheres to [Semantic Versioning](http://semver.org/).
   * Ability to specify a task to use when verifying a short read assembler
     biobox. This is passed using the `--task` flag to `biobox verify`.
 
+### Changed
+
+  * Updated README.md with more explicit instructions on how to submit pull
+    requests.
+
 ## [0.1.0] - 2015-02-17
 
 ### Added
