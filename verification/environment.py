@@ -9,6 +9,7 @@ def before_scenario(context, _):
     context.env = TestFileEnvironment(base_path = tmp)
 
     os.environ['IMAGE'] = context.config.userdata["IMAGE"]
+    os.environ['TASK']  = context.config.userdata["TASK"]
 
     # Mounting volumes in Docker needs an explict full path.
     # The path cannot be hard coded into the features as it varies
