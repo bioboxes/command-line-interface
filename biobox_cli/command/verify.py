@@ -31,7 +31,7 @@ def run(argv):
 
     from behave.__main__ import main as behave_main
     _, tmp_file = tempfile.mkstemp()
-    cmd = "{file} --define IMAGE={image} --define TASK={task} --define TMP_DIR={tmp_dir} --outfile {tmp_file} --no-summary --stop"
+    cmd = "{file} --define IMAGE={image} --define TASK={task} --define TMPDIR={tmp_dir} --outfile {tmp_file} --no-summary --stop"
     args = {'file':     verification_file(biobox),
             'tmp_dir':  tmp_feature_dir(),
             'image':    image,
