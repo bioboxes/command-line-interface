@@ -11,7 +11,7 @@ Feature: Verification steps for short read assembler bioboxes
       docker run \
         --volume="$(pwd)/input:/bbx/input" \
         ${IMAGE} \
-        default
+        ${TASK}
       """
     Then the exit code should be 1
     And the stderr should contain:
@@ -34,7 +34,7 @@ Feature: Verification steps for short read assembler bioboxes
       docker run \
         --volume="$(pwd)/input:/bbx/input" \
         ${IMAGE} \
-        default
+        ${TASK}
       """
     Then the exit code should be 1
     And the stderr should contain:
@@ -58,7 +58,7 @@ Feature: Verification steps for short read assembler bioboxes
       docker run \
         --volume="$(pwd)/input:/bbx/input" \
         ${IMAGE} \
-        default
+        ${TASK}
       """
     Then the exit code should be 1
     And the stderr should contain:
@@ -77,7 +77,7 @@ Feature: Verification steps for short read assembler bioboxes
       docker run \
         --volume="$(pwd)/input:/bbx/input" \
         ${IMAGE} \
-        default
+        ${TASK}
       """
     Then the exit code should be 1
     And the stderr should contain:
@@ -102,7 +102,7 @@ Feature: Verification steps for short read assembler bioboxes
       docker run \
         --volume="$(pwd)/input:/bbx/input" \
         ${IMAGE} \
-        default
+        ${TASK}
       """
     Then the exit code should be 1
     And the stderr should contain:
@@ -138,7 +138,7 @@ Feature: Verification steps for short read assembler bioboxes
         --volume="${TMPDIR}/input:/bbx/input:ro" \
         --volume="${TMPDIR}/output:/bbx/output:rw" \
         ${IMAGE} \
-        default
+        ${TASK}
       """
     Then the stderr should be empty
     And the exit code should be 0
