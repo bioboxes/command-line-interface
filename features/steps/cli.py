@@ -13,6 +13,17 @@ def get_data_file_path(file_):
     dir_ = os.path.dirname(os.path.abspath(__file__))
     return os.path.join(dir_, '..', '..', 'verification', 'data', file_)
 
+def assert_not_empty(obj):
+    nt.assert_true(len(obj) > 0)
+
+def assert_file_exists(file_):
+    nt.assert_true(os.path.isfile(file_),
+            "The file \"{}\" does not exist.".format(file_))
+
+def assert_file_not_empty(file_):
+    with open(file_, 'r') as f:
+        assert_not_empty(f.read().strip())
+
 
 
 @given(u'I create the directory "{directory}"')
@@ -67,10 +78,15 @@ def step_impl(context, stream, regexp):
 
 @then(u'the file "{}" should exist')
 def step_impl(context, file_):
-    nt.assert_true(os.path.isfile(get_env_path(context, file_)),
-            "The file \"{}\" does not exist.".format(file_))
+    assert_file_exists(get_env_path(context, file_))
 
 @then(u'the file "{}" should not be empty')
 def step_impl(context, file_):
-    with open(get_env_path(context, file_), 'r') as f:
-        nt.assert_not_equal(f.read().strip(), "")
+    assert_file_not_empty(get_env_path(context, file_))
+
+@then(u'the following files should exist and not be empty')
+def step_impl(context):
+    for row in context.table.rows:
+        file_ = get_env_path(context, row['file'])
+        assert_file_exists(file_)
+        assert_file_not_empty(file_)
