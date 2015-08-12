@@ -2,7 +2,8 @@
 
 This repository contains the code for building the [bioboxes][] command line
 interface. This allows a user to run bioboxes in the shell using Docker as the
-backend. Documentation is provided in the `doc` folder.
+backend. [Documentation is available][doc] for using the command line
+interface.
 
 ### Development Scripts
 
@@ -43,3 +44,4 @@ a pull request. A pull request should include the following:
 [ghi]: https://github.com/bioboxes/command-line-interface/issues
 [semver]: http://semver.org
 [bioboxes]: http://bioboxes.org
+[doc]: https://github.com/bioboxes/command-line-interface/blob/master/doc/bioboxes-cli.mkd
