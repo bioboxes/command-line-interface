@@ -7,7 +7,6 @@ project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-
   * Flag specify a task `--task` when using a short read assembler biobox. This
     runs different combintations of parameters according to their specification
     in each biobox `Taskfile`.
@@ -22,6 +21,11 @@ project adheres to [Semantic Versioning](http://semver.org/).
 
   * Updated README.md with more explicit instructions on how to submit pull
     requests.
+
+### Fixed
+
+  * Bug where bundled files could not be found if install in separate
+    directories
 
 ## [0.1.0] - 2015-02-17
 
