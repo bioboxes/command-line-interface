@@ -7,6 +7,11 @@ project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+
+  * Flag specify a task `--task` when using a short read assembler biobox. This
+    runs different combintations of parameters according to their specification
+    in each biobox `Taskfile`.
+
   * Ability to specify a task to use when verifying a short read assembler
     biobox. This is passed using the `--task` flag to `biobox verify`.
 
