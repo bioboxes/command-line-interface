@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.2.0] - date
+## [v0.2.0] - 2015-08-12
 
 ### Added
 
@@ -27,7 +27,7 @@ project adheres to [Semantic Versioning](http://semver.org/).
   * Bug where bundled files could not be found if install in separate
     directories
 
-## [0.1.0] - 2015-02-17
+## [v0.1.0] - 2015-08-10
 
 ### Added
 
@@ -49,3 +49,6 @@ project adheres to [Semantic Versioning](http://semver.org/).
 
   * More verbose error messages. The user now gets clearer error messages when
     the biobox is not available or the command is called incorrectly.
+
+[v0.2.0]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.2.0
+[v0.1.0]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.1.0
