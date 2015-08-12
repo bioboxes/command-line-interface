@@ -17,8 +17,9 @@ import biobox_cli.util as util
 import sys, os, os.path, tempfile
 
 def verification_file(biobox):
+    from pkg_resources import resource_filename
     file_ = biobox + '.feature'
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'verification', file_))
+    return os.path.abspath(resource_filename(__name__, os.path.join('..', '..', 'verification', file_)))
 
 def tmp_feature_dir():
     return os.path.abspath(os.path.join(os.getcwd(), 'biobox_verify'))

@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-import os, sys
-path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
+import os, sys, pkg_resources
+
+path = os.path.abspath(pkg_resources.resource_filename(__name__, '..'))
 sys.path.insert(1, path)
 
-import biobox_cli.main as bbx
-bbx.run()
+import biobox_cli.main as biobox
+biobox.run()
