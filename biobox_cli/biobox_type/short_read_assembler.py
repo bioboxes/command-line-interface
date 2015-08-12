@@ -1,12 +1,13 @@
 """
 Usage:
-    biobox run short_read_assembler <image> --input=FILE --output=FILE
+    biobox run short_read_assembler <image> --input=FILE --output=FILE [--task=TASK]
 
 Options:
   -h, --help              Show this screen.
   -v, --version           Show version.
   -i FILE, --input=FILE   Source FASTQ file containing paired short reads
   -o FILE, --output=FILE  Destination FASTA file for assembled contigs
+  -t TASK, --task=TASK    Optionally specify a biobox task to run [default: default]
 
 """
 
@@ -28,6 +29,7 @@ def run(argv):
     image       = opts['<image>']
     fastq_file  = opts['--input']
     contig_file = opts['--output']
+    task        = opts['--task']
 
     if not ctn.image_available(image):
         util.err_exit('unknown_image', {'image': image})
@@ -44,6 +46,6 @@ def run(argv):
         ctn.biobox_file_mount_string(fle.create_biobox_directory(biobox_yaml)),
         ctn.output_directory_mount_string(host_dst_dir)]
 
-    ctn.run(ctn.create(image, "default", mount_strings))
+    ctn.run(ctn.create(image, task, mount_strings))
     biobox_output = fle.parse(host_dst_dir)
     copy_contigs_file(host_dst_dir, biobox_output, contig_file)
