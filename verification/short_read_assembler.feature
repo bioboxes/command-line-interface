@@ -142,5 +142,42 @@ Feature: Verification steps for short read assembler bioboxes
       """
     Then the stderr should be empty
     And the exit code should be 0
-    And the file "output/biobox.yaml" should not be empty
-    And the file "output/contigs.fa" should not be empty
+    And the following files should exist and not be empty:
+      | file               |
+      | output/biobox.yaml |
+      | output/contigs.fa  |
+
+  Scenario: Generating a log.txt file when a metadata directory is mounted
+    Given I create the directory "input"
+    And I create the directory "output"
+    And I create the directory "metadata"
+    And I copy the example data files:
+      | source                    | dest              |
+      | genome_paired_reads.fq.gz | input/reads.fq.gz |
+    And I create the file "input/biobox.yaml" with the contents:
+      """
+      ---
+      version: 0.9.0
+      arguments:
+      - fastq:
+        - value: /bbx/input/reads.fq.gz
+          type: paired
+          id: 0
+
+      """
+    When I run the command:
+      """
+      docker run \
+        --volume="${TMPDIR}/metadata:/bbx/metadata:rw" \
+        --volume="${TMPDIR}/input:/bbx/input:ro"       \
+        --volume="${TMPDIR}/output:/bbx/output:rw"     \
+        ${IMAGE} \
+        ${TASK}
+      """
+    Then the stderr should be empty
+    And the exit code should be 0
+    And the following files should exist and not be empty:
+      | file               |
+      | output/biobox.yaml |
+      | output/contigs.fa  |
+      | metadata/log.txt   |

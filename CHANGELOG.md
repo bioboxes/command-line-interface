@@ -10,6 +10,9 @@ project adheres to [Semantic Versioning](http://semver.org/).
   * Ability to specify a task to use when verifying a short read assembler
     biobox. This is passed using the `--task` flag to `biobox verify`.
 
+  * Short read assembler verification now checks that the file `log.txt` is
+    created when a directory that is mounted to `/bbx/metadata`.
+
 ### Changed
 
   * Updated README.md with more explicit instructions on how to submit pull
