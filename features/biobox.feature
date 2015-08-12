@@ -117,7 +117,8 @@ Feature: A CLI to run biobox-compatible Docker containers
         short_read_assembler \
         <assembler> \
         --input=reads.fq.gz \
-        --output=contigs.fa
+        --output=contigs.fa \
+        <args>
       """
     Then the stdout should be empty
     And the stderr should be empty
@@ -126,6 +127,6 @@ Feature: A CLI to run biobox-compatible Docker containers
     And the file "contigs.fa" should not be empty
 
     Examples:
-      | assembler        |
-      | bioboxes/velvet  |
-      | bioboxes/megahit |
+      | assembler        | args            |
+      | bioboxes/velvet  |                 |
+      | bioboxes/megahit | --task=no-mercy |

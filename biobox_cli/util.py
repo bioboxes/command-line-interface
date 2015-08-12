@@ -21,9 +21,8 @@ def parse_docopt(doc, argv, is_main_module):
                   options_first = is_main_module)
 
 def err_message(msg_key, locals_):
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets', 'error_messages.yml')
-    with open(path, 'r') as f:
-            errors = yaml.load(f.read())
+    from pkg_resources import resource_string
+    errors = yaml.load(resource_string(__name__, os.path.join('..', 'assets', 'error_messages.yml')))
     return errors[msg_key].format(**locals_)
 
 def err_exit(msg_key, locals_):

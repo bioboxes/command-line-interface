@@ -3,9 +3,31 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [v0.2.0] - 2015-08-12
 
-## [0.1.0] - 2015-02-17
+### Added
+
+  * Flag specify a task `--task` when using a short read assembler biobox. This
+    runs different combintations of parameters according to their specification
+    in each biobox `Taskfile`.
+
+  * Ability to specify a task to use when verifying a short read assembler
+    biobox. This is passed using the `--task` flag to `biobox verify`.
+
+  * Short read assembler verification now checks that the file `log.txt` is
+    created when a directory that is mounted to `/bbx/metadata`.
+
+### Changed
+
+  * Updated README.md with more explicit instructions on how to submit pull
+    requests.
+
+### Fixed
+
+  * Bug where bundled files could not be found if install in separate
+    directories
+
+## [v0.1.0] - 2015-08-10
 
 ### Added
 
@@ -27,3 +49,6 @@ project adheres to [Semantic Versioning](http://semver.org/).
 
   * More verbose error messages. The user now gets clearer error messages when
     the biobox is not available or the command is called incorrectly.
+
+[v0.2.0]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.2.0
+[v0.1.0]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.1.0
