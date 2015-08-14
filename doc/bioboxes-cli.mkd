@@ -12,8 +12,8 @@ The CLI is used as follows:
 # The general interface
 biobox run <box_type> <container> [options]
 
-# An example using spades for genome assembly
-biobox run short_read_assember bioboxes/megahit -i reads.fq -o contigs.fa
+# An example using megahit for genome assembly
+biobox run short_read_assembler bioboxes/megahit -i reads.fq -o contigs.fa
 ```
 
 ## Installation

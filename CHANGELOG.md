@@ -3,12 +3,23 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v0.2.1] - 2015-08-14
+
+### Fixed
+
+  * A significant bug in the project layout and `setup.py` meant that
+    biobox_cli sub modules, the `assets` directory and the `verification`
+    directory were included in the `.tar.gz` released file, but not installed.
+    This was fixed by moving all files under the `biobox_cli` directory, and
+    specifying their inclusion using `find_packages()` and `package_data` in
+    the `setup.py` configuration file.
+
 ## [v0.2.0] - 2015-08-12
 
 ### Added
 
   * Flag specify a task `--task` when using a short read assembler biobox. This
-    runs different combintations of parameters according to their specification
+    runs different combinations of parameters according to their specification
     in each biobox `Taskfile`.
 
   * Ability to specify a task to use when verifying a short read assembler
