@@ -3,6 +3,8 @@ version := $(shell $(path) python setup.py --version)
 name    := $(shell $(path) python setup.py --name)
 dist    := dist/$(name)-$(version).tar.gz
 
+installer-image := test-install
+
 publish: $(dist)
 	@$(path) twine upload \
 		--username ${PYPI_USERNAME} \
@@ -42,14 +44,22 @@ autotest:
 #################################################
 
 
-
 build: $(dist) test-build
 
 test-build: $(dist)
 	docker run \
+		--tty \
 		--volume=$(abspath $(dir $^)):/dist:ro \
-		python:2.7 \
-		/bin/bash -c "pip install --user /$^ && /root/.local/bin/biobox -h"
+		$(installer-image) \
+		/bin/bash -c "pip install --user /$^ && clear && /root/.local/bin/biobox -h"
+
+ssh: $(dist)
+	docker run \
+		--interactive \
+		--tty \
+		--volume=$(abspath $(dir $^)):/dist:ro \
+		$(installer-image) \
+		/bin/bash -c "pip install --user /$^ && clear && bash"
 
 $(dist): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
 	$(path) python setup.py sdist
@@ -63,7 +73,7 @@ $(dist): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
 #################################################
 
 
-bootstrap: vendor/python .image
+bootstrap: vendor/python .images
 
 vendor/python: requirements.txt
 	mkdir -p log
@@ -71,10 +81,11 @@ vendor/python: requirements.txt
 	$(path) pip install -r $< 2>&1 > log/pip.txt
 	touch $@
 
-.image:
-	docker pull python:2.7
+.images: requirements.txt images/test-install/Dockerfile
 	docker pull bioboxes/velvet
 	docker pull bioboxes/megahit
+	cp $< images/test-install
+	docker build --tag $(installer-image) images/test-install
 	touch $@
 
 .PHONY: bootstrap build feature test-build publish test

@@ -2,7 +2,8 @@
 vendor
 log
 tmp
-.image
+.images
+images/test-install/requirements.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
