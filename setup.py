@@ -8,9 +8,12 @@ setup(
     author               = 'bioboxes',
     author_email         = 'mail@bioboxes.org',
     url                  = 'http://bioboxes.org',
-    packages             = ['biobox_cli'],
     scripts              = ['bin/biobox'],
     install_requires     = open('requirements.txt').read().splitlines(),
+
+    packages             = find_packages(),
+    package_data         = {'': ['assets/*']},
+    include_package_data = True,
 
     classifiers = [
         'Natural Language :: English',
