@@ -1,6 +1,8 @@
 import tempfile, json, os
 from os import path
 
+import itertools as it
+
 def behave_feature_file(biobox):
     from pkg_resources import resource_filename
     file_ = biobox + '.feature'
@@ -27,3 +29,14 @@ def run(biobox_type, image, task):
 
 def is_failed(results):
     return "failed" in map(lambda i: i['status'], results)
+
+def get(key):
+    return lambda i: i[key]
+
+def is_failed_scenario(scenario):
+    return is_failed(map(get("result"), scenario['steps']))
+
+def get_failing(results):
+    def f(acc, item):
+        return acc + filter(is_failed_scenario, item['elements'])
+    return reduce(f, results, [])
