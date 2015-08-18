@@ -14,7 +14,7 @@ Available Biobox types:
 """
 
 import biobox_cli.util as util
-import sys, os, os.path, tempfile
+import sys, os, os.path, tempfile, json
 
 def verification_file(biobox):
     from pkg_resources import resource_filename
@@ -32,7 +32,7 @@ def run(argv):
 
     from behave.__main__ import main as behave_main
     _, tmp_file = tempfile.mkstemp()
-    cmd = "{file} --define IMAGE={image} --define TASK={task} --define TMPDIR={tmp_dir} --outfile {tmp_file} --no-summary --stop"
+    cmd = "{file} --define IMAGE={image} --define TASK={task} --define TMPDIR={tmp_dir} --outfile {tmp_file} --format json.pretty --no-summary --stop"
     args = {'file':     verification_file(biobox),
             'tmp_dir':  tmp_feature_dir(),
             'image':    image,
@@ -42,7 +42,8 @@ def run(argv):
     behave_main(cmd.format(**args))
 
     with open(tmp_file, 'r') as f:
-        output = f.read()
+        features = json.loads(f.read())
 
-    if "Assertion Failed" in output:
+
+    if "failed" in map(lambda i: i['status'], features):
         util.err_exit('failed_verification', {'image': image, 'biobox': biobox.replace('_', ' ')})
