@@ -24,3 +24,6 @@ def run(biobox_type, image, task):
 
     with open(tmp_file, 'r') as f:
         return json.loads(f.read())
+
+def is_failed(results):
+    return "failed" in map(lambda i: i['status'], results)

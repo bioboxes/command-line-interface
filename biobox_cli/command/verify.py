@@ -24,5 +24,6 @@ def run(argv):
 
     results = behave.run(biobox, image, task)
 
-    if "failed" in map(lambda i: i['status'], results):
-        util.err_exit('failed_verification', {'image': image, 'biobox': biobox.replace('_', ' ')})
+    if behave.is_failed(results):
+        util.err_exit('failed_verification',
+                {'image': image, 'biobox': biobox.replace('_', ' ')})
