@@ -23,6 +23,8 @@ Feature: A CLI to verify images are biobox-compatible
     Then the stdout should be empty
     And the stderr should contain:
       """
-      Failed to return an error for a non-yaml format biobox.yaml file.
+      Error "python:2.7" is not a valid short_read_assembler biobox.
+      Should return an error for a non-yaml formatted biobox.yaml file.
+
       """
     And the exit code should be 1

@@ -1,6 +1,6 @@
 Feature: Verification steps for short read assembler bioboxes
 
-  Scenario: Should return an error for a non-yaml format biobox.yaml file.
+  Scenario: Should return an error for a non-yaml formatted biobox.yaml file.
     Given I create the directory "input"
     And I create the file "input/biobox.yaml" with the contents:
       """
