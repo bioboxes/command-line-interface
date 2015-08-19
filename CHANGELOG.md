@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v0.3.0] - date
+
+### Added
+
+  * The `biobox verify` command now returns the reason for the failed
+    verification.
+
 ## [v0.2.1] - 2015-08-14
 
 ### Fixed
@@ -61,5 +68,7 @@ project adheres to [Semantic Versioning](http://semver.org/).
   * More verbose error messages. The user now gets clearer error messages when
     the biobox is not available or the command is called incorrectly.
 
+[v0.3.0]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.3.0
+[v0.2.1]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.2.1
 [v0.2.0]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.2.0
 [v0.1.0]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.1.0
