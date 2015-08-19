@@ -40,3 +40,6 @@ def get_failing(results):
     def f(acc, item):
         return acc + filter(is_failed_scenario, item['elements'])
     return reduce(f, results, [])
+
+def scenario_name(scenario):
+    return scenario["name"]
