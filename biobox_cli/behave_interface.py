@@ -2,6 +2,7 @@ import tempfile, json, os
 from os import path
 
 import itertools as it
+import functools as func
 
 def behave_feature_file(biobox):
     from pkg_resources import resource_filename
@@ -31,10 +32,18 @@ def is_failed(results):
     return "failed" in map(lambda i: i['status'], results)
 
 def get(key):
-    return lambda i: i[key]
+    def _get(_dict):
+        if key in _dict:
+            return _dict[key]
+        else:
+            return None
+    return _get
+
+def is_not_none(i):
+    return (i is not None)
 
 def is_failed_scenario(scenario):
-    return is_failed(map(get("result"), scenario['steps']))
+    return is_failed(filter(is_not_none, (map(get("result"), scenario['steps']))))
 
 def get_failing(results):
     def f(acc, item):

@@ -7,10 +7,10 @@ def feature(statuses):
             'elements' : map(scenario, statuses)}
 
 def scenario(status = "failed", name = "scenario name"):
-    return {"keyword" : "Scenario",
-            "name"    : name,
-            "steps"   : [{'result' : {'status' : status}}]} 
-
+    scen = {"keyword" : "Scenario", "name" : name, "steps" : [{}]}
+    if status in ["failed", "passing"]:
+        scen["steps"] = [{'result' : {'status' : status}}]
+    return scen
 
 def test_get_failing_for_single_pass():
     features = [feature(["passing"])]
@@ -28,6 +28,10 @@ def test_get_failing_for_multiple_failing_scenarios():
     features = [feature(["failed", "passing"]),
                 feature(["failed", "passing"])]
     nt.assert_equal([scenario(), scenario()], behave.get_failing(features))
+
+def test_get_failing_with_unrun_scenarios():
+    features = [feature(["passing", "failed", "not-run"])]
+    nt.assert_equal([scenario()], behave.get_failing(features))
 
 
 def test_scenario_name():

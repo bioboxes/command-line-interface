@@ -4,6 +4,7 @@ name    := $(shell $(path) python setup.py --name)
 dist    := dist/$(name)-$(version).tar.gz
 
 installer-image := test-install
+verifier-image  := test-verify
 
 publish: $(dist)
 	@$(path) twine upload \
@@ -81,11 +82,12 @@ vendor/python: requirements.txt
 	$(path) pip install -r $< 2>&1 > log/pip.txt
 	touch $@
 
-.images: requirements.txt images/test-install/Dockerfile
+.images: requirements.txt $(shell find images -name "*")
 	docker pull bioboxes/velvet
 	docker pull bioboxes/megahit
 	cp $< images/test-install
-	docker build --tag $(installer-image) images/test-install
+	docker build --tag $(installer-image) images/$(installer-image)
+	docker build --tag $(verifier-image)  images/$(verifier-image)
 	touch $@
 
 .PHONY: bootstrap build feature test-build publish test
