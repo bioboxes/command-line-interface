@@ -1,25 +1,76 @@
-## Bioboxes command line interface (CLI)
+# Bioboxes command line interface
 
-The bioboxes CLI is python tool to run biobox-compatible Docker containers on
-the command line. The aim is to simplify the installation and use of
-bioinformatics tools for biologists.
+The command line interface (CLI) allows you to use the biobox pre-packaged
+bioinformatics tools in your research and workflows without having to
+understand Docker. The CLI allows you to run a biobox, giving it your input
+data files and then getting the generated output files.
 
-## Interface
+## Quick Start
 
-The CLI is used as follows:
+~~~ bash
+# Install the CLI
+pip install --user biobox_cli
 
-``` bash
-# The general interface
-biobox run <box_type> <container> [options]
-
-# An example using megahit for genome assembly
-biobox run short_read_assembler bioboxes/megahit -i reads.fq -o contigs.fa
-```
+# Assemble paired fastq reads into contigs
+biobox run \
+  short_read_assembler \
+  bioboxes/megahit \
+  -i YOUR_READS.fq.gz \
+  -o contigs.fa
+~~~
 
 ## Installation
 
-The biobox CLI is installed using pip.
+The CLI requires Docker and python/pip to installed on your system. These are
+the only required dependencies, all other dependencies are included in each
+biobox. You may install Docker [using the Docker toolbox][toolbox].
+Instructions are available for [installing or upgrading pip][pip]. Once you
+have Docker and pip installed you can install the biobox CLI as follows:
 
-``` bash
+[toolbox]: https://www.docker.com/toolbox
+[pip]: https://pip.pypa.io/en/latest/installing.html
+
+~~~ bash
 pip install --user biobox_cli
-```
+~~~
+
+## Using a biobox
+
+The reason to use bioboxes is that they allow you to access many different
+bioinformatics software tools, but without the often associated pain of
+installing or getting to learn the interface. Once installed, the biobox CLI
+allows you to use biobox tools on your data to get the results you want. The
+general CLI is as follows:
+
+~~~ bash
+# The general interface
+biobox run <box_type> <container> [options]
+~~~
+
+The `<box_type>` argument specifies what type of biobox you would like to use,
+e.g. `short_read_assembler`. These are the bioboxes used to assemble short
+Illumina reads from a genome into contigs.
+
+The second argument `<container>` is the specific biobox you would like to use.
+A list of different available bioboxes can be found on the ["Biobox
+Images"][available] section of this site. An example of using the biobox
+CLI to run the megahit genome assembler on gzipped paired reads is as follows:
+
+[available]: /available-bioboxes/
+
+~~~ bash
+# An example using megahit for genome assembly
+biobox run \
+  short_read_assembler \
+  bioboxes/megahit \
+  --input reads.fq.gz \
+  --output contigs.fa
+~~~
+
+You can get further information on how to use the biobox CLI using the `--help`
+flag.
+
+~~~ bash
+# Get help output on using the CLI
+biobox --help
+~~~

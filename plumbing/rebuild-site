@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -o nounset
+
+URL='https://circleci.com/api/v1/project/bioboxes/bioboxes.org/tree/master'
+curl -X POST "${URL}?circle-token=${CIRCLECI_TOKEN}"
