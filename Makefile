@@ -11,6 +11,7 @@ publish: $(dist)
 		--username ${PYPI_USERNAME} \
 		--password ${PYPI_PASSWORD} \
 		$^
+	./plumbing/rebuild-site
 
 console:
 	@$(path) python -i console.py

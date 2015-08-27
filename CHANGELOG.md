@@ -10,6 +10,16 @@ project adheres to [Semantic Versioning](http://semver.org/).
   * The `biobox verify` command now returns the reason for the failed
     verification.
 
+## [v0.2.2] - 2015-08-27
+
+### Added
+
+  * The documentation in `doc` is now much more detailed and contains examples
+    on how to use the CLI.
+
+  * A trigger `plumbing/rebuild-website` to rebuild the bioboxes.org website
+    when a PR is merged into the master branch.
+
 ## [v0.2.1] - 2015-08-14
 
 ### Fixed
@@ -68,7 +78,11 @@ project adheres to [Semantic Versioning](http://semver.org/).
   * More verbose error messages. The user now gets clearer error messages when
     the biobox is not available or the command is called incorrectly.
 
+<<<<<<< HEAD
 [v0.3.0]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.3.0
+=======
+[v0.2.2]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.2.2
+>>>>>>> @{-1}
 [v0.2.1]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.2.1
 [v0.2.0]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.2.0
 [v0.1.0]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.1.0
