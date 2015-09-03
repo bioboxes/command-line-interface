@@ -10,7 +10,7 @@ def parse(dir_):
         return yaml.load(f.read())
 
 def fastq_arguments(args):
-    values = map(lambda (i, (p_h, p_c, t)) : entry("fastq_" + str(i), p_c, t), enumerate(args))
+    values = map(lambda (i, (p_c, t)) : entry("fastq_" + str(i), p_c, t), enumerate(args))
     return {"fastq" : values}
 
 def entry(id_, value, type_):

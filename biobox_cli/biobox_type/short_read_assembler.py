@@ -35,7 +35,7 @@ def run(argv):
         util.err_exit('unknown_image', {'image': image})
 
     cntr_fastq_file = "/fastq/input.fq"
-    fastq_values = [(fastq_file, cntr_fastq_file, "paired")]
+    fastq_values = [(cntr_fastq_file, "paired")]
     biobox_yaml = fle.generate([
         fle.fastq_arguments(fastq_values)])
 
