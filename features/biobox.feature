@@ -127,8 +127,8 @@ Feature: A CLI to run biobox-compatible Docker containers
     And the file "contigs.fa" should not be empty
 
     Examples:
-      | assembler        | args            | input                   | output                 |
-      | bioboxes/velvet  |                 | reads.fq.gz             | contigs.fa             |
-      | bioboxes/velvet  |                 | $(realpath reads.fq.gz) | contigs.fa             |
-      | bioboxes/velvet  |                 | reads.fq.gz             | $(realpath contigs.fa) |
-      | bioboxes/megahit | --task=no-mercy | reads.fq.gz             | contigs.fa             |
+      | assembler        | args            | input                      | output                    |
+      | bioboxes/velvet  |                 | reads.fq.gz                | contigs.fa                |
+      | bioboxes/velvet  |                 | $(readlink reads.fq.gz)    | contigs.fa                |
+      | bioboxes/velvet  |                 | reads.fq.gz                | $(readlink contigs.fa)    |
+      | bioboxes/megahit | --task=no-mercy | reads.fq.gz                | contigs.fa                |
