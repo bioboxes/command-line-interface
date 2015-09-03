@@ -14,7 +14,7 @@ Feature: A CLI to verify images are biobox-compatible
       | short_read_assembler | bioboxes/velvet  |                 |
       | short_read_assembler | bioboxes/velvet  | -t default      |
       | short_read_assembler | bioboxes/megahit | --task=no-mercy |
-      | assembler_benchmark   | bioboxes/quast   | --task=no-mercy |
+      | assembler_benchmark  | bioboxes/quast   |                 |
 
   Scenario: Verifying a invalid image
     When I run the command:
