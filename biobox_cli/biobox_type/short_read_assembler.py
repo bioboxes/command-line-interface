@@ -34,10 +34,9 @@ def run(argv):
     if not ctn.image_available(image):
         util.err_exit('unknown_image', {'image': image})
 
-    cntr_fastq_file = "/fastq/input.fq"
+    cntr_fastq_file = "/fastq/input.fq.gz"
     fastq_values = [(cntr_fastq_file, "paired")]
-    biobox_yaml = fle.generate([
-        fle.fastq_arguments(fastq_values)])
+    biobox_yaml = fle.generate([fle.fastq_arguments(fastq_values)])
 
     host_src_dir = os.path.abspath(fastq_file)
     host_dst_dir = tmp.mkdtemp()
