@@ -8,4 +8,5 @@ unknown_command: |
   Run `biobox --help` for a list of available.
 
 failed_verification: |
-  Verification failed - {image} is not a valid biobox {biobox}.
+  Error "{image}" is not a valid {biobox} biobox.
+  {error}
