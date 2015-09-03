@@ -10,6 +10,11 @@ project adheres to [Semantic Versioning](http://semver.org/).
   * The `biobox verify` command now returns the reason for the failed
     verification.
 
+### Fixed
+
+  * Fixed bug where passing full paths as the input arguments would cause a
+    crash. Full paths can now be given.
+
 ## [v0.2.2] - 2015-08-27
 
 ### Added
