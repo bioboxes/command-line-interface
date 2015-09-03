@@ -10,9 +10,18 @@ def parse(dir_):
         return yaml.load(f.read())
 
 def fastq_arguments(mount_directory, *args):
-    values = map(lambda (i, (p, t)), : entry("fastq_" + str(i), os.path.join(mount_directory, p), t),
-            enumerate(args))
-    return {"fastq" : values}
+    return files_values(mount_directory, "fastq", *args)
+
+def fasta_arguments(mount_directory, *args):
+    return files_values(mount_directory, "fasta", *args)
+
+def reference_argument(mount_directory, ref):
+    return {"fasta_dir": ref}
+
+def files_values(mount_directory, identifier, *args):
+    values = map(lambda (i, (p, t)), : entry(identifier + "_" + str(i), os.path.join(mount_directory, p), t),
+                 enumerate(args))
+    return {identifier : values}
 
 def entry(id_, value, type_):
     return {"id" : id_, "value" : value, "type" : type_}
