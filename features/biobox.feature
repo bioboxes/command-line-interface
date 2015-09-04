@@ -129,6 +129,6 @@ Feature: A CLI to run biobox-compatible Docker containers
     Examples:
       | assembler        | args            | input                      | output                    |
       | bioboxes/velvet  |                 | reads.fq.gz                | contigs.fa                |
-      | bioboxes/velvet  |                 | $(readlink reads.fq.gz)    | contigs.fa                |
-      | bioboxes/velvet  |                 | reads.fq.gz                | $(readlink contigs.fa)    |
+      | bioboxes/velvet  |                 | $(readlink -f reads.fq.gz)    | contigs.fa                |
+      | bioboxes/velvet  |                 | reads.fq.gz                | $(readlink -f contigs.fa)    |
       | bioboxes/megahit | --task=no-mercy | reads.fq.gz                | contigs.fa                |
