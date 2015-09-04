@@ -149,8 +149,10 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
     And I create the directory "output"
     And I copy the example data files:
       | source           | dest                 |
-      | reference.tar.gz | input/reference      |
       | assembly.fasta   | input/assembly.fasta |
+    And I copy the example data directories:
+      | source           | dest                 |
+      | references       | input/references     |
     And I create the file "input/biobox.yaml" with the contents:
       """
       ---
@@ -179,9 +181,11 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
     And I create the directory "output"
     And I create the directory "metadata"
     And I copy the example data files:
-      | source         | dest                 |
-      | reference      | input/reference      |
-      | assembly.fasta | input/assembly.fasta |
+      | source           | dest                 |
+      | assembly.fasta   | input/assembly.fasta |
+    And I copy the example data directories:
+      | source           | dest                 |
+      | references       | input/references     |
     And I create the file "input/biobox.yaml" with the contents:
       """
       ---

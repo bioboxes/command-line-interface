@@ -106,7 +106,7 @@ Feature: A CLI to run biobox-compatible Docker containers
       | args                                 |
       | --input=reads.fq --output=contigs.fa |
 
-  Scenario Outline: Running a biobox container
+  Scenario Outline: Running a biobox short read assembler container
     Given I copy the example data files:
       | source                    | dest        |
       | genome_paired_reads.fq.gz | reads.fq.gz |
@@ -116,8 +116,8 @@ Feature: A CLI to run biobox-compatible Docker containers
         run \
         short_read_assembler \
         <assembler> \
-        --input=reads.fq.gz \
-        --output=contigs.fa \
+        --input=<input> \
+        --output=<output> \
         <args>
       """
     Then the stdout should be empty
@@ -127,6 +127,8 @@ Feature: A CLI to run biobox-compatible Docker containers
     And the file "contigs.fa" should not be empty
 
     Examples:
-      | assembler        | args            |
-      | bioboxes/velvet  |                 |
-      | bioboxes/megahit | --task=no-mercy |
+      | assembler        | args            | input                      | output                    |
+      | bioboxes/velvet  |                 | reads.fq.gz                | contigs.fa                |
+      | bioboxes/velvet  |                 | $(readlink -f reads.fq.gz)    | contigs.fa                |
+      | bioboxes/velvet  |                 | reads.fq.gz                | $(readlink -f contigs.fa)    |
+      | bioboxes/megahit | --task=no-mercy | reads.fq.gz                | contigs.fa                |
