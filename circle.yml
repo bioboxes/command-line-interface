@@ -12,7 +12,7 @@ test:
   override:
     - ./script/build
     - ./script/test
-    - sudo ./script/feature
+    - ./script/feature
 
 deployment:
   deploy:
