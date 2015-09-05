@@ -2,11 +2,12 @@
 biobox verify - Verify that a Docker image matches the given specification type
 
 Usage:
-    biobox verify <biobox_type> <image> [--task=TASK]
+    biobox verify <biobox_type> <image> [--task=TASK] [--verbose]
 
 Options:
   -h, --help             Show this screen.
   -t TASK --task=TASK    Specify which biobox task to test. [default: default]
+  -V, --verbose          Show the status of each biobox verification test.
 
 Available Biobox types:
 
