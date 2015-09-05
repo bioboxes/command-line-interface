@@ -116,6 +116,7 @@ Feature: A CLI to run biobox-compatible Docker containers
         run \
         short_read_assembler \
         <assembler> \
+        --no-rm-container \
         --input=<input> \
         --output=<output> \
         <args>
