@@ -1,6 +1,6 @@
 """
 Usage:
-    biobox run short_read_assembler <image> --input=FILE --output=FILE [--task=TASK]
+    biobox run short_read_assembler <image> [--no-rm-container] --input=FILE --output=FILE [--task=TASK]
 
 Options:
   -h, --help              Show this screen.
@@ -46,6 +46,15 @@ def run(argv):
         ctn.biobox_file_mount_string(fle.create_biobox_directory(biobox_yaml)),
         ctn.output_directory_mount_string(host_dst_dir)]
 
-    ctn.run(ctn.create(image, task, mount_strings))
+    ctnr = ctn.create(image, task, mount_strings)
+    ctn.run(ctnr)
     biobox_output = fle.parse(host_dst_dir)
     copy_contigs_file(host_dst_dir, biobox_output, contig_file)
+    return ctnr
+
+def remove(container):
+    """
+    Removes a container
+    Note this method is not tested due to limitations of circle ci
+    """
+    ctn.remove(container)
