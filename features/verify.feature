@@ -11,7 +11,7 @@ Feature: A CLI to verify images are biobox-compatible
       """
       No Docker image available with the name: unknown
       Did you include the namespace too? E.g. bioboxes/velvet.
-      """ 
+      """
     And the exit code should be 1
 
   Scenario Outline: Verifying a valid biobox image
@@ -26,9 +26,30 @@ Feature: A CLI to verify images are biobox-compatible
     Examples:
       | type                 | image            | args            |
       | short_read_assembler | bioboxes/velvet  |                 |
-      | short_read_assembler | bioboxes/velvet  | -t default      |
       | short_read_assembler | bioboxes/megahit | --task=no-mercy |
       | assembler_benchmark  | bioboxes/quast   |                 |
+
+  Scenario: Generating a verbose of biobox image verification
+    When I run the command:
+      """
+      biobox verify \
+        short_read_assembler \
+        bioboxes/velvet \
+        --verbose \
+        --t default
+      """
+    Then the stderr should be empty
+    And the stdout should contain:
+    """
+      Return an error when the biobox.yaml is in an invalid format.            PASS
+      Return an error when the biobox.yaml is missing a version number.        PASS
+      Return an error when the biobox.yaml has an invalid version number.      PASS
+      Return an error when the biobox.yaml is missing the "arguments" field.   PASS
+      Return an error the biobox.yaml has an unknown additional field.         PASS
+      Create a contigs file when given a valid biobox.yml and FASTQ data.      PASS
+      Create a 'log.txt' file when a metadata directory is mounted.            PASS
+    """
+    And the exit code should be 0
 
   Scenario Outline: Verifying an invalid biobox image
     When I run the command:
@@ -39,7 +60,7 @@ Feature: A CLI to verify images are biobox-compatible
     And the stderr should contain:
       """
       Error "test-verify" is not a valid short_read_assembler biobox.
-      Should return an error for a non-yaml formatted biobox.yaml file.
+      Should return an error when the biobox.yaml is in an invalid format.
 
       """
     And the exit code should be 1
