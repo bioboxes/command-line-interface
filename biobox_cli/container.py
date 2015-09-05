@@ -50,3 +50,10 @@ def create(image, command, mounts = []):
 def run(container):
     client().start(container)
     client().wait(container)
+
+def remove(container):
+    """
+    Removal of a container
+    NOTE: This method is not tested due to circle ci limitations
+    """
+    client().remove_container(container, v=True)

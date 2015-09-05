@@ -10,6 +10,11 @@ project adheres to [Semantic Versioning](http://semver.org/).
   * The `biobox verify` command now returns the reason for the failed
     verification.
 
+  * Containers are automatically removed by default after being run. This saves
+    space on the users system by no longer keeping redundant containers around.
+    An additional flag `--no-rm-container` was added to override this and keep
+    the container after use.
+
 ### Fixed
 
   * Fixed bug where passing full paths as the input arguments would cause a
