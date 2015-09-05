@@ -15,6 +15,10 @@ project adheres to [Semantic Versioning](http://semver.org/).
   * Fixed bug where passing full paths as the input arguments would cause a
     crash. Full paths can now be given.
 
+  * Fixed a bug where trying to validate a non-existent Docker image returned a
+    verification failure message to the use instead of correctly informing the
+    user the image does not exist.
+
 ## [v0.2.2] - 2015-08-27
 
 ### Added

@@ -15,12 +15,15 @@ Available Biobox types:
 
 import biobox_cli.util             as util
 import biobox_cli.behave_interface as behave
+import biobox_cli.container        as ctn
 
 def run(argv):
     opts   = util.parse_docopt(__doc__, argv, False)
     biobox = opts['<biobox_type>']
     image  = opts['<image>']
     task   = opts['--task']
+
+    ctn.exit_if_no_image_available(image)
 
     results = behave.run(biobox, image, task)
 

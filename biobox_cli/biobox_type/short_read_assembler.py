@@ -31,8 +31,7 @@ def run(argv):
     contig_file = opts['--output']
     task        = opts['--task']
 
-    if not ctn.image_available(image):
-        util.err_exit('unknown_image', {'image': image})
+    ctn.exit_if_no_image_available(image)
 
     cntr_fastq_file = "/fastq/input.fq.gz"
     fastq_values = [(cntr_fastq_file, "paired")]
