@@ -23,8 +23,7 @@ def run(argv):
     image  = opts['<image>']
     task   = opts['--task']
 
-    if not ctn.image_available(image):
-        util.err_exit('unknown_image', {'image': image})
+    ctn.exit_if_no_image_available(image)
 
     results = behave.run(biobox, image, task)
 
