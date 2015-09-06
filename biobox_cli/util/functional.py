@@ -29,10 +29,6 @@ def is_empty(x):
 def first(x):
     return x[0]
 
-def unique(x):
-    from sortedcontainers import SortedSet
-    return list(SortedSet(x))
-
 # http://stackoverflow.com/a/480227/91144
 def unique(seq):
     seen = set()
