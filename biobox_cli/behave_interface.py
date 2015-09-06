@@ -4,15 +4,30 @@ from os import path
 import itertools as it
 import functools as func
 
+import biobox_cli.util.functional as fn
+
 def behave_feature_file(biobox):
+    """
+    Returns the fullpath for the corresponding feature file for the given biobox type.
+    """
     from pkg_resources import resource_filename
     file_ = biobox + '.feature'
     return path.abspath(resource_filename(__name__, path.join('verification', file_)))
 
 def tmp_feature_dir():
+    """
+    Returns the fullpath of a 'biobox_verify' directory created in the current
+    working directory.
+    """
     return path.abspath(path.join(os.getcwd(), 'biobox_verify'))
 
 def run(biobox_type, image, task):
+    """
+    Runs the behave cucumber features for the given biobox and tast given by
+    the passed arguments. Creates a directory in the current working directory,
+    where the verfication files are created. Returns a dictionary of the behave
+    output.
+    """
     from behave.__main__ import main as behave_main
     _, tmp_file = tempfile.mkstemp()
 
@@ -28,24 +43,23 @@ def run(biobox_type, image, task):
     with open(tmp_file, 'r') as f:
         return json.loads(f.read())
 
-def is_failed(results):
-    return "failed" in map(lambda i: i['status'], results)
-
-def get(key):
-    def _get(_dict):
-        if key in _dict:
-            return _dict[key]
-        else:
-            return None
-    return _get
-
-def is_not_none(i):
-    return (i is not None)
+def is_failed(behave_dict):
+    """
+    Parses a behave dictionary and returns true if any verifications have
+    failed.
+    """
+    return "failed" in map(lambda i: i['status'], behave_dict)
 
 def is_failed_scenario(scenario):
-    return is_failed(filter(is_not_none, (map(get("result"), scenario['steps']))))
+    """
+    Returns true if a behave feature scenario has failed.
+    """
+    return is_failed(filter(fn.is_not_none, (map(fn.get("result"), scenario['steps']))))
 
-def get_failing(results):
+def get_failing_scenarios(results):
+    """
+    Returns all failing scenarios from a behave dictionary
+    """
     def f(acc, item):
         return acc + filter(is_failed_scenario, item['elements'])
     return reduce(f, results, [])

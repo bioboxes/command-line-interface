@@ -12,26 +12,26 @@ def scenario(status = "failed", name = "scenario name"):
         scen["steps"] = [{'result' : {'status' : status}}]
     return scen
 
-def test_get_failing_for_single_pass():
+def test_get_failing_scenarios_for_single_pass():
     features = [feature(["passing"])]
-    nt.assert_equal([], behave.get_failing(features))
+    nt.assert_equal([], behave.get_failing_scenarios(features))
 
-def test_get_failing_for_single_failure():
+def test_get_failing_scenarios_for_single_failure():
     features = [feature(["failed"])]
-    nt.assert_equal([scenario()], behave.get_failing(features))
+    nt.assert_equal([scenario()], behave.get_failing_scenarios(features))
 
-def test_get_failing_for_pass_and_failure():
+def test_get_failing_scenarios_for_pass_and_failure():
     features = [feature(["failed", "passing"])]
-    nt.assert_equal([scenario()], behave.get_failing(features))
+    nt.assert_equal([scenario()], behave.get_failing_scenarios(features))
 
-def test_get_failing_for_multiple_failing_scenarios():
+def test_get_failing_scenarios_for_multiple_failing_scenarios():
     features = [feature(["failed", "passing"]),
                 feature(["failed", "passing"])]
-    nt.assert_equal([scenario(), scenario()], behave.get_failing(features))
+    nt.assert_equal([scenario(), scenario()], behave.get_failing_scenarios(features))
 
-def test_get_failing_with_unrun_scenarios():
+def test_get_failing_scenarios_with_unrun_scenarios():
     features = [feature(["passing", "failed", "not-run"])]
-    nt.assert_equal([scenario()], behave.get_failing(features))
+    nt.assert_equal([scenario()], behave.get_failing_scenarios(features))
 
 
 def test_scenario_name():
