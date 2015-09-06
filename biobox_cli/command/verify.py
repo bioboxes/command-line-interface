@@ -28,7 +28,7 @@ from fn.op import flip
 def format_scenario_name(name):
     return fn.thread([
         string.replace(name, "Should ", ""),
-        string.capitalize,
+        lambda x: x[0].upper() + x[1:],
         F(flip(string.split), '--'),
         fn.first,
         string.strip])
@@ -68,9 +68,9 @@ def run(argv):
             F(flip(string.join), "\n")])
         print output
     elif behave.is_failed(results):
-        error = fn.thread([
+        msg = fn.thread([
             behave.get_failing_scenarios(results),
             F(map, behave.scenario_name),
             F(flip(string.join), "\n")])
 
-        error.err_exit('failed_verification', {'image': image, 'error': error, 'biobox' : biobox})
+        error.err_exit('failed_verification', {'image': image, 'error': msg, 'biobox' : biobox})

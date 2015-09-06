@@ -7,10 +7,11 @@ Feature: A CLI to verify images are biobox-compatible
       biobox verify short_read_assembler unknown
       """
     Then the stdout should be empty
-    And the stderr should contain:
+    And the stderr should equal:
       """
       No Docker image available with the name: unknown
       Did you include the namespace too? E.g. bioboxes/velvet.
+
       """
     And the exit code should be 1
 
@@ -39,7 +40,7 @@ Feature: A CLI to verify images are biobox-compatible
         --t default
       """
     Then the stderr should be empty
-    And the stdout should contain:
+    And the stdout should equal:
     """
     Return an error when the biobox.yaml is in an invalid format.            PASS
     Return an error when the biobox.yaml is missing a version number.        PASS
@@ -48,6 +49,7 @@ Feature: A CLI to verify images are biobox-compatible
     Return an error the biobox.yaml has an unknown additional field.         PASS
     Create a contigs file when given a valid biobox.yml and FASTQ data.      PASS
     Create a 'log.txt' file when a metadata directory is mounted.            PASS
+
     """
     And the exit code should be 0
 
@@ -57,7 +59,7 @@ Feature: A CLI to verify images are biobox-compatible
       biobox verify short_read_assembler test-verify --task <task>
       """
     Then the stdout should be empty
-    And the stderr should contain:
+    And the stderr should equal:
       """
       Error "test-verify" is not a valid short_read_assembler biobox.
       Should return an error when the biobox.yaml is in an invalid format.
