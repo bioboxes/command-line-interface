@@ -8,7 +8,8 @@ project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
   * The `biobox verify` command now returns the reason for the failed
-    verification.
+    verification. A flag `--verbose` can be used to list the PASS/FAIL status
+    for all the verifications explicitly.
 
   * Containers are automatically removed by default after being run. This saves
     space on the users system by no longer keeping redundant containers around.
