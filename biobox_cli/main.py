@@ -16,8 +16,12 @@ Biobox types:
     short_read_assembler    Assemble short reads into contigs
 """
 
-import biobox_cli.util.misc as util
-import sys
+import sys, string
+
+from fn import F
+
+import biobox_cli.util.misc       as util
+import biobox_cli.util.functional as fn
 
 def run():
     args = input_args()
@@ -26,7 +30,9 @@ def run():
 
 def input_args():
     """
-    Get CL args excluding those consisting of only whitespace
+    Get command line args excluding those consisting of only whitespace
     """
-    return filter(lambda x: len(x) > 0,
-        map(lambda x: x.strip(), sys.argv[1:]))
+    return fn.thread([
+        sys.argv[1:],
+        F(map, string.strip),
+        F(filter, fn.is_not_empty)])

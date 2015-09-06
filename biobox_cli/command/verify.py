@@ -16,8 +16,14 @@ Available Biobox types:
 
 import biobox_cli.util.misc        as util
 import biobox_cli.util.error       as error
+import biobox_cli.util.functional  as fn
 import biobox_cli.behave_interface as behave
 import biobox_cli.container        as ctn
+
+import string
+
+from fn    import F
+from fn.op import flip
 
 def run(argv):
     opts    = util.parse_docopt(__doc__, argv, False)
@@ -33,5 +39,9 @@ def run(argv):
     if verbose:
         None
     elif behave.is_failed(results):
-        error = "\n".join(map(behave.scenario_name, behave.get_failing_scenarios(results)))
+        error = fn.thread([
+            behave.get_failing_scenarios(results),
+            F(map, behave.scenario_name),
+            F(flip, string.join, "\n")])
+
         error.err_exit('failed_verification', {'image': image, 'error': error, 'biobox' : biobox})
