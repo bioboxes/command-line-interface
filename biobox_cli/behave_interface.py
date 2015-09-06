@@ -1,8 +1,8 @@
 import tempfile, json, os
 from os import path
 
-import itertools as it
-import functools as func
+from fn import F, _
+import fn.iters
 
 import biobox_cli.util.functional as fn
 
@@ -50,14 +50,29 @@ def is_failed(behave_data):
     """
     return "failed" in map(lambda i: i['status'], behave_data)
 
-def is_failed_scenario(scenario):
-    """
-    Returns true if a behave feature scenario has failed.
-    """
-    return is_failed(filter(fn.is_not_none, (map(fn.get("result"), scenario['steps']))))
-
 def get_scenarios(behave_data):
     return reduce(lambda acc, x: acc + x['elements'], behave_data, [])
+
+def scenario_name(scenario):
+    return scenario["name"]
+
+def scenario_status(scenario):
+    """
+    Returns the status of the last step in a scenario
+    """
+    status = fn.thread([
+        scenario['steps'],
+        F(map, fn.get("result")),
+        F(filter, fn.is_not_none),
+        F(map, fn.get("status")),
+        ])
+    if fn.is_empty(status):
+        return "not run"
+    else:
+        return status[-1]
+
+def is_failed_scenario(scenario):
+    return scenario_status(scenario) == "failed"
 
 def get_failing_scenarios(behave_data):
     """
@@ -65,5 +80,7 @@ def get_failing_scenarios(behave_data):
     """
     return filter(is_failed_scenario, get_scenarios(behave_data))
 
-def scenario_name(scenario):
-    return scenario["name"]
+def get_scenarios_and_statuses(behave_data):
+    return fn.thread([
+        get_scenarios(behave_data),
+        F(map, lambda x: [scenario_name(x), scenario_status(x)])])

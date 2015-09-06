@@ -21,5 +21,7 @@ def is_not_none(i):
     return (i is not None)
 
 def is_not_empty(x):
-    return len(x) > 0
+    return not is_empty(x)
 
+def is_empty(x):
+    return len(x) == 0

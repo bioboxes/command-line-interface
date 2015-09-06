@@ -33,6 +33,14 @@ def test_get_failing_scenarios_with_unrun_scenarios():
     features = [feature(["passing", "failed", "not-run"])]
     nt.assert_equal([scenario()], behave.get_failing_scenarios(features))
 
+def test_get_scenarios_and_status():
+    features = [feature(["failed", "passing"]),
+                feature(["failed", "passing"])]
+    expected = [["scenario name", "failed"],
+                ["scenario name", "passing"],
+                ["scenario name", "failed"],
+                ["scenario name", "passing"]]
+    nt.assert_equal(expected, behave.get_scenarios_and_statuses(features))
 
 def test_scenario_name():
     nt.assert_equal("a", behave.scenario_name(scenario("failed", "a")))
