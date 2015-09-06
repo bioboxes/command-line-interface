@@ -4,7 +4,7 @@ logging.getLogger("requests").setLevel(logging.WARNING)
 import docker
 import docker.utils
 
-import biobox_cli.util as util
+import biobox_cli.util.error as error
 
 def client():
     client = docker.Client(**docker.utils.kwargs_from_env(assert_hostname = False))
@@ -28,7 +28,7 @@ def is_image_available(image):
 
 def exit_if_no_image_available(image):
     if not is_image_available(image):
-        util.err_exit('unknown_image', {'image': image})
+        error.err_exit('unknown_image', {'image': image})
 
 def mount_string(host_dir, container_dir, read_only = True):
     access = "ro" if read_only else "rw"

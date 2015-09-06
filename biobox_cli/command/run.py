@@ -11,7 +11,7 @@ Available Biobox types:
   short_read_assembler  Assemble short reads into contigs
 """
 
-import biobox_cli.util as util
+import biobox_cli.util.misc as util
 
 def run(argv):
     opts = util.parse_docopt(__doc__, argv, True)
