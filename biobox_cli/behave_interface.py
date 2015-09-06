@@ -43,12 +43,12 @@ def run(biobox_type, image, task):
     with open(tmp_file, 'r') as f:
         return json.loads(f.read())
 
-def is_failed(behave_dict):
+def is_failed(behave_data):
     """
     Parses a behave dictionary and returns true if any verifications have
     failed.
     """
-    return "failed" in map(lambda i: i['status'], behave_dict)
+    return "failed" in map(lambda i: i['status'], behave_data)
 
 def is_failed_scenario(scenario):
     """
@@ -56,13 +56,14 @@ def is_failed_scenario(scenario):
     """
     return is_failed(filter(fn.is_not_none, (map(fn.get("result"), scenario['steps']))))
 
-def get_failing_scenarios(results):
+def get_scenarios(behave_data):
+    return reduce(lambda acc, x: acc + x['elements'], behave_data, [])
+
+def get_failing_scenarios(behave_data):
     """
     Returns all failing scenarios from a behave dictionary
     """
-    def f(acc, item):
-        return acc + filter(is_failed_scenario, item['elements'])
-    return reduce(f, results, [])
+    return filter(is_failed_scenario, get_scenarios(behave_data))
 
 def scenario_name(scenario):
     return scenario["name"]
