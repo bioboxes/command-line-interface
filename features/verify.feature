@@ -41,13 +41,13 @@ Feature: A CLI to verify images are biobox-compatible
     Then the stderr should be empty
     And the stdout should contain:
     """
-      Return an error when the biobox.yaml is in an invalid format.            PASS
-      Return an error when the biobox.yaml is missing a version number.        PASS
-      Return an error when the biobox.yaml has an invalid version number.      PASS
-      Return an error when the biobox.yaml is missing the "arguments" field.   PASS
-      Return an error the biobox.yaml has an unknown additional field.         PASS
-      Create a contigs file when given a valid biobox.yml and FASTQ data.      PASS
-      Create a 'log.txt' file when a metadata directory is mounted.            PASS
+    Return an error when the biobox.yaml is in an invalid format.            PASS
+    Return an error when the biobox.yaml is missing a version number.        PASS
+    Return an error when the biobox.yaml has an invalid version number.      PASS
+    Return an error when the biobox.yaml is missing the "arguments" field.   PASS
+    Return an error the biobox.yaml has an unknown additional field.         PASS
+    Create a contigs file when given a valid biobox.yml and FASTQ data.      PASS
+    Create a 'log.txt' file when a metadata directory is mounted.            PASS
     """
     And the exit code should be 0
 

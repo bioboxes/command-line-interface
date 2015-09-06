@@ -81,6 +81,9 @@ def get_failing_scenarios(behave_data):
     return filter(is_failed_scenario, get_scenarios(behave_data))
 
 def get_scenarios_and_statuses(behave_data):
+    """
+    Returns a list of scenarios and their status
+    """
     return fn.thread([
         get_scenarios(behave_data),
         F(map, lambda x: [scenario_name(x), scenario_status(x)])])

@@ -25,3 +25,16 @@ def is_not_empty(x):
 
 def is_empty(x):
     return len(x) == 0
+
+def first(x):
+    return x[0]
+
+def unique(x):
+    from sortedcontainers import SortedSet
+    return list(SortedSet(x))
+
+# http://stackoverflow.com/a/480227/91144
+def unique(seq):
+    seen = set()
+    seen_add = seen.add
+    return [x for x in seq if not (x in seen or seen_add(x))]
