@@ -49,7 +49,10 @@ def run(argv):
 
     ctn.exit_if_no_image_available(image)
 
-    results = behave.run(biobox, image, task)
+    if verbose:
+        results = behave.run(biobox, image, task, False)
+    else:
+        results = behave.run(biobox, image, task)
 
     if verbose:
         statuses = fn.thread([

@@ -30,7 +30,7 @@ Feature: A CLI to verify images are biobox-compatible
       | short_read_assembler | bioboxes/megahit | --task=no-mercy |
       | assembler_benchmark  | bioboxes/quast   |                 |
 
-  Scenario: Generating a verbose of biobox image verification
+  Scenario: Generating a verbose output of biobox image verification
     When I run the command:
       """
       biobox verify \
@@ -72,3 +72,25 @@ Feature: A CLI to verify images are biobox-compatible
       | exit-0   |
       | exit-1   |
       | exit-128 |
+
+  Scenario: Generating a verbose output of failing biobox image verification
+    When I run the command:
+      """
+      biobox verify \
+        short_read_assembler \
+        test-verify \
+        --verbose
+      """
+    Then the stderr should be empty
+    And the stdout should equal:
+    """
+    Return an error when the biobox.yaml is in an invalid format.            FAIL
+    Return an error when the biobox.yaml is missing a version number.        FAIL
+    Return an error when the biobox.yaml has an invalid version number.      FAIL
+    Return an error when the biobox.yaml is missing the "arguments" field.   FAIL
+    Return an error the biobox.yaml has an unknown additional field.         FAIL
+    Create a contigs file when given a valid biobox.yml and FASTQ data.      FAIL
+    Create a 'log.txt' file when a metadata directory is mounted.            FAIL
+
+    """
+    And the exit code should be 0

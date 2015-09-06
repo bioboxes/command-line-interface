@@ -21,7 +21,7 @@ def tmp_feature_dir():
     """
     return path.abspath(path.join(os.getcwd(), 'biobox_verify'))
 
-def run(biobox_type, image, task):
+def run(biobox_type, image, task, stop = True):
     """
     Runs the behave cucumber features for the given biobox and tast given by
     the passed arguments. Creates a directory in the current working directory,
@@ -31,7 +31,9 @@ def run(biobox_type, image, task):
     from behave.__main__ import main as behave_main
     _, tmp_file = tempfile.mkstemp()
 
-    cmd = "{file} --define IMAGE={image} --define TASK={task} --define TMPDIR={tmp_dir} --outfile {tmp_file} --format json.pretty --no-summary --stop"
+    cmd = "{file} --define IMAGE={image} --define TASK={task} --define TMPDIR={tmp_dir} --outfile {tmp_file} --format json.pretty --no-summary"
+    if stop:
+      cmd += " --stop"
     args = {'file':     behave_feature_file(biobox_type),
             'tmp_dir':  tmp_feature_dir(),
             'image':    image,
