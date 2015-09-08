@@ -16,6 +16,9 @@ project adheres to [Semantic Versioning](http://semver.org/).
     An additional flag `--no-rm-container` was added to override this and keep
     the container after use.
 
+  * The biobox commandline interface is able to run and verify assembler 
+    benchmark bioboxes, such as bioboxes/quast. 
+
 ### Fixed
 
   * Fixed bug where passing full paths as the input arguments would cause a
