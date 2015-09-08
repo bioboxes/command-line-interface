@@ -45,7 +45,7 @@ Feature: A CLI to run biobox-compatible Docker containers
 
       """
 
-      Examples:
+    Examples:
       | cmd     |
       | dummy   |
       | unknown |
@@ -64,7 +64,7 @@ Feature: A CLI to run biobox-compatible Docker containers
 
       """
 
-      Examples:
+    Examples:
       | command | biobox  |
       | run     | dummy   |
       | run     | unknown |
@@ -133,3 +133,34 @@ Feature: A CLI to run biobox-compatible Docker containers
       | bioboxes/velvet  |                 | $(realpath reads.fq.gz) | contigs.fa               |
       | bioboxes/velvet  |                 | reads.fq.gz             | $(realpath .)/contigs.fa |
       | bioboxes/megahit | --task=no-mercy | reads.fq.gz             | contigs.fa               |
+
+  Scenario Outline: Running a biobox assembler benchmark container
+    Given I create the directory "input"
+    And I create the directory "output"
+    And I copy the example data files:
+      | source         | dest                 |
+      | assembly.fasta | input/assembly.fasta |
+    And I copy the example data directories:
+      | source     | dest             |
+      | references | input/references |
+    When I run the command:
+      """
+      biobox \
+        run \
+        assembler_benchmark \
+        <benchmark> \
+        --no-rm \
+        --input-fasta=<input-fasta> \
+        --input-ref=<input-ref> \
+        --output=<output> \
+        <args>
+      """
+    Then the stdout should be empty
+    And the stderr should be empty
+    And the exit code should be 0
+    And the file "output/biobox.yaml" should exist
+    And the file "output/biobox.yaml" should not be empty
+    Examples:
+      | benchmark      | args | input-fasta                      | input-ref                    | output             |
+      | bioboxes/quast |      | $(realpath input/assembly.fasta) | $(realpath input/references) | $(realpath output) |
+      | bioboxes/quast |      | input/assembly.fasta             | input/references             | output             |

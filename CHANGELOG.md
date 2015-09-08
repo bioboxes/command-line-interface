@@ -13,8 +13,11 @@ project adheres to [Semantic Versioning](http://semver.org/).
 
   * Containers are automatically removed by default after being run. This saves
     space on the users system by no longer keeping redundant containers around.
-    An additional flag `--no-rm-container` was added to override this and keep
+    An additional flag `--no-rm` was added to override this and keep
     the container after use.
+
+  * The biobox commandline interface is able to run and verify assembler 
+    benchmark bioboxes, such as bioboxes/quast. 
 
 ### Fixed
 
