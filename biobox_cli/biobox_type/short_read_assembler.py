@@ -1,6 +1,6 @@
 """
 Usage:
-    biobox run short_read_assembler <image> --input=FILE --output=FILE [--task=TASK]
+    biobox run short_read_assembler <image> [--no-rm] --input=FILE --output=FILE [--task=TASK]
 
 Options:
   -h, --help              Show this screen.
@@ -12,7 +12,7 @@ Options:
 """
 
 import biobox_cli.container   as ctn
-import biobox_cli.util        as util
+import biobox_cli.util.misc   as util
 import biobox_cli.biobox_file as fle
 
 import os
@@ -31,21 +31,29 @@ def run(argv):
     contig_file = opts['--output']
     task        = opts['--task']
 
-    if not ctn.image_available(image):
-        util.err_exit('unknown_image', {'image': image})
+    ctn.exit_if_no_image_available(image)
 
-    cntr_src_dir = "/fastq"
-    biobox_yaml = fle.generate([
-        fle.fastq_arguments(cntr_src_dir, [fastq_file, "paired"])])
+    cntr_fastq_file = "/fastq/input.fq.gz"
+    fastq_values = [(cntr_fastq_file, "paired")]
+    biobox_yaml = fle.generate([fle.fastq_arguments(fastq_values)])
 
-    host_src_dir = os.path.abspath(os.path.dirname(fastq_file))
+    host_src_dir = os.path.abspath(fastq_file)
     host_dst_dir = tmp.mkdtemp()
 
     mount_strings = [
-        ctn.mount_string(host_src_dir, cntr_src_dir),
+        ctn.mount_string(host_src_dir, cntr_fastq_file),
         ctn.biobox_file_mount_string(fle.create_biobox_directory(biobox_yaml)),
         ctn.output_directory_mount_string(host_dst_dir)]
 
-    ctn.run(ctn.create(image, task, mount_strings))
+    ctnr = ctn.create(image, task, mount_strings)
+    ctn.run(ctnr)
     biobox_output = fle.parse(host_dst_dir)
     copy_contigs_file(host_dst_dir, biobox_output, contig_file)
+    return ctnr
+
+def remove(container):
+    """
+    Removes a container
+    Note this method is not tested due to limitations of circle ci
+    """
+    ctn.remove(container)

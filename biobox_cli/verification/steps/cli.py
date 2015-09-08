@@ -40,6 +40,12 @@ def step_impl(context, file_):
 def step_impl(context):
     for row in context.table.rows:
         shutil.copy(get_data_file_path(row['source']),
+                get_env_path(context, row['dest']))\
+
+@given(u'I copy the example data directories')
+def step_impl(context):
+    for row in context.table.rows:
+        shutil.copytree(get_data_file_path(row['source']),
                 get_env_path(context, row['dest']))
 
 @when(u'I run the command')

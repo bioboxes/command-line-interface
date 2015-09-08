@@ -1,6 +1,6 @@
 Feature: Verification steps for short read assembler bioboxes
 
-  Scenario: A garbled biobox.yaml file.
+  Scenario: Should return an error when the biobox.yaml is in an invalid format.
     Given I create the directory "input"
     And I create the file "input/biobox.yaml" with the contents:
       """
@@ -19,7 +19,7 @@ Feature: Verification steps for short read assembler bioboxes
       Error parsing the YAML file: /bbx/input/biobox.yaml
       """
 
-  Scenario: An biobox.yaml missing the version number.
+  Scenario: Should return an error when the biobox.yaml is missing a version number.
     Given I create the directory "input"
     Given I create the file "input/biobox.yaml" with the contents:
       """
@@ -42,7 +42,7 @@ Feature: Verification steps for short read assembler bioboxes
       'version' is a required property
       """
 
-  Scenario: An biobox.yaml with a missing patch version number.
+  Scenario: Should return an error when the biobox.yaml has an invalid version number.
     Given I create the directory "input"
     And I create the file "input/biobox.yaml" with the contents:
       """
@@ -66,7 +66,7 @@ Feature: Verification steps for short read assembler bioboxes
       '0.9' does not match '^0.9.\\d+$'
       """
 
-  Scenario: An biobox.yaml with a missing arguments field.
+  Scenario: Should return an error when the biobox.yaml is missing the "arguments" field.
     Given I create the directory "input"
     And I create the file "input/biobox.yaml" with the contents:
       """
@@ -85,7 +85,7 @@ Feature: Verification steps for short read assembler bioboxes
       'arguments' is a required property
       """
 
-  Scenario Outline: An biobox.yaml with an additional unknown field
+  Scenario Outline: Should return an error the biobox.yaml has an unknown additional field.
     Given I create the directory "input"
     And I create the file "input/biobox.yaml" with the contents:
       """
@@ -115,7 +115,7 @@ Feature: Verification steps for short read assembler bioboxes
       | unknown       |
       | invalid_fastq |
 
-  Scenario: Running the biobox image successfully
+  Scenario: Should create a contigs file when given a valid biobox.yml and FASTQ data.
     Given I create the directory "input"
     And I create the directory "output"
     And I copy the example data files:
@@ -147,7 +147,7 @@ Feature: Verification steps for short read assembler bioboxes
       | output/biobox.yaml |
       | output/contigs.fa  |
 
-  Scenario: Generating a log.txt file when a metadata directory is mounted
+  Scenario: Should create a 'log.txt' file when a metadata directory is mounted.
     Given I create the directory "input"
     And I create the directory "output"
     And I create the directory "metadata"

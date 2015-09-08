@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v0.3.0] - date
+
+### Added
+
+  * The `biobox verify` command now returns the reason for the failed
+    verification. A flag `--verbose` can be used to list the PASS/FAIL status
+    for all the verifications explicitly.
+
+  * Containers are automatically removed by default after being run. This saves
+    space on the users system by no longer keeping redundant containers around.
+    An additional flag `--no-rm-container` was added to override this and keep
+    the container after use.
+
+### Fixed
+
+  * Fixed bug where passing full paths as the input arguments would cause a
+    crash. Full paths can now be given.
+
+  * Fixed a bug where trying to validate a non-existent Docker image returned a
+    verification failure message to the use instead of correctly informing the
+    user the image does not exist.
+
 ## [v0.2.2] - 2015-08-27
 
 ### Added
@@ -71,7 +93,11 @@ project adheres to [Semantic Versioning](http://semver.org/).
   * More verbose error messages. The user now gets clearer error messages when
     the biobox is not available or the command is called incorrectly.
 
+<<<<<<< HEAD
+[v0.3.0]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.3.0
+=======
 [v0.2.2]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.2.2
+>>>>>>> @{-1}
 [v0.2.1]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.2.1
 [v0.2.0]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.2.0
 [v0.1.0]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.1.0

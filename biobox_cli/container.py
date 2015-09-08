@@ -1,9 +1,10 @@
-import logging
-import os
+import logging, os
 logging.getLogger("requests").setLevel(logging.WARNING)
 
 import docker
 import docker.utils
+
+import biobox_cli.util.error as error
 
 def client():
     client = docker.Client(**docker.utils.kwargs_from_env(assert_hostname = False))
@@ -13,18 +14,21 @@ def get_image_tags(docker_dict):
     return reduce(lambda acc, x: acc + [x, x.split(":")[0]],
             docker_dict['RepoTags'], [])
 
-def image_available_locally(image):
+def is_image_available_locally(image):
     image_tags = map(get_image_tags, client().images())
     images = set(reduce(lambda acc, x: acc + x, image_tags, []))
     return image in images
 
-def image_available(image):
-    from docker.errors import APIError
-    if not image_available_locally(image):
+def is_image_available(image):
+    if not is_image_available_locally(image):
         output = client().pull(image)
         if "error" in output:
             return False
     return True
+
+def exit_if_no_image_available(image):
+    if not is_image_available(image):
+        error.err_exit('unknown_image', {'image': image})
 
 def mount_string(host_dir, container_dir, read_only = True):
     access = "ro" if read_only else "rw"
@@ -46,3 +50,10 @@ def create(image, command, mounts = []):
 def run(container):
     client().start(container)
     client().wait(container)
+
+def remove(container):
+    """
+    Removal of a container
+    NOTE: This method is not tested due to circle ci limitations
+    """
+    client().remove_container(container, v=True)
