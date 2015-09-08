@@ -1,13 +1,13 @@
 """
 Usage:
-    biobox run assembler_benchmark <image> [--no-rm] --input-fasta=FILE --input-ref=DIR --output=FILE [--task=TASK]
+    biobox run assembler_benchmark <image> [--no-rm] --input-fasta=FILE --input-ref=DIR --output=DIR [--task=TASK]
 
 Options:
   -h, --help                     Show this screen.
   -v, --version                  Show version.
   -if FILE, --input-fasta=FILE   Source FASTA file
   -ir DIR, --input-ref=DIR       Source directory containing reference fasta files
-  -o DIR --output=FILE           Destination output directory
+  -o DIR --output=DIR            Destination output directory
   -t TASK, --task=TASK           Optionally specify a biobox task to run [default: default]
 
 """
