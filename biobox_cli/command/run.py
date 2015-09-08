@@ -17,5 +17,5 @@ def run(argv):
     opts = util.parse_docopt(__doc__, argv, True)
     module = util.select_module("biobox_type", opts["<biobox_type>"])
     ctnr = module.run(argv)
-    if not '--no-rm-container' in argv:
+    if not '--no-rm' in argv:
         module.remove(ctnr)
