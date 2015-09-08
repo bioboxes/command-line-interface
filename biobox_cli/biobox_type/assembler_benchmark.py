@@ -1,6 +1,6 @@
 """
 Usage:
-    biobox run assembler_benchmark <image> --input-fasta=FILE --input-ref=DIR --output=FILE [--task=TASK]
+    biobox run assembler_benchmark <image> [--no-rm] --input-fasta=FILE --input-ref=DIR --output=FILE [--task=TASK]
 
 Options:
   -h, --help                     Show this screen.
@@ -13,20 +13,16 @@ Options:
 """
 
 import biobox_cli.container   as ctn
-import biobox_cli.util        as util
 import biobox_cli.biobox_file as fle
 
 import os
 import tempfile as tmp
+import biobox_cli.util.misc   as util
 
-
-def copy_contigs_file(biobox_output_dir, biobox_output, dst):
-    contigs = biobox_output['arguments'][0]['fasta'][0]['value']
-    src = os.path.join(biobox_output_dir, contigs)
+def copy_result_files(biobox_output_dir, dst):
     import shutil
-
-    shutil.move(src, dst)
-
+    output_files = os.listdir(biobox_output_dir)
+    map(lambda f: shutil.move(os.path.join(biobox_output_dir,f), dst), output_files)
 
 def run(argv):
     opts = util.parse_docopt(__doc__, argv, False)
@@ -36,14 +32,14 @@ def run(argv):
     output_dir = opts['--output']
     task = opts['--task']
 
-    if not ctn.image_available(image):
-         util.err_exit('unknown_image', {'image': image})
+    ctn.exit_if_no_image_available(image)
 
-    cntr_src_fasta_dir = "/fasta"
-    fasta_yaml_values = fle.fasta_arguments(cntr_src_fasta_dir, [fasta_file, "contig"])
+    cntr_src_fasta = "/fasta/input.fa"
+    fasta_values = [(cntr_src_fasta, "contig")]
+    fasta_yaml_values = fle.fasta_arguments(fasta_values)
 
     cntr_src_ref_dir = "/ref"
-    ref_dir_yaml_values = fle.reference_argument(cntr_src_ref_dir, ref_dir)
+    ref_dir_yaml_values = fle.reference_argument(ref_dir)
 
     biobox_yaml = fle.generate([fasta_yaml_values, ref_dir_yaml_values])
 
@@ -52,11 +48,19 @@ def run(argv):
     host_dst_dir = tmp.mkdtemp()
 
     mount_strings = [
-         ctn.mount_string(host_src_fasta_file, cntr_src_fasta_dir),
+         ctn.mount_string(host_src_fasta_file, cntr_src_fasta),
          ctn.mount_string(host_src_ref_dir, cntr_src_ref_dir),
          ctn.biobox_file_mount_string(fle.create_biobox_directory(biobox_yaml)),
          ctn.output_directory_mount_string(host_dst_dir)]
 
-    ctn.run(ctn.create(image, task, mount_strings))
-    biobox_output = fle.parse(host_dst_dir)
-    copy_contigs_file(host_dst_dir, biobox_output, output_dir)
+    ctnr = ctn.create(image, task, mount_strings)
+    ctn.run(ctnr)
+    copy_result_files(host_dst_dir, output_dir)
+    return ctnr
+
+def remove(container):
+    """
+    Removes a container
+    Note this method is not tested due to limitations of circle ci
+    """
+    ctn.remove(container)
