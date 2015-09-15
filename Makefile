@@ -28,10 +28,13 @@ clean:
 
 test    = $(path) nosetests --rednose
 
-feature:
+command:
+	command -v realpath >/dev/null 2>&1 || { echo >&2 "Please install 'realpath' on your system"; exit 1; }
+
+feature: command
 	@$(path) behave --stop $(ARGS)
 
-test:
+test: command
 	@$(test)
 
 autotest:
@@ -91,4 +94,4 @@ vendor/python: requirements.txt
 	docker build --tag $(verifier-image)  images/$(verifier-image)
 	touch $@
 
-.PHONY: bootstrap build feature test-build publish test
+.PHONY: bootstrap build feature test-build publish test command
