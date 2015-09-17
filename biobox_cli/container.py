@@ -48,13 +48,13 @@ def create(image, command, mounts = []):
             volumes     = map(lambda x: x.split(":")[0], mounts),
             host_config = docker.utils.create_host_config(binds=mounts))
 
-def create_tty(image):
+def create_tty(image, tty):
     command = ""
     return client().create_container(
             image,
             command,
             stdin_open = True,
-            tty        = True,
+            tty        = tty,
             entrypoint = '/bin/bash')
 
 def run(container):

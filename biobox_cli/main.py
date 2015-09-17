@@ -11,6 +11,7 @@ Options:
 Commands:
     run       Run a biobox Docker image with input parameters
     verify    Verify that a Docker image matches the given specification type
+    login     Log in to a biobox container with mounted test data
 
 Biobox types:
     short_read_assembler    Assemble short reads into contigs
