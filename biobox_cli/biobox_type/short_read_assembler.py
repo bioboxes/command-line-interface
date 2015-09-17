@@ -8,6 +8,7 @@ Options:
   -i FILE, --input=FILE   Source FASTQ file containing paired short reads
   -o FILE, --output=FILE  Destination FASTA file for assembled contigs
   -t TASK, --task=TASK    Optionally specify a biobox task to run [default: default]
+  -r, --no-rm             Don't remove the container after the process finishes
 
 """
 

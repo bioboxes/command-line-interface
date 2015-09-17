@@ -6,6 +6,7 @@ Usage:
 
 Options:
   -h, --help     Show this screen.
+  -r, --no-rm    Don't remove the container after the process finishes
 
 Available Biobox types:
   short_read_assembler  Assemble short reads into contigs
