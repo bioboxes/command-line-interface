@@ -5,6 +5,7 @@ import docker
 import docker.utils
 
 import biobox_cli.util.error as error
+import dockerpty             as pty
 
 def client():
     client = docker.Client(**docker.utils.kwargs_from_env(assert_hostname = False))
@@ -47,9 +48,23 @@ def create(image, command, mounts = []):
             volumes     = map(lambda x: x.split(":")[0], mounts),
             host_config = docker.utils.create_host_config(binds=mounts))
 
+def create_tty(image):
+    command = ""
+    return client().create_container(
+            image,
+            command,
+            stdin_open = True,
+            tty        = True,
+            entrypoint = '/bin/bash')
+
 def run(container):
     client().start(container)
     client().wait(container)
+
+def login(container):
+    client().start(container)
+    pty.PseudoTerminal(client(), container).start()
+    client().stop(container)
 
 def remove(container):
     """
