@@ -6,13 +6,20 @@ import fn.iters
 
 import biobox_cli.util.functional as fn
 
-def behave_feature_file(biobox):
+
+def feature_file(biobox):
     """
     Returns the fullpath for the corresponding feature file for the given biobox type.
     """
     from pkg_resources import resource_filename
     file_ = biobox + '.feature'
     return path.abspath(resource_filename(__name__, path.join('verification', file_)))
+
+def features_available(biobox):
+    """
+    Returns True if a feature file is available for the given biobox type
+    """
+    return path.isfile(feature_file(biobox))
 
 def tmp_feature_dir():
     """
@@ -34,7 +41,7 @@ def run(biobox_type, image, task, stop = True):
     cmd = "{file} --define IMAGE={image} --define TASK={task} --define TMPDIR={tmp_dir} --outfile {tmp_file} --format json.pretty --no-summary"
     if stop:
       cmd += " --stop"
-    args = {'file':     behave_feature_file(biobox_type),
+    args = {'file':     feature_file(biobox_type),
             'tmp_dir':  tmp_feature_dir(),
             'image':    image,
             'tmp_file': tmp_file,

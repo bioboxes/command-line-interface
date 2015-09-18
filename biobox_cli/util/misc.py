@@ -1,4 +1,5 @@
 import sys
+import biobox_cli.util.error  as error
 
 def select_module(module, name):
     """
