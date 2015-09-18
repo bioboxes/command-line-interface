@@ -40,6 +40,7 @@ def run(argv):
         error.err_exit("unknown_command",
                 {"command_type" : "biobox type", "command" : biobox_type})
 
+    docker.exit_if_no_image_available(image)
 
 
 
