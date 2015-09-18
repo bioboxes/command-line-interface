@@ -29,7 +29,7 @@ clean:
 test    = $(path) nosetests --rednose
 
 command:
-	command -v realpath >/dev/null 2>&1 || { echo >&2 "Please install 'realpath' on your system"; exit 1; }
+	@command -v realpath >/dev/null 2>&1 || { echo >&2 "Please install 'realpath' on your system"; exit 1; }
 
 feature: command
 	@$(path) behave --stop $(ARGS)
