@@ -13,22 +13,39 @@ Available Biobox types:
   short_read_assembler  Assemble short reads into contigs
 """
 
-import biobox_cli.util.misc as util
-import biobox_cli.container as docker
+import yaml
 
+import biobox_cli.util.misc   as util
+import biobox_cli.util.assets as asset
+import biobox_cli.util.error  as error
+import biobox_cli.container   as docker
+
+def get_login_parameters(biobox_type):
+    params = yaml.load(asset.get_asset_file_contents('login_parameters.yml'))
+    if biobox_type not in params:
+        return None
+    else:
+        return params[biobox_type]
 
 def run(argv):
     opts = util.parse_docopt(__doc__, argv, True)
 
-    image  = opts["<image>"]
-    tty    = not "--no-tty" in opts["<args>"]
-    remove = not "--no-rm"  in opts["<args>"]
+    image       = opts["<image>"]
+    biobox_type = opts["<biobox_type>"]
+    tty         = not "--no-tty" in opts["<args>"]
+    remove      = not "--no-rm"  in opts["<args>"]
+
+    params = get_login_parameters(biobox_type)
+    if params is None:
+        error.err_exit("unknown_command",
+                {"command_type" : "biobox type", "command" : biobox_type})
+
+
+
+
 
     ctnr = docker.create_tty(image, tty)
     docker.login(ctnr)
-
-    #module = util.select_module("biobox_type", )
-    #ctnr = module.login()
 
     if remove:
         docker.remove(ctnr)

@@ -1,7 +1,5 @@
 import sys
 
-import biobox_cli.util.error as error
-
 def select_module(module, name):
     """
     Select and return a biobox module
