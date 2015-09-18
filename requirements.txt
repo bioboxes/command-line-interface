@@ -8,4 +8,4 @@ rednose            == 0.4.3
 requests[security] == 2.7.0
 scripttest         == 1.3
 twine              == 1.5.0
-dockerpty
+dockerpty          == 0.3.2
