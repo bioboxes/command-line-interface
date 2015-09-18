@@ -3,19 +3,32 @@ import nose.tools as nt
 
 import subprocess as spr
 
+import pexpect, re
+
+PROMPT = 'root@\w+:[^\r]+'
+
 @when(u'I run the interactive command')
 def step_impl(context):
-    cmd = context.text
-    context.process = spr.Popen(
-            cmd.split(' '),
-            shell  = True,
-            stdin  = spr.PIPE,
-            stdout = spr.PIPE,
-            stderr = spr.PIPE)
+    process = pexpect.spawn(context.text)
+    time.sleep(0.5)
+    process.send(b"\x1b[A")
+    process.expect(PROMPT)
+
+    class Output(object):
+        pass
+
+    context.output = Output()
+    context.output.stderr = ""
+    context.output.stdout = ""
+
+    context.process = process
+
 
 @when(u'I type')
 def step_impl(context):
-    class Output(object):
-        pass
-    context.output = Output()
-    context.output.stdout, context.output.stderr = context.process.communicate(input = context.text.encode())
+    cmd = context.text.strip()
+    context.process.sendline(cmd)
+    context.process.expect(PROMPT)
+    context.output.stdout = re.sub(re.escape(cmd),
+                                   '',
+                                   context.process.before).strip()
