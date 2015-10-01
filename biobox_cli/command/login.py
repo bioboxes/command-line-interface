@@ -21,11 +21,31 @@ import biobox_cli.util.error  as error
 import biobox_cli.container   as docker
 
 def get_login_parameters(biobox_type):
+    """
+    Determines if the biobox type is currently supported for login. Returns
+    a list of parameters for mounting data if it is.
+    """
     params = yaml.load(asset.get_asset_file_contents('login_parameters.yml'))
     if biobox_type not in params:
         return None
     else:
         return params[biobox_type]
+
+
+def create_login_file(dir_, params):
+    from os.path import join
+    from shutil  import copyfile
+
+    is_literal = params['type'] == 'literal'
+    dst = join(dir_, params['dst'])
+
+    if is_literal:
+        with open(dst, 'w') as f:
+            f.write(params['src'])
+    else:
+        src = asset.get_data_file_path(params['src'])
+        copyfile(src, dst)
+
 
 def run(argv):
     opts = util.parse_docopt(__doc__, argv, True)
@@ -41,9 +61,6 @@ def run(argv):
                 {"command_type" : "biobox type", "command" : biobox_type})
 
     docker.exit_if_no_image_available(image)
-
-
-
 
     ctnr = docker.create_tty(image, tty)
     docker.login(ctnr)

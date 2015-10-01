@@ -41,21 +41,23 @@ def output_directory_mount_string(directory):
 def biobox_file_mount_string(directory):
     return mount_string(directory, "/bbx/input")
 
-def create(image, command, mounts = []):
+def create(image, command, volumes = []):
     return client().create_container(
             image,
             command,
-            volumes     = map(lambda x: x.split(":")[0], mounts),
-            host_config = docker.utils.create_host_config(binds=mounts))
+            volumes     = map(lambda x: x.split(":")[0], volumes),
+            host_config = docker.utils.create_host_config(binds=volumes))
 
-def create_tty(image, tty):
+def create_tty(image, tty, volumes = []):
     command = ""
     return client().create_container(
             image,
             command,
-            stdin_open = True,
-            tty        = tty,
-            entrypoint = '/bin/bash')
+            stdin_open  = True,
+            tty         = tty,
+            entrypoint  = '/bin/bash',
+            volumes     = map(lambda x: x.split(":")[0], volumes),
+            host_config = docker.utils.create_host_config(binds=volumes))
 
 def run(container):
     client().start(container)
