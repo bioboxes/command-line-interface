@@ -53,7 +53,7 @@ def create_login_volume(dir_name, files):
     src = util.mkdir_p(os.path.join(TEMPORARY_DIRECTORY, dir_name.strip("/")))
     for f in files:
         create_login_file(src, f)
-    return docker.mount_string(src, dir_name, False)
+    return docker.volume_string(src, dir_name, False)
 
 def rm_login_dir():
     shutil.rmtree(TEMPORARY_DIRECTORY)

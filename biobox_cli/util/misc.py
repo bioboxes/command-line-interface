@@ -1,6 +1,6 @@
 import sys
 import os.path
-import biobox_cli.util.error  as error
+import biobox_cli.util.error as error
 
 def select_module(module, name):
     """

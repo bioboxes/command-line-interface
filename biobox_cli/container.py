@@ -31,18 +31,18 @@ def exit_if_no_image_available(image):
     if not is_image_available(image):
         error.err_exit('unknown_image', {'image': image})
 
-def mount_string(host_dir, container_dir, read_only = True):
+def volume_string(host_dir, container_dir, read_only = True):
     access = "ro" if read_only else "rw"
     return ":".join([os.path.abspath(host_dir), container_dir, access])
 
-def output_directory_mount_string(directory):
-    return mount_string(directory, "/bbx/output", False)
+def output_directory_volume_string(directory):
+    return volume_string(directory, "/bbx/output", False)
 
-def input_directory_mount_string(directory):
-    return mount_string(directory, "/bbx/input", True)
+def input_directory_volume_string(directory):
+    return volume_string(directory, "/bbx/input", True)
 
-def biobox_file_mount_string(directory):
-    return mount_string(directory, "/bbx/input")
+def biobox_file_volume_string(directory):
+    return volume_string(directory, "/bbx/input")
 
 def create(image, command, volumes = []):
     return client().create_container(

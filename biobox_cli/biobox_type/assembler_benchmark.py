@@ -47,13 +47,13 @@ def run(argv):
     host_src_ref_dir = os.path.abspath(ref_dir)
     host_dst_dir = tmp.mkdtemp()
 
-    mount_strings = [
-         ctn.mount_string(host_src_fasta_file, cntr_src_fasta),
-         ctn.mount_string(host_src_ref_dir, cntr_src_ref_dir),
-         ctn.biobox_file_mount_string(fle.create_biobox_directory(biobox_yaml)),
-         ctn.output_directory_mount_string(host_dst_dir)]
+    volume_strings = [
+         ctn.volume_string(host_src_fasta_file, cntr_src_fasta),
+         ctn.volume_string(host_src_ref_dir, cntr_src_ref_dir),
+         ctn.biobox_file_volume_string(fle.create_biobox_directory(biobox_yaml)),
+         ctn.output_directory_volume_string(host_dst_dir)]
 
-    ctnr = ctn.create(image, task, mount_strings)
+    ctnr = ctn.create(image, task, volume_strings)
     ctn.run(ctnr)
     copy_result_files(host_dst_dir, output_dir)
     return ctnr
