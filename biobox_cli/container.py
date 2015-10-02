@@ -38,6 +38,9 @@ def mount_string(host_dir, container_dir, read_only = True):
 def output_directory_mount_string(directory):
     return mount_string(directory, "/bbx/output", False)
 
+def input_directory_mount_string(directory):
+    return mount_string(directory, "/bbx/input", True)
+
 def biobox_file_mount_string(directory):
     return mount_string(directory, "/bbx/input")
 

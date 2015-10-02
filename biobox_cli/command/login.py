@@ -14,11 +14,16 @@ Available Biobox types:
 """
 
 import yaml
+import os.path
+import shutil
 
 import biobox_cli.util.misc   as util
 import biobox_cli.util.assets as asset
 import biobox_cli.util.error  as error
 import biobox_cli.container   as docker
+
+TEMPORARY_DIRECTORY = '.biobox_tmp'
+
 
 def get_login_parameters(biobox_type):
     """
@@ -33,18 +38,22 @@ def get_login_parameters(biobox_type):
 
 
 def create_login_file(dir_, params):
-    from os.path import join
-    from shutil  import copyfile
-
     is_literal = params['type'] == 'literal'
-    dst = join(dir_, params['dst'])
+    dst = os.path.join(dir_, params['dst'])
 
     if is_literal:
         with open(dst, 'w') as f:
             f.write(params['src'])
     else:
         src = asset.get_data_file_path(params['src'])
-        copyfile(src, dst)
+        shutil.copyfile(src, dst)
+
+
+def create_login_volume((dir_name, files)):
+    src = util.mkdir_p(os.path.join(TEMPORARY_DIRECTORY, dir_name.strip("/")))
+    for f in files:
+        create_login_file(src, f)
+    return docker.mount_string(src, dir_name, False)
 
 
 def run(argv):
@@ -55,14 +64,14 @@ def run(argv):
     tty         = not "--no-tty" in opts["<args>"]
     remove      = not "--no-rm"  in opts["<args>"]
 
+    docker.exit_if_no_image_available(image)
+
     params = get_login_parameters(biobox_type)
     if params is None:
         error.err_exit("unknown_command",
                 {"command_type" : "biobox type", "command" : biobox_type})
-
-    docker.exit_if_no_image_available(image)
-
-    ctnr = docker.create_tty(image, tty)
+    volumes = map(create_login_volume, params)
+    ctnr = docker.create_tty(image, tty, volumes)
     docker.login(ctnr)
 
     if remove:

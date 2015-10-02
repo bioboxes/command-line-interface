@@ -18,3 +18,4 @@ Feature: Allow a user to ssh into an image to test internally
       input:
       biobox.yaml reads.fq.gz
       """
+    And the directory ".biobox_tmp" should not exist
