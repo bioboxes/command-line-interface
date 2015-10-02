@@ -49,7 +49,7 @@ def create_login_file(dir_, params):
         shutil.copyfile(src, dst)
 
 
-def create_login_volume((dir_name, files)):
+def create_login_volume(dir_name, files):
     src = util.mkdir_p(os.path.join(TEMPORARY_DIRECTORY, dir_name.strip("/")))
     for f in files:
         create_login_file(src, f)
@@ -70,7 +70,8 @@ def run(argv):
     if params is None:
         error.err_exit("unknown_command",
                 {"command_type" : "biobox type", "command" : biobox_type})
-    volumes = map(create_login_volume, params)
+
+    volumes = map(lambda d: create_login_volume(d['directory'], d['files']), params)
     ctnr = docker.create_tty(image, tty, volumes)
     docker.login(ctnr)
 

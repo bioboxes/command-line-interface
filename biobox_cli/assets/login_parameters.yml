@@ -1,7 +1,9 @@
 ---
 short_read_assembler:
-  - /bbx/output:
-  - /bbx/input:
+  - directory: /bbx/output
+    files: []
+  - directory: /bbx/input
+    files:
     - type: path
       src: genome_paired_reads.fq.gz
       dst: reads.fq.gz

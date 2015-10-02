@@ -36,8 +36,9 @@ def test_create_login_file_path():
 @nose.with_setup(teardown = rm_tmp_login_dir)
 def test_create_login_volume():
     dst_dir = '/bbx/input'
-    value     = [dst_dir, [{'type': 'literal', 'src': 'literal_string', 'dst': TMP_FILE_NAME}]]
-    volume = login.create_login_volume(value)
+    value   = [{'type': 'literal', 'src': 'literal_string', 'dst': TMP_FILE_NAME}]
+    volume  = login.create_login_volume(dst_dir, value)
+
     dir_path = os.path.join(login.TEMPORARY_DIRECTORY, dst_dir.strip("/"))
     hlpr.assert_file_not_empty(os.path.join(dir_path, TMP_FILE_NAME))
     hlpr.assert_file_contents_equal(os.path.join(dir_path, TMP_FILE_NAME), 'literal_string')

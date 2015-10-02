@@ -7,15 +7,17 @@ Feature: Allow a user to ssh into an image to test internally
       """
     And I type:
       """
-      ls /bbx/*
+      find /bbx/*
       """
     Then the stdout should contain:
       """
-      output:
+      /bbx/output
       """
     And the stdout should contain:
       """
-      input:
-      biobox.yaml reads.fq.gz
+      /bbx/input/biobox.yaml
       """
-    And the directory ".biobox_tmp" should not exist
+    And the stdout should contain:
+      """
+      /bbx/input/reads.fq.gz
+      """
