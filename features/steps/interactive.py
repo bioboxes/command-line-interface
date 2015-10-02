@@ -30,3 +30,7 @@ def step_impl(context):
 def step_impl(context):
     cmd = context.text.strip() + "\n"
     context.output.stdout = type(context.process, cmd)
+
+@when(u'I exit the shell')
+def step_impl(context):
+    context.process.send("exit\n")

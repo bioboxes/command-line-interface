@@ -55,6 +55,8 @@ def create_login_volume(dir_name, files):
         create_login_file(src, f)
     return docker.mount_string(src, dir_name, False)
 
+def rm_login_dir():
+    shutil.rmtree(TEMPORARY_DIRECTORY)
 
 def run(argv):
     opts = util.parse_docopt(__doc__, argv, True)
@@ -74,6 +76,7 @@ def run(argv):
     volumes = map(lambda d: create_login_volume(d['directory'], d['files']), params)
     ctnr = docker.create_tty(image, tty, volumes)
     docker.login(ctnr)
+    rm_login_dir()
 
     if remove:
         docker.remove(ctnr)

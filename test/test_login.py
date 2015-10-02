@@ -18,9 +18,6 @@ def rm_tmp_file():
     if os.path.exists(TMP_PATH):
         os.remove(TMP_PATH)
 
-def rm_tmp_login_dir():
-    shutil.rmtree(login.TEMPORARY_DIRECTORY)
-
 @nose.with_setup(teardown = rm_tmp_file)
 def test_create_login_file_literal():
     value = {'type': 'literal', 'src': 'literal_string', 'dst': TMP_FILE_NAME}
@@ -33,7 +30,7 @@ def test_create_login_file_path():
     login.create_login_file(TMP_DIR, value)
     hlpr.assert_file_not_empty(TMP_PATH)
 
-@nose.with_setup(teardown = rm_tmp_login_dir)
+@nose.with_setup(teardown = login.rm_login_dir)
 def test_create_login_volume():
     dst_dir = '/bbx/input'
     value   = [{'type': 'literal', 'src': 'literal_string', 'dst': TMP_FILE_NAME}]

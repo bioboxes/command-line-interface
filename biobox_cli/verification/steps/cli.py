@@ -83,6 +83,11 @@ def step_impl(context, stream, regexp):
     nt.assert_not_equal(None, re.match(regexp, output),
       "Regular expression {} not found in:\n'{}'".format(regexp, output))
 
+@then(u'the directory "{}" should not exist')
+def step_impl(context, dir_):
+    nt.assert_false(os.path.isdir(dir_),
+            "The directory \"{}\" should not exist.".format(dir_))
+
 @then(u'the file "{}" should exist')
 def step_impl(context, file_):
     assert_file_exists(get_env_path(context, file_))

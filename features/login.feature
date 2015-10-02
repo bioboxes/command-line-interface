@@ -9,6 +9,7 @@ Feature: Allow a user to ssh into an image to test internally
       """
       find /bbx/*
       """
+    And I exit the shell
     Then the stdout should contain:
       """
       /bbx/output
