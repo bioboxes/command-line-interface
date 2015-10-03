@@ -21,21 +21,21 @@ def test_checking_an_available_image():
 def test_checking_an_available_image_with_tag():
     nose.assert_equal(ctn.is_image_available("python:2.7"), True)
 
-def test_create_mount_string_with_relative_dir():
+def test_create_volume_string_with_relative_dir():
     expected = "{}/tmp:/tmp:ro".format(hlpr.project_root())
-    nose.assert_equal(ctn.mount_string("tmp", "/tmp"), expected)
+    nose.assert_equal(ctn.volume_string("tmp", "/tmp"), expected)
 
-def test_create_mount_string_with_absolute_dir():
+def test_create_volume_string_with_absolute_dir():
     expected = "/tmp:/tmp:ro"
-    nose.assert_equal(ctn.mount_string("/tmp", "/tmp"), expected)
+    nose.assert_equal(ctn.volume_string("/tmp", "/tmp"), expected)
 
-def test_create_output_mount_string():
+def test_create_output_volume_string():
     expected = "/tmp:/bbx/output:rw"
-    nose.assert_equal(ctn.output_directory_mount_string("/tmp"), expected)
+    nose.assert_equal(ctn.output_directory_volume_string("/tmp"), expected)
 
-def test_create_output_mount_string():
+def test_create_output_volume_string():
     expected = "/tmp:/bbx/input:ro"
-    nose.assert_equal(ctn.biobox_file_mount_string("/tmp"), expected)
+    nose.assert_equal(ctn.biobox_file_volume_string("/tmp"), expected)
 
 def test_create_container_with_no_volumes():
     container = ctn.create("bioboxes/velvet", "default")
