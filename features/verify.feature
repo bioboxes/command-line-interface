@@ -11,8 +11,7 @@ Feature: A CLI to verify images are biobox-compatible
 
     Examples:
       | type                 | image            | args            |
-      | short_read_assembler | bioboxes/velvet  |                 |
-      | short_read_assembler | bioboxes/megahit | --task=no-mercy |
+      | short_read_assembler | bioboxes/velvet  | --task=default  |
       | assembler_benchmark  | bioboxes/quast   |                 |
 
   Scenario: Generating a verbose output of biobox image verification

@@ -70,7 +70,6 @@ Feature: A CLI to run biobox-compatible Docker containers
       | bioboxes/velvet  |                 | reads.fq.gz             | contigs.fa               |
       | bioboxes/velvet  |                 | $(realpath reads.fq.gz) | contigs.fa               |
       | bioboxes/velvet  |                 | reads.fq.gz             | $(realpath .)/contigs.fa |
-      | bioboxes/megahit | --task=no-mercy | reads.fq.gz             | contigs.fa               |
 
   Scenario Outline: Running a biobox assembler benchmark container
     Given I create the directory "input"
