@@ -1,5 +1,5 @@
 import sys
-
+import os.path
 import biobox_cli.util.error as error
 
 def select_module(module, name):
@@ -21,3 +21,14 @@ def parse_docopt(doc, argv, is_main_module):
                   argv          = argv,
                   version       = __version__,
                   options_first = is_main_module)
+
+# http://stackoverflow.com/a/600612
+def mkdir_p(path):
+    import os, errno
+    try:
+        os.makedirs(path)
+    except OSError as exc: # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else: raise
+    return os.path.abspath(path)

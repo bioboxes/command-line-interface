@@ -7,6 +7,13 @@ project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+  * Support for assembler benchmark bioboxes was added to `biobox run` and
+    `biobox verify` allowing the use of images such as bioboxes/quast.
+
+  * The `biobox login` was allowing a user to log into a bash prompt in the
+    specified image with test data volumes mounted. This feature was added to
+    help interactive debugging when creating a biobox.
+
   * The `biobox verify` command now returns the reason for the failed
     verification. A flag `--verbose` can be used to list the PASS/FAIL status
     for all the verifications explicitly.
@@ -15,9 +22,6 @@ project adheres to [Semantic Versioning](http://semver.org/).
     space on the users system by no longer keeping redundant containers around.
     An additional flag `--no-rm` was added to override this and keep
     the container after use.
-
-  * The biobox commandline interface is able to run and verify assembler 
-    benchmark bioboxes, such as bioboxes/quast. 
 
 ### Fixed
 

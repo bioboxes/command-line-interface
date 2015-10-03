@@ -1,20 +1,5 @@
 Feature: A CLI to verify images are biobox-compatible
 
-  @internet
-  Scenario: Trying verify a non-existent image
-    When I run the command:
-      """
-      biobox verify short_read_assembler unknown
-      """
-    Then the stdout should be empty
-    And the stderr should equal:
-      """
-      No Docker image available with the name: unknown
-      Did you include the namespace too? E.g. bioboxes/velvet.
-
-      """
-    And the exit code should be 1
-
   Scenario Outline: Verifying a valid biobox image
     When I run the command:
       """
@@ -26,8 +11,7 @@ Feature: A CLI to verify images are biobox-compatible
 
     Examples:
       | type                 | image            | args            |
-      | short_read_assembler | bioboxes/velvet  |                 |
-      | short_read_assembler | bioboxes/megahit | --task=no-mercy |
+      | short_read_assembler | bioboxes/velvet  | --task=default  |
       | assembler_benchmark  | bioboxes/quast   |                 |
 
   Scenario: Generating a verbose output of biobox image verification

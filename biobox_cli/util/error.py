@@ -1,8 +1,8 @@
-import yaml, os.path, sys
+import yaml, sys
+import biobox_cli.util.assets as asset
 
 def err_message(msg_key, locals_):
-    from pkg_resources import resource_string
-    errors = yaml.load(resource_string(__name__, os.path.join('..', 'assets', 'error_messages.yml')))
+    errors = yaml.load(asset.get_asset_file_contents('error_messages.yml'))
     return errors[msg_key].format(**locals_)
 
 def err_exit(msg_key, locals_):

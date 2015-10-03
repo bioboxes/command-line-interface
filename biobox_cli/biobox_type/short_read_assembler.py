@@ -8,6 +8,7 @@ Options:
   -i FILE, --input=FILE   Source FASTQ file containing paired short reads
   -o FILE, --output=FILE  Destination FASTA file for assembled contigs
   -t TASK, --task=TASK    Optionally specify a biobox task to run [default: default]
+  -r, --no-rm             Don't remove the container after the process finishes
 
 """
 
@@ -40,12 +41,12 @@ def run(argv):
     host_src_dir = os.path.abspath(fastq_file)
     host_dst_dir = tmp.mkdtemp()
 
-    mount_strings = [
-        ctn.mount_string(host_src_dir, cntr_fastq_file),
-        ctn.biobox_file_mount_string(fle.create_biobox_directory(biobox_yaml)),
-        ctn.output_directory_mount_string(host_dst_dir)]
+    volume_strings = [
+        ctn.volume_string(host_src_dir, cntr_fastq_file),
+        ctn.biobox_file_volume_string(fle.create_biobox_directory(biobox_yaml)),
+        ctn.output_directory_volume_string(host_dst_dir)]
 
-    ctnr = ctn.create(image, task, mount_strings)
+    ctnr = ctn.create(image, task, volume_strings)
     ctn.run(ctnr)
     biobox_output = fle.parse(host_dst_dir)
     copy_contigs_file(host_dst_dir, biobox_output, contig_file)

@@ -47,6 +47,10 @@ def run(argv):
     task    = opts['--task']
     verbose = opts['--verbose']
 
+    if not behave.features_available(biobox):
+        error.err_exit("unknown_command",
+                {"command_type" : "biobox type", "command" : biobox})
+
     ctn.exit_if_no_image_available(image)
 
     if verbose:

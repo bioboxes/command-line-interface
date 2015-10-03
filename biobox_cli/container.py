@@ -5,6 +5,7 @@ import docker
 import docker.utils
 
 import biobox_cli.util.error as error
+import dockerpty             as pty
 
 def client():
     client = docker.Client(**docker.utils.kwargs_from_env(assert_hostname = False))
@@ -30,26 +31,45 @@ def exit_if_no_image_available(image):
     if not is_image_available(image):
         error.err_exit('unknown_image', {'image': image})
 
-def mount_string(host_dir, container_dir, read_only = True):
+def volume_string(host_dir, container_dir, read_only = True):
     access = "ro" if read_only else "rw"
     return ":".join([os.path.abspath(host_dir), container_dir, access])
 
-def output_directory_mount_string(directory):
-    return mount_string(directory, "/bbx/output", False)
+def output_directory_volume_string(directory):
+    return volume_string(directory, "/bbx/output", False)
 
-def biobox_file_mount_string(directory):
-    return mount_string(directory, "/bbx/input")
+def input_directory_volume_string(directory):
+    return volume_string(directory, "/bbx/input", True)
 
-def create(image, command, mounts = []):
+def biobox_file_volume_string(directory):
+    return volume_string(directory, "/bbx/input")
+
+def create(image, command, volumes = []):
     return client().create_container(
             image,
             command,
-            volumes     = map(lambda x: x.split(":")[0], mounts),
-            host_config = docker.utils.create_host_config(binds=mounts))
+            volumes     = map(lambda x: x.split(":")[0], volumes),
+            host_config = docker.utils.create_host_config(binds=volumes))
+
+def create_tty(image, tty, volumes = []):
+    command = ""
+    return client().create_container(
+            image,
+            command,
+            stdin_open  = True,
+            tty         = tty,
+            entrypoint  = '/bin/bash',
+            volumes     = map(lambda x: x.split(":")[0], volumes),
+            host_config = docker.utils.create_host_config(binds=volumes))
 
 def run(container):
     client().start(container)
     client().wait(container)
+
+def login(container):
+    client().start(container)
+    pty.PseudoTerminal(client(), container).start()
+    client().stop(container)
 
 def remove(container):
     """
