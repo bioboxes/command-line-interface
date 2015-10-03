@@ -1,9 +1,7 @@
 import time, pexpect, re
-import nose.tools as nt
-import subprocess as spr
 
-PROMPT   = "root@\w+:[^\r]+"
-ENTER = "\n"
+PROMPT = "root@\w+:[^\r]+"
+UP_ARROW  = "\x1b[A"
 
 def type(process, input_):
     process.send(input_.encode())
@@ -14,9 +12,9 @@ def type(process, input_):
 @when(u'I run the interactive command')
 def step_impl(context):
     process = pexpect.spawn(context.text)
-    time.sleep(0.5)
+    time.sleep(3)
 
-    type(process, ENTER)
+    type(process, UP_ARROW)
 
     class Output(object):
         pass
