@@ -23,6 +23,8 @@ project adheres to [Semantic Versioning](http://semver.org/).
     An additional flag `--no-rm` was added to override this and keep
     the container after use.
 
+  * Verify taxonomic binning benchmark container.
+
 ### Fixed
 
   * Fixed bug where passing full paths as the input arguments would cause a
