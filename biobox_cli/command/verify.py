@@ -7,7 +7,7 @@ Usage:
 Options:
   -h, --help             Show this screen.
   -t TASK, --task=TASK   Specify which biobox task to test. [default: default]
-  -V, --verbose          Show the status of each biobox verification test.
+  -v, --verbose          Show the status of each biobox verification test.
   -l FILE, --log=FILE    Log test results to file.
 
 Available Biobox types:
