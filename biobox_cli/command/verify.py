@@ -2,12 +2,13 @@
 biobox verify - Verify that a Docker image matches the given specification type
 
 Usage:
-    biobox verify <biobox_type> <image> [--task=TASK] [--verbose]
+    biobox verify <biobox_type> <image> [--task=TASK] [--verbose] [--log=FILE]
 
 Options:
   -h, --help             Show this screen.
   -t TASK, --task=TASK   Specify which biobox task to test. [default: default]
   -V, --verbose          Show the status of each biobox verification test.
+  -l FILE, --log=FILE    Log test results to file.
 
 Available Biobox types:
 
@@ -21,6 +22,7 @@ import biobox_cli.behave_interface as behave
 import biobox_cli.container        as ctn
 
 import string
+import sys
 
 from fn    import F, _
 from fn.op import flip
@@ -46,6 +48,7 @@ def run(argv):
     image   = opts['<image>']
     task    = opts['--task']
     verbose = opts['--verbose']
+    log     = opts['--log']
 
     if not behave.features_available(biobox):
         error.err_exit("unknown_command",
@@ -59,6 +62,8 @@ def run(argv):
         results = behave.run(biobox, image, task)
 
     if verbose:
+        if log:
+            sys.stdout = open(log, "w+")
         statuses = fn.thread([
             behave.get_scenarios_and_statuses(results),
             F(map, lambda (x, y): (format_scenario_name(x), format_scenario_status(y)))])
@@ -75,6 +80,8 @@ def run(argv):
             F(flip(string.join), "\n")])
         print output
     elif behave.is_failed(results):
+        if log:
+            sys.stderr = open(log, "w+")
         msg = fn.thread([
             behave.get_failing_scenarios(results),
             F(map, behave.scenario_name),
