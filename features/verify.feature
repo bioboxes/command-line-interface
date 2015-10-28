@@ -6,7 +6,7 @@ Feature: A CLI to verify images are biobox-compatible
       biobox verify <type> <image> <args>
       """
     Then the stdout should be empty
-    And the stderr should be empty
+    And excluding warnings the stderr should be empty
     And the exit code should be 0
 
     Examples:
@@ -23,7 +23,7 @@ Feature: A CLI to verify images are biobox-compatible
         --verbose \
         --t default
       """
-    Then the stderr should be empty
+    Then excluding warnings the stderr should be empty
     And the stdout should equal:
     """
     Return an error when the biobox.yaml is in an invalid format.            PASS
@@ -43,7 +43,7 @@ Feature: A CLI to verify images are biobox-compatible
       biobox verify short_read_assembler test-verify --task <task>
       """
     Then the stdout should be empty
-    And the stderr should equal:
+    And excluding warnings the stderr should equal:
       """
       Error "test-verify" is not a valid short_read_assembler biobox.
       Should return an error when the biobox.yaml is in an invalid format.
