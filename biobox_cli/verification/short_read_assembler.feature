@@ -140,7 +140,7 @@ Feature: Verification steps for short read assembler bioboxes
         ${IMAGE} \
         ${TASK}
       """
-    Then the stderr should be empty
+    Then excluding warnings the stderr should be empty
     And the exit code should be 0
     And the following files should exist and not be empty:
       | file               |
@@ -174,7 +174,7 @@ Feature: Verification steps for short read assembler bioboxes
         ${IMAGE} \
         ${TASK}
       """
-    Then the stderr should be empty
+    Then excluding warnings the stderr should be empty
     And the exit code should be 0
     And the following files should exist and not be empty:
       | file               |
