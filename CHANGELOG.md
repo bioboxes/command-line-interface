@@ -25,6 +25,8 @@ project adheres to [Semantic Versioning](http://semver.org/).
 
   * Verify taxonomic binning benchmark container.
 
+  * Verify read based assembly benchmark container.
+
 ### Fixed
 
   * Fixed bug where passing full paths as the input arguments would cause a
