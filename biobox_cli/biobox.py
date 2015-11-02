@@ -2,6 +2,7 @@ from abc import ABCMeta, abstractmethod
 import biobox_cli.container   as ctn
 import biobox_cli.util.misc   as util
 import tempfile as tmp
+import inspect
 
 class Biobox:
     __metaclass__ = ABCMeta
@@ -11,15 +12,12 @@ class Biobox:
         pass
 
     @abstractmethod
-    def get_doc(self):
-        pass
-
-    @abstractmethod
     def after_run(self, host_dst_dir):
         pass
 
     def run(self, argv):
-        opts = util.parse_docopt(self.get_doc(), argv, False)
+        doc = inspect.getdoc(inspect.getmodule(self))
+        opts = util.parse_docopt(doc, argv, False)
         task        = opts['--task']
         image       = opts['<image>']
         output      = opts['--output']

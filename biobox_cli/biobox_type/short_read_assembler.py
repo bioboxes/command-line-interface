@@ -1,3 +1,16 @@
+"""
+Usage:
+biobox run short_read_assembler <image> [--no-rm] --input=FILE --output=FILE [--task=TASK]
+
+Options:
+-h, --help              Show this screen.
+-v, --version           Show version.
+-i FILE, --input=FILE   Source FASTQ file containing paired short reads
+-o FILE, --output=FILE  Destination FASTA file for assembled contigs
+-t TASK, --task=TASK    Optionally specify a biobox task to run [default: default]
+-r, --no-rm             Don't remove the container after the process finishes
+"""
+
 import biobox_cli.container   as ctn
 import biobox_cli.biobox_file as fle
 from biobox_cli.biobox import Biobox
@@ -5,21 +18,6 @@ from biobox_cli.biobox import Biobox
 import os
 
 class Assembler(Biobox):
-
-    def get_doc(self):
-        return """
-Usage:
-    biobox run short_read_assembler <image> [--no-rm] --input=FILE --output=FILE [--task=TASK]
-
-Options:
-  -h, --help              Show this screen.
-  -v, --version           Show version.
-  -i FILE, --input=FILE   Source FASTQ file containing paired short reads
-  -o FILE, --output=FILE  Destination FASTA file for assembled contigs
-  -t TASK, --task=TASK    Optionally specify a biobox task to run [default: default]
-  -r, --no-rm             Don't remove the container after the process finishes
-
-"""
 
     def copy_contigs_file(self,biobox_output_dir, biobox_output, dst):
         contigs = biobox_output['arguments'][0]['fasta'][0]['value']
