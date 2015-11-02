@@ -1,6 +1,6 @@
 """
 Usage:
-biobox run short_read_assembler <image> [--no-rm] --input=FILE --output=FILE [--task=TASK]
+    biobox run short_read_assembler <image> [--no-rm] --input=FILE --output=FILE [--task=TASK]
 
 Options:
 -h, --help              Show this screen.
