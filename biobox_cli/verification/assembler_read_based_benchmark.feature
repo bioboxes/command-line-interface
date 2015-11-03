@@ -32,9 +32,10 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
             type: contig
             format: bioboxes.org:/fasta
         reads:
-          path: /bbx/mnt/input/reads.fq.gz
-          id: lib1
-          type: paired
+          - path: /bbx/mnt/input/reads.fq.gz
+            id: lib1
+            type: paired
+            format: bioboxes.org:/fastq
       """
     When I run the command:
     """
@@ -51,7 +52,7 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
     And I create the directory "output"
     And I create the file "input/biobox.yaml" with the contents:
       """
-      version: "0.1"
+      version: "0.2"
       arguments:
         assemblies:
           - path: /bbx/mnt/input/assembly.fasta
@@ -59,9 +60,10 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
             type: contig
             format: bioboxes.org:/fasta
         reads:
-          path: /bbx/mnt/input/reads.fq.gz
-          id: lib1
-          type: paired
+          - path: /bbx/mnt/input/reads.fq.gz
+            id: lib1
+            type: paired
+            format: bioboxes.org:/fastq
       """
     When I run the command:
     """
@@ -74,7 +76,7 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
     Then the exit code should be 1
     And the stderr should contain:
       """
-      '0.1' does not match '^0.1.\\d+$'
+      '0.2' does not match '^0.2.\\d+$'
       """
 
   Scenario: An biobox.yaml with a wrong version number.
@@ -90,9 +92,10 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
             type: contig
             format: bioboxes.org:/fasta
         reads:
-          path: /bbx/mnt/input/reads.fq.gz
-          id: lib1
-          type: paired
+          - path: /bbx/mnt/input/reads.fq.gz
+            id: lib1
+            type: paired
+            format: bioboxes.org:/fastq
      """
     When I run the command:
       """
@@ -104,7 +107,7 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
     Then the exit code should be 1
     And the stderr should contain:
       """
-      '0.8.0' does not match '^0.1.\\d+$'
+      '0.8.0' does not match '^0.2.\\d+$'
       """
 
   Scenario: An biobox.yaml with a missing arguments field.
@@ -112,7 +115,7 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
     And I create the directory "output"
     And I create the file "input/biobox.yaml" with the contents:
       """
-      version: "0.1.0"
+      version: "0.2.0"
       """
     When I run the command:
       """
@@ -132,7 +135,7 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
     And I create the directory "output"
     And I create the file "input/biobox.yaml" with the contents:
       """
-      version: "0.1.0"
+      version: "0.2.0"
       arguments:
         assemblies:
           - path: /bbx/mnt/input/assembly.fasta
@@ -140,9 +143,10 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
             type: contig
             format: bioboxes.org:/fasta
         reads:
-          path: /bbx/mnt/input/reads.fq.gz
-          id: lib1
-          type: paired
+          - path: /bbx/mnt/input/reads.fq.gz
+            id: lib1
+            type: paired
+            format: bioboxes.org:/fastq
       <field>: {}
       """
     When I run the command:
@@ -171,7 +175,7 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
       | read_based_benchmark/assembly.fasta   | input/assembly.fasta  |
     And I create the file "input/biobox.yaml" with the contents:
       """
-      version: "0.1.0"
+      version: "0.2.0"
       arguments:
         assemblies:
           - path: /bbx/mnt/input/assembly.fasta
@@ -179,9 +183,10 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
             type: contig
             format: bioboxes.org:/fasta
         reads:
-          path: /bbx/mnt/input/reads.fq.gz
-          id: lib1
-          type: paired
+          - path: /bbx/mnt/input/reads.fq.gz
+            id: lib1
+            type: paired
+            format: bioboxes.org:/fastq
       """
     When I run the command:
       """
@@ -205,7 +210,7 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
       | read_based_benchmark/assembly.fasta   | input/assembly.fasta  |
     And I create the file "input/biobox.yaml" with the contents:
       """
-      version: "0.1.0"
+      version: "0.2.0"
       arguments:
         assemblies:
           - path: /bbx/mnt/input/assembly.fasta
@@ -213,9 +218,10 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
             type: contig
             format: bioboxes.org:/fasta
         reads:
-          path: /bbx/mnt/input/reads.fq.gz
-          id: lib1
-          type: paired
+          - path: /bbx/mnt/input/reads.fq.gz
+            id: lib1
+            type: paired
+            format: bioboxes.org:/fastq
       """
     When I run the command:
       """
