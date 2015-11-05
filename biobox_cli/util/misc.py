@@ -1,5 +1,5 @@
 import sys
-import os.path
+import inspect
 import biobox_cli.util.error as error
 
 def select_module(module, name):
@@ -32,3 +32,9 @@ def mkdir_p(path):
             pass
         else: raise
     return os.path.abspath(path)
+
+def get_subclasses(mod, cls):
+    """Yield the classes in module ``mod`` that inherit from ``cls``"""
+    for name, obj in inspect.getmembers(mod):
+        if hasattr(obj, "__bases__") and cls in obj.__bases__:
+            yield obj

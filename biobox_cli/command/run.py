@@ -13,10 +13,14 @@ Available Biobox types:
 """
 
 import biobox_cli.util.misc as util
+import sys
+from biobox_cli.biobox import Biobox as ABiobox
 
 def run(argv):
     opts = util.parse_docopt(__doc__, argv, True)
     module = util.select_module("biobox_type", opts["<biobox_type>"])
-    ctnr = module.run(argv)
+    Biobox = util.get_subclasses(module, ABiobox).next()
+    bbx = Biobox()
+    ctnr = bbx.run(argv)
     if not '--no-rm' in argv:
-        module.remove(ctnr)
+        bbx.remove(ctnr)

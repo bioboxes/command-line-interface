@@ -16,51 +16,37 @@ import biobox_cli.container   as ctn
 import biobox_cli.biobox_file as fle
 
 import os
-import tempfile as tmp
-import biobox_cli.util.misc   as util
+from biobox_cli.biobox import Biobox
 
-def copy_result_files(biobox_output_dir, dst):
-    import shutil
-    output_files = os.listdir(biobox_output_dir)
-    map(lambda f: shutil.move(os.path.join(biobox_output_dir,f), dst), output_files)
+class Assembler_Benchmark(Biobox):
 
-def run(argv):
-    opts = util.parse_docopt(__doc__, argv, False)
-    image = opts['<image>']
-    fasta_file = opts['--input-fasta']
-    ref_dir = opts['--input-ref']
-    output_dir = opts['--output']
-    task = opts['--task']
+    def copy_result_files(self, biobox_output_dir, dst):
+        import shutil
+        output_files = os.listdir(biobox_output_dir)
+        map(lambda f: shutil.move(os.path.join(biobox_output_dir,f), dst), output_files)
 
-    ctn.exit_if_no_image_available(image)
+    def prepare_volumes(self, opts, host_dst_dir):
+        fasta_file = opts['--input-fasta']
+        ref_dir = opts['--input-ref']
 
-    cntr_src_fasta = "/fasta/input.fa"
-    fasta_values = [(cntr_src_fasta, "contig")]
-    fasta_yaml_values = fle.fasta_arguments(fasta_values)
+        host_src_fasta_file = os.path.abspath(fasta_file)
+        host_src_ref_dir = os.path.abspath(ref_dir)
 
-    cntr_src_ref_dir = "/ref"
-    ref_dir_yaml_values = fle.reference_argument(ref_dir)
+        cntr_src_fasta = "/fasta/input.fa"
+        fasta_values = [(cntr_src_fasta, "contig")]
+        fasta_yaml_values = fle.fasta_arguments(fasta_values)
 
-    biobox_yaml = fle.generate([fasta_yaml_values, ref_dir_yaml_values])
+        cntr_src_ref_dir = "/ref"
+        ref_dir_yaml_values = fle.reference_argument(ref_dir)
 
-    host_src_fasta_file = os.path.abspath(fasta_file)
-    host_src_ref_dir = os.path.abspath(ref_dir)
-    host_dst_dir = tmp.mkdtemp()
+        biobox_yaml = fle.generate([fasta_yaml_values, ref_dir_yaml_values])
 
-    volume_strings = [
-         ctn.volume_string(host_src_fasta_file, cntr_src_fasta),
-         ctn.volume_string(host_src_ref_dir, cntr_src_ref_dir),
-         ctn.biobox_file_volume_string(fle.create_biobox_directory(biobox_yaml)),
-         ctn.output_directory_volume_string(host_dst_dir)]
+        volume_strings = [
+                ctn.volume_string(host_src_fasta_file, cntr_src_fasta),
+                ctn.volume_string(host_src_ref_dir, cntr_src_ref_dir),
+                ctn.biobox_file_volume_string(fle.create_biobox_directory(biobox_yaml)),
+                ctn.output_directory_volume_string(host_dst_dir)]
+        return volume_strings
 
-    ctnr = ctn.create(image, task, volume_strings)
-    ctn.run(ctnr)
-    copy_result_files(host_dst_dir, output_dir)
-    return ctnr
-
-def remove(container):
-    """
-    Removes a container
-    Note this method is not tested due to limitations of circle ci
-    """
-    ctn.remove(container)
+    def after_run(self, output, host_dst_dir):
+        self.copy_result_files(host_dst_dir, output)
