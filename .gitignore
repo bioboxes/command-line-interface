@@ -4,6 +4,8 @@ log
 tmp
 .images
 images/test-install/requirements.txt
+biobox_verify
+.biobox_tmp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

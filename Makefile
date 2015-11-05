@@ -4,6 +4,7 @@ name    := $(shell $(path) python setup.py --name)
 dist    := dist/$(name)-$(version).tar.gz
 
 installer-image := test-install
+verifier-image  := test-verify
 
 publish: $(dist)
 	@$(path) twine upload \
@@ -27,10 +28,13 @@ clean:
 
 test    = $(path) nosetests --rednose
 
-feature:
+command:
+	@command -v realpath >/dev/null 2>&1 || { echo >&2 "Please install 'realpath' on your system"; exit 1; }
+
+feature: command
 	@$(path) behave --stop $(ARGS)
 
-test:
+test: command
 	@$(test)
 
 autotest:
@@ -82,11 +86,12 @@ vendor/python: requirements.txt
 	$(path) pip install -r $< 2>&1 > log/pip.txt
 	touch $@
 
-.images: requirements.txt images/test-install/Dockerfile
+.images: requirements.txt $(shell find images -name "*")
 	docker pull bioboxes/velvet
 	docker pull bioboxes/megahit
 	cp $< images/test-install
-	docker build --tag $(installer-image) images/test-install
+	docker build --tag $(installer-image) images/$(installer-image)
+	docker build --tag $(verifier-image)  images/$(verifier-image)
 	touch $@
 
-.PHONY: bootstrap build feature test-build publish test
+.PHONY: bootstrap build feature test-build publish test command

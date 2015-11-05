@@ -7,6 +7,8 @@ dependencies:
     - ./script/bootstrap
   cache_directories:
     - vendor
+  pre:
+    - sudo apt-get update && sudo apt-get install --no-install-recommends realpath
 
 test:
   override:

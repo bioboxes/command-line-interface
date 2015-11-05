@@ -9,10 +9,18 @@ def parse(dir_):
     with open(os.path.join(dir_, 'biobox.yaml'), 'r') as f:
         return yaml.load(f.read())
 
-def fastq_arguments(mount_directory, *args):
-    values = map(lambda (i, (p, t)), : entry("fastq_" + str(i), os.path.join(mount_directory, p), t),
-            enumerate(args))
-    return {"fastq" : values}
+def fastq_arguments(args):
+    return files_values("fastq", args)
+
+def fasta_arguments(args):
+    return files_values("fasta", args)
+
+def reference_argument(ref):
+    return {"fasta_dir": ref}
+
+def files_values(identifier, args):
+    values = map(lambda (i, (p_c, t)) : entry(identifier + "_" + str(i), p_c, t), enumerate(args))
+    return {identifier : values}
 
 def entry(id_, value, type_):
     return {"id" : id_, "value" : value, "type" : type_}
