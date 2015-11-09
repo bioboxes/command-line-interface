@@ -19,7 +19,7 @@ def reference_argument(ref):
     return {"fasta_dir": ref}
 
 def files_values(identifier, args):
-    values = map(lambda (i, (p_c, t)) : entry(identifier + "_" + str(i), p_c, t), enumerate(args))
+    values = [entry(identifier + "_" + str(i), p_c, t) for (i, (p_c, t)) in enumerate(args)]
     return {identifier : values}
 
 def entry(id_, value, type_):

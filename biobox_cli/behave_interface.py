@@ -60,7 +60,10 @@ def is_failed(behave_data):
     return "failed" in map(lambda i: i['status'], behave_data)
 
 def get_scenarios(behave_data):
-    return reduce(lambda acc, x: acc + x['elements'], behave_data, [])
+    acc = []
+    for item in behave_data:
+        acc += item['elements']
+    return acc
 
 def scenario_name(scenario):
     return scenario["name"]
@@ -69,12 +72,12 @@ def scenario_status(scenario):
     """
     Returns the status of the last step in a scenario
     """
-    status = fn.thread([
+    status = list(fn.thread([
         scenario['steps'],
         F(map, fn.get("result")),
         F(filter, fn.is_not_none),
         F(map, fn.get("status")),
-        ])
+        ]))
     if fn.is_empty(status):
         return "not run"
     else:
@@ -87,12 +90,12 @@ def get_failing_scenarios(behave_data):
     """
     Returns all failing scenarios from a behave dictionary
     """
-    return filter(is_failed_scenario, get_scenarios(behave_data))
+    return list(filter(is_failed_scenario, get_scenarios(behave_data)))
 
 def get_scenarios_and_statuses(behave_data):
     """
     Returns a list of scenarios and their status
     """
-    return fn.thread([
+    return list(fn.thread([
         get_scenarios(behave_data),
-        F(map, lambda x: [scenario_name(x), scenario_status(x)])])
+        F(map, lambda x: [scenario_name(x), scenario_status(x)])]))
