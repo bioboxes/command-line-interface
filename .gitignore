@@ -6,7 +6,7 @@ tmp
 images/py2/requirements.txt
 biobox_verify
 .biobox_tmp
-.test-build-py2
+.test-build-py*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

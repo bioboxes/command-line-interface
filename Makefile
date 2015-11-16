@@ -50,14 +50,14 @@ autotest:
 #################################################
 
 
-build: $(dist) .test-build-py2
+build: $(dist) .test-build-py2 .test-build-py3
 
-.test-build-py2: $(dist)
-	@docker run \
-		--tty \
-		--volume=$(abspath $(dir $^)):/dist:ro \
-		$(python-2-image) \
-		/bin/bash -c "pip install --user /$^ && clear && /root/.local/bin/biobox -h"
+.test-build-py3: ./plumbing/test-pip-install $(dist)
+	@$^ $(python-2-image)
+	@touch $@
+
+.test-build-py2: ./plumbing/test-pip-install $(dist)
+	@$^ $(python-2-image)
 	@touch $@
 
 ssh: $(dist)
@@ -70,8 +70,7 @@ ssh: $(dist)
 
 $(dist): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
 	$(path) python setup.py sdist
-	touch $@
-
+	touch $(dir $@)
 
 #################################################
 #
@@ -93,6 +92,7 @@ vendor/python: requirements.txt
 	docker pull bioboxes/megahit
 	cp $< images/$(python-2-image)
 	docker build --tag $(python-2-image) images/$(python-2-image)
+	docker build --tag $(python-3-image) images/$(python-3-image)
 	docker build --tag $(verifier-image) images/$(verifier-image)
 	touch $@
 

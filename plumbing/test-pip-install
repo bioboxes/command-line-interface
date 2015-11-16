@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+
+PACKAGE=$1
+IMAGE=$2
+
+echo "Testing installation on ${IMAGE}"
+
+docker run \
+	--tty \
+	--volume=$(realpath $(dirname ${PACKAGE})):/dist:ro \
+	${IMAGE} \
+	/bin/bash -c "pip install --user ${PACKAGE} && clear && /root/.local/bin/biobox -h" > /dev/null
