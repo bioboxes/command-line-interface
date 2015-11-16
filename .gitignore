@@ -3,9 +3,10 @@ vendor
 log
 tmp
 .images
-images/test-install/requirements.txt
+images/py2/requirements.txt
 biobox_verify
 .biobox_tmp
+.test-build-py*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

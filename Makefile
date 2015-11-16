@@ -3,8 +3,9 @@ version := $(shell $(path) python setup.py --version)
 name    := $(shell $(path) python setup.py --name)
 dist    := dist/$(name)-$(version).tar.gz
 
-installer-image := test-install
-verifier-image  := test-verify
+python-3-image := py3
+python-2-image := py2
+verifier-image := test-verify
 
 publish: $(dist)
 	@$(path) twine upload \
@@ -49,27 +50,27 @@ autotest:
 #################################################
 
 
-build: $(dist) test-build
+build: $(dist) .test-build-py2 .test-build-py3
 
-test-build: $(dist)
-	docker run \
-		--tty \
-		--volume=$(abspath $(dir $^)):/dist:ro \
-		$(installer-image) \
-		/bin/bash -c "pip install --user /$^ && clear && /root/.local/bin/biobox -h"
+.test-build-py3: ./plumbing/test-pip-install $(dist)
+	@$^ $(python-2-image)
+	@touch $@
+
+.test-build-py2: ./plumbing/test-pip-install $(dist)
+	@$^ $(python-2-image)
+	@touch $@
 
 ssh: $(dist)
 	docker run \
 		--interactive \
 		--tty \
 		--volume=$(abspath $(dir $^)):/dist:ro \
-		$(installer-image) \
+		$(python-2-image) \
 		/bin/bash -c "pip install --user /$^ && clear && bash"
 
 $(dist): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
 	$(path) python setup.py sdist
-	touch $@
-
+	touch $(dir $@)
 
 #################################################
 #
@@ -89,9 +90,10 @@ vendor/python: requirements.txt
 .images: requirements.txt $(shell find images -name "*")
 	docker pull bioboxes/velvet
 	docker pull bioboxes/megahit
-	cp $< images/test-install
-	docker build --tag $(installer-image) images/$(installer-image)
-	docker build --tag $(verifier-image)  images/$(verifier-image)
+	cp $< images/$(python-2-image)
+	docker build --tag $(python-2-image) images/$(python-2-image)
+	docker build --tag $(python-3-image) images/$(python-3-image)
+	docker build --tag $(verifier-image) images/$(verifier-image)
 	touch $@
 
 .PHONY: bootstrap build feature test-build publish test command
