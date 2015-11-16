@@ -14,6 +14,7 @@ Available Biobox types:
 
   short_read_assembler  Assemble short reads into contigs
 """
+from __future__ import print_function
 
 import biobox_cli.util.misc        as util
 import biobox_cli.util.error       as error
@@ -27,13 +28,16 @@ import sys
 from fn    import F, _
 from fn.op import flip
 
+def name_and_status(x, y):
+    return format_scenario_name(x), format_scenario_status(y)
+
 def format_scenario_name(name):
     return fn.thread([
-        string.replace(name, "Should ", ""),
+        str.replace(name, "Should ", ""),
         lambda x: x[0].upper() + x[1:],
-        F(flip(string.split), '--'),
+        F(flip(str.split), '--'),
         fn.first,
-        string.strip])
+        str.strip])
 
 def format_scenario_status(status):
     formats = {
@@ -66,19 +70,20 @@ def run(argv):
             sys.stdout = open(log, "w+")
         statuses = fn.thread([
             behave.get_scenarios_and_statuses(results),
-            F(map, lambda (x, y): (format_scenario_name(x), format_scenario_status(y)))])
+            F(map, name_and_status)])
         longest_name = fn.thread([
             statuses,
             F(map, fn.first),
             F(map, len),
             max])
+        def justify(x, y): return string.ljust(x, longest_name, ' '), y
         output = fn.thread([
             statuses,
-            F(map, lambda (x, y): (string.ljust(x, longest_name, ' '), y)),
+            F(map, justify),
             F(map, F(flip(string.join), "   ")),
             fn.unique,
             F(flip(string.join), "\n")])
-        print output
+        print(output)
     elif behave.is_failed(results):
         if log:
             sys.stderr = open(log, "w+")

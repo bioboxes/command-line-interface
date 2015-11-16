@@ -1,5 +1,9 @@
 import logging, os
 logging.getLogger("requests").setLevel(logging.WARNING)
+try:
+    from functools import reduce
+except ImportError:
+    pass
 
 import docker
 import docker.utils
@@ -48,7 +52,7 @@ def create(image, command, volumes = []):
     return client().create_container(
             image,
             command,
-            volumes     = map(lambda x: x.split(":")[0], volumes),
+            volumes     = list(map(lambda x: x.split(":")[0], volumes)),
             host_config = docker.utils.create_host_config(binds=volumes))
 
 def create_tty(image, tty, volumes = []):
