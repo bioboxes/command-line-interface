@@ -27,7 +27,7 @@ def is_image_available_locally(image):
 def is_image_available(image):
     if not is_image_available_locally(image):
         output = client().pull(image)
-        if not "Pulling" in output:
+        if not "Pulling" or not "Error" in output:
             return False
     return True
 
