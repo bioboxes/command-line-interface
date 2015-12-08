@@ -27,7 +27,7 @@ def is_image_available_locally(image):
 def is_image_available(image):
     if not is_image_available_locally(image):
         output = client().pull(image)
-        if "error" in output:
+        if not "Pulling" in output:
             return False
     return True
 
@@ -53,7 +53,7 @@ def create(image, command, volumes = []):
             image,
             command,
             volumes     = list(map(lambda x: x.split(":")[0], volumes)),
-            host_config = docker.utils.create_host_config(binds=volumes))
+            host_config = client().create_host_config(binds=volumes))
 
 def create_tty(image, tty, volumes = []):
     command = ""
