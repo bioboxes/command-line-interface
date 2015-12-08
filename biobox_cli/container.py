@@ -12,7 +12,7 @@ import biobox_cli.util.error as error
 import dockerpty             as pty
 
 def client():
-    client = docker.Client(**docker.utils.kwargs_from_env(assert_hostname = False))
+    client = docker.AutoVersionClient(**docker.utils.kwargs_from_env(assert_hostname = False))
     return client
 
 def get_image_tags(docker_dict):
