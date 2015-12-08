@@ -33,7 +33,7 @@ def name_and_status(x, y):
 
 def format_scenario_name(name):
     return fn.thread([
-        str.replace(name, "Should ", ""),
+        str.replace(str(name), "Should ", ""),
         lambda x: x[0].upper() + x[1:],
         F(flip(str.split), '--'),
         fn.first,
@@ -70,7 +70,7 @@ def run(argv):
             sys.stdout = open(log, "w+")
         statuses = fn.thread([
             behave.get_scenarios_and_statuses(results),
-            F(map, name_and_status)])
+            F(map, lambda x: name_and_status(*x))])
         longest_name = fn.thread([
             statuses,
             F(map, fn.first),
@@ -79,7 +79,7 @@ def run(argv):
         def justify(x, y): return string.ljust(x, longest_name, ' '), y
         output = fn.thread([
             statuses,
-            F(map, justify),
+            F(map, lambda x: justify(*x)),
             F(map, F(flip(string.join), "   ")),
             fn.unique,
             F(flip(string.join), "\n")])
