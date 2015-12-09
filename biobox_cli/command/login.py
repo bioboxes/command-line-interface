@@ -73,7 +73,7 @@ def run(argv):
         error.err_exit("unknown_command",
                 {"command_type" : "biobox type", "command" : biobox_type})
 
-    volumes = map(lambda d: create_login_volume(d['directory'], d['files']), params)
+    volumes = list(map(lambda d: create_login_volume(d['directory'], d['files']), params))
     ctnr = docker.create_tty(image, tty, volumes)
     docker.login(ctnr)
     rm_login_dir()

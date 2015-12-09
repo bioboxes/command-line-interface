@@ -23,7 +23,7 @@ class Assembler_Benchmark(Biobox):
     def copy_result_files(self, biobox_output_dir, dst):
         import shutil
         output_files = os.listdir(biobox_output_dir)
-        map(lambda f: shutil.move(os.path.join(biobox_output_dir,f), dst), output_files)
+        list(map(lambda f: shutil.move(os.path.join(biobox_output_dir,f), dst), output_files))
 
     def prepare_volumes(self, opts, host_dst_dir):
         fasta_file = opts['--input-fasta']

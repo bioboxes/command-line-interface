@@ -36,4 +36,5 @@ def input_args():
     return fn.thread([
         sys.argv[1:],
         F(map, str.strip),
-        F(filter, fn.is_not_empty)])
+        F(filter, fn.is_not_empty),
+        F(list)])
