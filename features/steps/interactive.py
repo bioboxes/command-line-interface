@@ -5,16 +5,15 @@ UP_ARROW  = "\x1b[A"
 
 def type(process, input_):
     process.send(input_.encode())
+    time.sleep(3)
     process.expect(PROMPT)
     # Remove the typed input from the returned standard out
-    return re.sub(re.escape(input_.strip()), '', process.before).strip()
+    return re.sub(re.escape(input_.strip()), '', process.buffer).strip()
 
 @when(u'I run the interactive command')
 def step_impl(context):
     process = pexpect.spawn(context.text)
     time.sleep(3)
-
-    type(process, UP_ARROW)
 
     class Output(object):
         pass
