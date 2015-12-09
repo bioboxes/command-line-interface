@@ -1,0 +1,8 @@
+#!/bin/bash
+
+hash fswatch 2>/dev/null || {
+  echo >&2 'The executable `fswatch` is required to start autotesting.'
+  exit 1
+}
+
+make autotest PYTHON_VERSION="python3"

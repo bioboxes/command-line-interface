@@ -1,4 +1,4 @@
-path    := PATH=./vendor/python/bin:$(shell echo "${PATH}")
+path    := PATH=./vendor/$(PYTHON_VERSION)/bin:$(shell echo "${PATH}")
 version := $(shell $(path) python setup.py --version)
 name    := $(shell $(path) python setup.py --name)
 dist    := dist/$(name)-$(version).tar.gz
@@ -33,9 +33,11 @@ command:
 	@command -v realpath >/dev/null 2>&1 || { echo >&2 "Please install 'realpath' on your system"; exit 1; }
 
 feature: command
+	@echo "======================= Running $(PYTHON_VERSION) feature tests ======================="
 	@$(path) behave --stop $(ARGS)
 
 test: command
+	@echo "======================= Running $(PYTHON_VERSION) tests ======================="
 	@$(test)
 
 autotest:
@@ -79,11 +81,11 @@ $(dist): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
 #################################################
 
 
-bootstrap: vendor/python .images
+bootstrap: vendor/$(PYTHON_VERSION) .images
 
-vendor/python: requirements.txt
+vendor/$(PYTHON_VERSION): requirements.txt
 	mkdir -p log
-	virtualenv $@ 2>&1 > log/virtualenv.txt
+	virtualenv --python=$(PYTHON_VERSION) $@ 2>&1 > log/virtualenv.txt
 	$(path) pip install -r $< 2>&1 > log/pip.txt
 	touch $@
 

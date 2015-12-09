@@ -8,7 +8,7 @@ dependencies:
   cache_directories:
     - vendor
   pre:
-    - sudo apt-get update && sudo apt-get install --no-install-recommends realpath
+    - sudo apt-get update && sudo apt-get install --no-install-recommends libpython2.7-dev realpath
 
 test:
   override:
