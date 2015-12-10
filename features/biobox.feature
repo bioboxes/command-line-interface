@@ -47,7 +47,7 @@ Feature: A CLI to run biobox-compatible Docker containers
   Scenario Outline: Running a biobox short read assembler container
     Given I copy the example data files:
       | source                    | dest        |
-      | genome_paired_reads.fq.gz | reads.fq.gz |
+      | short_read_assembler/genome_paired_reads.fq.gz | reads.fq.gz |
     When I run the command:
       """
       biobox \
@@ -76,10 +76,10 @@ Feature: A CLI to run biobox-compatible Docker containers
     And I create the directory "output"
     And I copy the example data files:
       | source         | dest                 |
-      | assembly.fasta | input/assembly.fasta |
+      | assembler_benchmark/assembly.fasta | input/assembly.fasta |
     And I copy the example data directories:
       | source     | dest             |
-      | references | input/references |
+      | assembler_benchmark/references | input/references |
     When I run the command:
       """
       biobox \
