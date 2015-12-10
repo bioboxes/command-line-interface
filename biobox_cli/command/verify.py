@@ -70,19 +70,22 @@ def run(argv):
             sys.stdout = open(log, "w+")
         statuses = fn.thread([
             behave.get_scenarios_and_statuses(results),
-            F(map, lambda x: name_and_status(*x))])
+            F(map, lambda x: name_and_status(*x)),
+            F(list)])
         longest_name = fn.thread([
             statuses,
             F(map, fn.first),
             F(map, len),
             max])
-        def justify(x, y): return string.ljust(x, longest_name, ' '), y
+        def justify(x, y): return x.ljust(longest_name), y
+
+
         output = fn.thread([
             statuses,
             F(map, lambda x: justify(*x)),
-            F(map, F(flip(string.join), "   ")),
+            F(map, F("   ".join)),
             fn.unique,
-            F(flip(string.join), "\n")])
+            F("\n".join)])
         print(output)
     elif behave.is_failed(results):
         if log:
@@ -90,6 +93,6 @@ def run(argv):
         msg = fn.thread([
             behave.get_failing_scenarios(results),
             F(map, behave.scenario_name),
-            F(flip(string.join), "\n")])
+            F("\n".join)])
 
         error.err_exit('failed_verification', {'image': image, 'error': msg, 'biobox' : biobox})

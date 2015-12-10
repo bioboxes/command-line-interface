@@ -20,14 +20,14 @@ def get_image_tags(docker_dict):
             docker_dict['RepoTags'], [])
 
 def is_image_available_locally(image):
-    image_tags = map(get_image_tags, client().images())
+    image_tags = list(map(get_image_tags, client().images()))
     images = set(reduce(lambda acc, x: acc + x, image_tags, []))
     return image in images
 
 def is_image_available(image):
     if not is_image_available_locally(image):
         output = client().pull(image)
-        if not "Pulling" or "errorDetail" in output:
+        if not "Pulling" in output or "errorDetail" in output:
             return False
     return True
 
@@ -63,8 +63,8 @@ def create_tty(image, tty, volumes = []):
             stdin_open  = True,
             tty         = tty,
             entrypoint  = '/bin/bash',
-            volumes     = map(lambda x: x.split(":")[0], volumes),
-            host_config = docker.utils.create_host_config(binds=volumes))
+            volumes     = list(map(lambda x: x.split(":")[0], volumes)),
+            host_config = client().create_host_config(binds=volumes))
 
 def run(container):
     client().start(container)
