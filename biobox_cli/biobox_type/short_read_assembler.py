@@ -1,6 +1,6 @@
 """
 Usage:
-    biobox run short_read_assembler <image> [--no-rm] --input=FILE --output=FILE [--task=TASK]
+    biobox run short_read_assembler <image> [--memory=MEM] [--cpu-shares=CPU] [--cpuset=CPU] [--no-rm] --input=FILE --output=FILE [--task=TASK]
 
 Options:
 -h, --help              Show this screen.
@@ -9,6 +9,8 @@ Options:
 -o FILE, --output=FILE  Destination FASTA file for assembled contigs
 -t TASK, --task=TASK    Optionally specify a biobox task to run [default: default]
 -r, --no-rm             Don't remove the container after the process finishes
+--csh CPU, --cpu-shares=CPU    CPU shares (relative weight)
+--cse CPU, --cpuset=CPU        CPUs that should be used 
 """
 
 import biobox_cli.container   as ctn
