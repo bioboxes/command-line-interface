@@ -1,20 +1,15 @@
 import time, pexpect, re
 
-PROMPT = "root@\w+:[^\r]+"
-UP_ARROW  = "\x1b[A"
-
 def type(process, input_):
     process.send(input_.encode())
-    process.expect(PROMPT)
-    # Remove the typed input from the returned standard out
-    return re.sub(re.escape(input_.strip()), '', process.before).strip()
+    time.sleep(3)
+    process.expect('\n')
+    return str(process.buffer)
 
 @when(u'I run the interactive command')
 def step_impl(context):
     process = pexpect.spawn(context.text)
     time.sleep(3)
-
-    type(process, UP_ARROW)
 
     class Output(object):
         pass

@@ -11,5 +11,5 @@ def before_scenario(context, _):
     # The path cannot be hard coded into the features as it varies
     # Therefore dynamically pass the full path prefix as the TMPDIR
     # environment variable.
-    for key, value in context.config.userdata.iteritems():
+    for (key, value) in context.config.userdata.items():
         os.environ[key] = value
