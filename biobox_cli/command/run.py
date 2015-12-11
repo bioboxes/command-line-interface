@@ -13,7 +13,6 @@ Available Biobox types:
 """
 
 import biobox_cli.util.misc as util
-import sys
 from biobox_cli.biobox import Biobox as ABiobox
 
 def run(argv):

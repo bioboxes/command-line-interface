@@ -1,6 +1,6 @@
 """
 Usage:
-    biobox run assembler_benchmark <image> [--no-rm] --input-fasta=FILE --input-ref=DIR --output=DIR [--task=TASK]
+    biobox run assembler_benchmark <image> [--memory=MEM] [--cpu-shares=CPU_SHARES] [--cpuset=CPUS] [--no-rm] --input-fasta=FILE --input-ref=DIR --output=DIR [--task=TASK]
 
 Options:
   -h, --help                     Show this screen.
@@ -9,7 +9,9 @@ Options:
   -ir DIR, --input-ref=DIR       Source directory containing reference fasta files
   -o DIR --output=DIR            Destination output directory
   -t TASK, --task=TASK           Optionally specify a biobox task to run [default: default]
-
+  -r, --no-rm                    Don't remove the container after the process finishes
+  --csh CPU, --cpu-shares=CPU    CPU shares (relative weight)
+  --cse CPU, --cpuset=CPU        CPUs that should be used
 """
 
 import biobox_cli.container   as ctn

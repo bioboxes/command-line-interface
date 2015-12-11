@@ -21,10 +21,13 @@ class Biobox:
         task        = opts['--task']
         image       = opts['<image>']
         output      = opts['--output']
+        memory      = opts['--memory']
+        cpuset      = opts['--cpuset']
+        cpushares   = opts['--cpu-shares']
         host_dst_dir = tmp.mkdtemp()
         volumes = self.prepare_volumes(opts, host_dst_dir)
         ctn.exit_if_no_image_available(image)
-        ctnr = ctn.create(image, task, volumes)
+        ctnr = ctn.create(image, task, volumes, memory=memory, cpuset=cpuset, cpu_shares=cpushares)
         ctn.run(ctnr)
         self.after_run(output, host_dst_dir)
         return ctnr

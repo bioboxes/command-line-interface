@@ -38,13 +38,13 @@ def test_create_output_volume_string():
     nose.assert_equal(ctn.biobox_file_volume_string("/tmp"), expected)
 
 def test_create_container_with_no_volumes():
-    container = ctn.create("bioboxes/velvet", "default")
+    container = ctn.create("bioboxes/velvet", command="default")
     attr = ctn.client().inspect_container(container)
     nose.assert_equal(attr["Config"]["Volumes"], None)
     hlpr.remove_container(container)
 
 def test_create_container_with_volumes():
-    container = ctn.create("bioboxes/velvet", "default", ["/host:/cont:ro"])
+    container = ctn.create("bioboxes/velvet", command="default", volumes=["/host:/cont:ro"])
     attr = ctn.client().inspect_container(container)
     nose.assert_in("/host", attr["Config"]["Volumes"])
     hlpr.remove_container(container)
