@@ -5,7 +5,7 @@ short_read_assembler:
   - directory: /bbx/input
     files:
     - type: path
-      src: genome_paired_reads.fq.gz
+      src: short_read_assembler/genome_paired_reads.fq.gz
       dst: reads.fq.gz
     - type: literal
       dst: biobox.yaml

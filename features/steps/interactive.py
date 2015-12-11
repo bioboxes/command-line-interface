@@ -1,4 +1,4 @@
-import time, pexpect, re
+import time, pexpect
 
 def type(process, input_):
     process.send(input_.encode())

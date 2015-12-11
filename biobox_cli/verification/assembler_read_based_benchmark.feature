@@ -171,8 +171,8 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
     And I create the directory "output"
     And I copy the example data files:
       | source                      | dest                 |
-      | genome_paired_reads.fq.gz   | input/reads.fq.gz               |
-      | read_based_benchmark/assembly.fasta   | input/assembly.fasta  |
+      | assembler_read_based_benchmark/genome_paired_reads.fq.gz   | input/reads.fq.gz               |
+      | assembler_read_based_benchmark/assembly.fasta   | input/assembly.fasta  |
     And I create the file "input/biobox.yaml" with the contents:
       """
       version: "0.2.0"
@@ -206,8 +206,8 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
     And I create the directory "metadata"
     And I copy the example data files:
       | source                      | dest                 |
-      | genome_paired_reads.fq.gz   | input/reads.fq.gz               |
-      | read_based_benchmark/assembly.fasta   | input/assembly.fasta  |
+      | assembler_read_based_benchmark/genome_paired_reads.fq.gz   | input/reads.fq.gz               |
+      | assembler_read_based_benchmark/assembly.fasta   | input/assembly.fasta  |
     And I create the file "input/biobox.yaml" with the contents:
       """
       version: "0.2.0"
