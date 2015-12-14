@@ -1,4 +1,4 @@
-path    := PATH=./vendor/$(PYTHON_VERSION)/bin:$(shell echo "${PATH}")
+path    := PATH=$(PWD)/vendor/$(PYTHON_VERSION)/bin:$(shell echo "${PATH}")
 version := $(shell $(path) python setup.py --version)
 name    := $(shell $(path) python setup.py --name)
 dist    := dist/$(name)-$(version).tar.gz
