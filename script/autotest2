@@ -5,4 +5,4 @@ hash fswatch 2>/dev/null || {
   exit 1
 }
 
-make autotest
+make autotest  PYTHON_VERSION="python2"

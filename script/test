@@ -1,3 +1,4 @@
 #!/bin/bash
 
-make test
+make test PYTHON_VERSION=python2
+make test PYTHON_VERSION=python3
