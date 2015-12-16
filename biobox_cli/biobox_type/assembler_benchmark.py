@@ -1,15 +1,18 @@
 """
 Usage:
-    biobox run assembler_benchmark <image> [--no-rm] --input-fasta=FILE --input-ref=DIR --output=DIR [--task=TASK]
+    biobox run assembler_benchmark <image> [--memory=MEM] [--cpu-shares=CPU_SHARES] [--cpuset=CPUS] [--no-rm] --input-fasta=FILE --input-ref=DIR --output=DIR [--task=TASK]
 
 Options:
-  -h, --help                     Show this screen.
-  -v, --version                  Show version.
-  -if FILE, --input-fasta=FILE   Source FASTA file
-  -ir DIR, --input-ref=DIR       Source directory containing reference fasta files
-  -o DIR --output=DIR            Destination output directory
-  -t TASK, --task=TASK           Optionally specify a biobox task to run [default: default]
-
+-h, --help                     Show this screen.
+-v, --version                  Show version.
+-f FILE, --input-fasta=FILE    Source FASTA file
+-i DIR, --input-ref=DIR        Source directory containing reference fasta files
+-o DIR, --output=DIR            Destination output directory
+-t TASK, --task=TASK           Optionally specify a biobox task to run [default: default]
+-r, --no-rm                    Don't remove the container after the process finishes
+-c=CPU, --cpu-shares=CPU       CPU shares (relative weight)
+-s=CPU, --cpuset=CPU           CPUs that should be used. E.g:0,1 or 0-1
+-m=MEM, --memory=MEM           RAM that should be used
 """
 
 import biobox_cli.container   as ctn

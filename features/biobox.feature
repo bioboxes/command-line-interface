@@ -54,6 +54,7 @@ Feature: A CLI to run biobox-compatible Docker containers
         run \
         short_read_assembler \
         <assembler> \
+        <ressources> \
         --no-rm \
         --input=<input> \
         --output=<output> \
@@ -66,10 +67,12 @@ Feature: A CLI to run biobox-compatible Docker containers
     And the file "contigs.fa" should not be empty
 
     Examples:
-      | assembler        | args            | input                   | output                   |
-      | bioboxes/velvet  |                 | reads.fq.gz             | contigs.fa               |
-      | bioboxes/velvet  |                 | $(realpath reads.fq.gz) | contigs.fa               |
-      | bioboxes/velvet  |                 | reads.fq.gz             | $(realpath .)/contigs.fa |
+      | assembler        | ressources                                       |    args                        | input                   | output                   |
+      | bioboxes/velvet  |                                                  |                                | reads.fq.gz             | contigs.fa               |
+      | bioboxes/velvet  |                                                  |                                | $(realpath reads.fq.gz) | contigs.fa               |
+      | bioboxes/velvet  |                                                  |                                | reads.fq.gz             | $(realpath .)/contigs.fa |
+      | bioboxes/velvet  | --memory=1g --cpu-shares=512                     |                                | reads.fq.gz             | $(realpath .)/contigs.fa |
+      | bioboxes/velvet  | -m 1g -c 512                                     |                                | $(realpath reads.fq.gz) | contigs.fa               |
 
   Scenario Outline: Running a biobox assembler benchmark container
     Given I create the directory "input"
@@ -86,6 +89,7 @@ Feature: A CLI to run biobox-compatible Docker containers
         run \
         assembler_benchmark \
         <benchmark> \
+        <ressources> \
         --no-rm \
         --input-fasta=<input-fasta> \
         --input-ref=<input-ref> \
@@ -98,6 +102,8 @@ Feature: A CLI to run biobox-compatible Docker containers
     And the file "output/biobox.yaml" should exist
     And the file "output/biobox.yaml" should not be empty
     Examples:
-      | benchmark      | args | input-fasta                      | input-ref                    | output             |
-      | bioboxes/quast |      | $(realpath input/assembly.fasta) | $(realpath input/references) | $(realpath output) |
-      | bioboxes/quast |      | input/assembly.fasta             | input/references             | output             |
+      | benchmark      | args | ressources                                              | input-fasta                      | input-ref                    | output             |
+      | bioboxes/quast |      |                                                         | $(realpath input/assembly.fasta) | $(realpath input/references) | $(realpath output) |
+      | bioboxes/quast |      |                                                         | input/assembly.fasta             | input/references             | output             |
+      | bioboxes/quast |      | --memory=1g --cpu-shares=512                            | $(realpath input/assembly.fasta) | $(realpath input/references) | $(realpath output) |
+      | bioboxes/quast |      | -m 1g -c 512                                            | input/assembly.fasta             | input/references             | output             |

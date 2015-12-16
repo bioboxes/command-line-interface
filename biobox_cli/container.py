@@ -48,12 +48,14 @@ def input_directory_volume_string(directory):
 def biobox_file_volume_string(directory):
     return volume_string(directory, "/bbx/input")
 
-def create(image, command, volumes = []):
+def create(image, command, volumes = [], memory = None, cpu_shares = None, cpuset = None):
     return client().create_container(
             image,
             command,
+            cpu_shares = cpu_shares,
+            cpuset = cpuset,
             volumes     = list(map(lambda x: x.split(":")[0], volumes)),
-            host_config = client().create_host_config(binds=volumes))
+            host_config = client().create_host_config(binds=volumes, mem_limit=memory))
 
 def create_tty(image, tty, volumes = []):
     command = ""
