@@ -14,7 +14,8 @@ test:
   override:
     - ./script/build
     - ./script/test
-    - ./script/feature
+    - ./script/feature2
+    - ./script/feature3
 
 deployment:
   deploy:
