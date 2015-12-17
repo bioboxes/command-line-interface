@@ -1,11 +1,11 @@
 """
 Usage:
-    biobox run assembler_benchmark <image> [--memory=MEM] [--cpu-shares=CPU_SHARES] [--cpuset=CPUS] [--no-rm] --input-fasta=FILE --input-ref=DIR --output=DIR [--task=TASK]
+    biobox run assembler_benchmark <image> [--memory=MEM] [--cpu-shares=CPU_SHARES] [--cpuset=CPUS] [--no-rm] [--input-ref=DIR] --input-fasta=FILE --output=DIR [--task=TASK]
 
 Options:
 -h, --help                     Show this screen.
 -v, --version                  Show version.
--f FILE, --input-fasta=FILE    Source FASTA file
+-f FILE, --input-fasta=FILE    Source FASTA file (Optional)
 -i DIR, --input-ref=DIR        Source directory containing reference fasta files
 -o DIR, --output=DIR            Destination output directory
 -t TASK, --task=TASK           Optionally specify a biobox task to run [default: default]
@@ -33,22 +33,29 @@ class Assembler_Benchmark(Biobox):
         ref_dir = opts['--input-ref']
 
         host_src_fasta_file = os.path.abspath(fasta_file)
-        host_src_ref_dir = os.path.abspath(ref_dir)
+        if ref_dir:
+            host_src_ref_dir = os.path.abspath(ref_dir)
 
         cntr_src_fasta = "/fasta/input.fa"
         fasta_values = [(cntr_src_fasta, "contig")]
         fasta_yaml_values = fle.fasta_arguments(fasta_values)
 
-        cntr_src_ref_dir = "/ref"
-        ref_dir_yaml_values = fle.reference_argument(ref_dir)
+        yaml_values = [fasta_yaml_values]
+        if ref_dir:
+            cntr_src_ref_dir = "/ref"
+            ref_dir_yaml_values = fle.reference_argument(cntr_src_ref_dir)
+            yaml_values.append(ref_dir_yaml_values)
 
-        biobox_yaml = fle.generate([fasta_yaml_values, ref_dir_yaml_values])
+        biobox_yaml = fle.generate(yaml_values)
 
         volume_strings = [
                 ctn.volume_string(host_src_fasta_file, cntr_src_fasta),
-                ctn.volume_string(host_src_ref_dir, cntr_src_ref_dir),
                 ctn.biobox_file_volume_string(fle.create_biobox_directory(biobox_yaml)),
                 ctn.output_directory_volume_string(host_dst_dir)]
+
+        if ref_dir:
+            volume_strings.append(ctn.volume_string(host_src_ref_dir, cntr_src_ref_dir))
+
         return volume_strings
 
     def after_run(self, output, host_dst_dir):
