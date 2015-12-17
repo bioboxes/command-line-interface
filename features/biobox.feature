@@ -92,7 +92,7 @@ Feature: A CLI to run biobox-compatible Docker containers
         <ressources> \
         --no-rm \
         --input-fasta=<input-fasta> \
-        --input-ref=<input-ref> \
+        <input-ref> \
         --output=<output> \
         <args>
       """
@@ -102,8 +102,10 @@ Feature: A CLI to run biobox-compatible Docker containers
     And the file "output/biobox.yaml" should exist
     And the file "output/biobox.yaml" should not be empty
     Examples:
-      | benchmark      | args | ressources                                              | input-fasta                      | input-ref                    | output             |
-      | bioboxes/quast |      |                                                         | $(realpath input/assembly.fasta) | $(realpath input/references) | $(realpath output) |
-      | bioboxes/quast |      |                                                         | input/assembly.fasta             | input/references             | output             |
-      | bioboxes/quast |      | --memory=1g --cpu-shares=512                            | $(realpath input/assembly.fasta) | $(realpath input/references) | $(realpath output) |
-      | bioboxes/quast |      | -m 1g -c 512                                            | input/assembly.fasta             | input/references             | output             |
+      | benchmark      | args | ressources                                              | input-fasta                      | input-ref                                | output             |
+      | bioboxes/quast |      |                                                         | $(realpath input/assembly.fasta) | --input-ref=$(realpath input/references) | $(realpath output) |
+      | bioboxes/quast |      |                                                         | input/assembly.fasta             | --input-ref=input/references             | output             |
+      | bioboxes/quast |      |                                                         | input/assembly.fasta             |                                          | output             |
+      | bioboxes/quast |      | --memory=1g --cpu-shares=512                            | $(realpath input/assembly.fasta) | --input-ref=$(realpath input/references) | $(realpath output) |
+      | bioboxes/quast |      | -m 1g -c 512                                            | input/assembly.fasta             | --input-ref=input/references             | output             |
+      | bioboxes/quast |      | -m 1g -c 512                                            | input/assembly.fasta             |                                          | output             |
