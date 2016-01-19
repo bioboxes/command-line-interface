@@ -13,6 +13,10 @@ Options:
 Available Biobox types:
 
   short_read_assembler  Assemble short reads into contigs
+  profiling_benchmark   Profiling benchmark tools
+  assembler_benchmark   Assembler benchmrark tools
+  assembler_read_based_benchmark   Assembler Read based Benchmark tools
+  taxonomic_binning_benchmark   Taxonomic Binning Benchmark tools
 """
 from __future__ import print_function
 
