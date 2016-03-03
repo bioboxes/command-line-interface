@@ -81,12 +81,12 @@ $(dist): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
 #################################################
 
 
-bootstrap: vendor/$(PYTHON_VERSION) .images
+bootstrap: vendor/python3 vendor/python2 .images
 
-vendor/$(PYTHON_VERSION): requirements.txt
+vendor/python%: requirements.txt
 	mkdir -p log
-	virtualenv --python=$(PYTHON_VERSION) $@ 2>&1 > log/virtualenv.txt
-	$(path) pip install -r $< 2>&1 > log/pip.txt
+	virtualenv --python=python$* $@ 2>&1 > log/virtualenv.txt
+	./vendor/python$*/bin/pip install -r $< 2>&1 > log/pip.txt
 	touch $@
 
 .images: requirements.txt $(shell find images -name "*")
