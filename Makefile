@@ -59,7 +59,7 @@ build: $(dist) .test-build-py2 .test-build-py3
 	@touch $@
 
 .test-build-py2: ./plumbing/test-pip-install $(dist)
-	@$^ $(python-2-image)
+	@$^ $(python-3-image)
 	@touch $@
 
 ssh: $(dist)
