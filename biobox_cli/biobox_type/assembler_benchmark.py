@@ -19,7 +19,7 @@ import biobox_cli.container   as ctn
 import biobox_cli.biobox_file as fle
 
 import os
-from biobox_cli.biobox import Biobox
+from biobox_cli.biobox_helper import Biobox
 
 class Assembler_Benchmark(Biobox):
 

@@ -13,7 +13,7 @@ Available Biobox types:
 """
 
 import biobox_cli.util.misc as util
-from biobox_cli.biobox import Biobox as ABiobox
+from biobox_cli.biobox_helper import Biobox as ABiobox
 
 def run(argv):
     opts = util.parse_docopt(__doc__, argv, True)

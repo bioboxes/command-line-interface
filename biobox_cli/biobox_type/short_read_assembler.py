@@ -16,7 +16,7 @@ Options:
 
 import biobox_cli.container   as ctn
 import biobox_cli.biobox_file as fle
-from biobox_cli.biobox import Biobox
+from biobox_cli.biobox_helper import Biobox
 
 import os
 

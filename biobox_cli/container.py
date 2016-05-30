@@ -5,34 +5,17 @@ try:
 except ImportError:
     pass
 
-import docker
-import docker.utils
+import biobox.util               as docker
+import biobox.image.availability as avail
+from biobox.exception import NoImageFound
 
 import biobox_cli.util.error as error
 import dockerpty             as pty
 
-def client():
-    client = docker.AutoVersionClient(**docker.utils.kwargs_from_env(assert_hostname = False))
-    return client
-
-def get_image_tags(docker_dict):
-    return reduce(lambda acc, x: acc + [x, x.split(":")[0]],
-            docker_dict['RepoTags'], [])
-
-def is_image_available_locally(image):
-    image_tags = list(map(get_image_tags, client().images()))
-    images = set(reduce(lambda acc, x: acc + x, image_tags, []))
-    return image in images
-
-def is_image_available(image):
-    if not is_image_available_locally(image):
-        output = client().pull(image)
-        if not "Pulling" in output or "errorDetail" in output:
-            return False
-    return True
-
 def exit_if_no_image_available(image):
-    if not is_image_available(image):
+    try:
+        avail.get_image(image)
+    except NoImageFound:
         error.err_exit('unknown_image', {'image': image})
 
 def volume_string(host_dir, container_dir, read_only = True):
@@ -49,37 +32,37 @@ def biobox_file_volume_string(directory):
     return volume_string(directory, "/bbx/input")
 
 def create(image, command, volumes = [], memory = None, cpu_shares = None, cpuset = None):
-    return client().create_container(
+    return docker.client().create_container(
             image,
             command,
             cpu_shares = cpu_shares,
             cpuset = cpuset,
             volumes     = list(map(lambda x: x.split(":")[0], volumes)),
-            host_config = client().create_host_config(binds=volumes, mem_limit=memory))
+            host_config = docker.client().create_host_config(binds=volumes, mem_limit=memory))
 
 def create_tty(image, tty, volumes = []):
     command = ""
-    return client().create_container(
+    return docker.client().create_container(
             image,
             command,
             stdin_open  = True,
             tty         = tty,
             entrypoint  = '/bin/bash',
             volumes     = list(map(lambda x: x.split(":")[0], volumes)),
-            host_config = client().create_host_config(binds=volumes))
+            host_config = docker.client().create_host_config(binds=volumes))
 
 def run(container):
-    client().start(container)
-    client().wait(container)
+    docker.client().start(container)
+    docker.client().wait(container)
 
 def login(container):
-    client().start(container)
-    pty.PseudoTerminal(client(), container).start()
-    client().stop(container)
+    docker.client().start(container)
+    pty.PseudoTerminal(docker.client(), container).start()
+    docker.client().stop(container)
 
 def remove(container):
     """
     Removal of a container
     NOTE: This method is not tested due to circle ci limitations
     """
-    client().remove_container(container, v=True)
+    docker.client().remove_container(container, v=True)

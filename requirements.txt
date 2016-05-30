@@ -10,3 +10,4 @@ scripttest         == 1.3
 twine              == 1.5.0
 dockerpty          == 0.3.2
 pexpect            == 4.0.1
+biobox-py          == 0.2.0
