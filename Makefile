@@ -1,4 +1,4 @@
-path    := PATH=$(PWD)/vendor/$(PYTHON_VERSION)/bin:$(shell echo "${PATH}")
+path    := PATH=$(PWD)/.tox/py27-build/bin:$(shell echo "${PATH}")
 version := $(shell $(path) python setup.py --version)
 name    := $(shell $(path) python setup.py --name)
 dist    := dist/$(name)-$(version).tar.gz
@@ -53,28 +53,14 @@ autotest:
 #
 #################################################
 
+build: $(dist) test-build
 
-build: $(dist) .test-build-py2 .test-build-py3
+test-build:
+	tox -e py27-build,py3-build
 
-.test-build-py3: ./plumbing/test-pip-install $(dist)
-	@$^ $(python-2-image)
-	@touch $@
-
-.test-build-py2: ./plumbing/test-pip-install $(dist)
-	@$^ $(python-3-image)
-	@touch $@
-
-ssh: $(dist)
-	docker run \
-		--interactive \
-		--tty \
-		--volume=$(abspath $(dir $^)):/dist:ro \
-		$(python-2-image) \
-		/bin/bash -c "pip install --user /$^ && clear && bash"
-
-$(dist): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
-	$(path) python setup.py sdist
-	touch $(dir $@)
+$(dist): $(shell find biobox) requirements.txt setup.py MANIFEST.in
+	@$(path) python setup.py sdist --formats=gztar
+	touch $@
 
 #################################################
 #
@@ -86,14 +72,11 @@ $(dist): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
 bootstrap: .tox .images
 
 .tox: requirements.txt
-	tox --notest
+	@tox --notest
 	@touch $@
 
 .images: requirements.txt $(shell find images -name "*")
 	docker pull bioboxes/velvet
-	cp $< images/$(python-2-image)
-	docker build --tag $(python-2-image) images/$(python-2-image)
-	docker build --tag $(python-3-image) images/$(python-3-image)
 	docker build --tag $(verifier-image) images/$(verifier-image)
 	touch $@
 
