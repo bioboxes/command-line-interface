@@ -91,7 +91,6 @@ vendor/python%: requirements.txt
 
 .images: requirements.txt $(shell find images -name "*")
 	docker pull bioboxes/velvet
-	docker pull bioboxes/megahit
 	cp $< images/$(python-2-image)
 	docker build --tag $(python-2-image) images/$(python-2-image)
 	docker build --tag $(python-3-image) images/$(python-3-image)
