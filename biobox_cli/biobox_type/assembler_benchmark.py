@@ -15,11 +15,11 @@ Options:
 -m=MEM, --memory=MEM           RAM that should be used
 """
 
-import biobox_cli.container   as ctn
+import biobox.image.volume    as vol
 import biobox_cli.biobox_file as fle
 
 import os
-from biobox_cli.biobox import Biobox
+from biobox_cli.biobox_helper import Biobox
 
 class Assembler_Benchmark(Biobox):
 
@@ -49,12 +49,12 @@ class Assembler_Benchmark(Biobox):
         biobox_yaml = fle.generate(yaml_values)
 
         volume_strings = [
-                ctn.volume_string(host_src_fasta_file, cntr_src_fasta),
-                ctn.biobox_file_volume_string(fle.create_biobox_directory(biobox_yaml)),
-                ctn.output_directory_volume_string(host_dst_dir)]
+                vol.create_volume_string(host_src_fasta_file, cntr_src_fasta),
+                vol.biobox_file(fle.create_biobox_directory(biobox_yaml)),
+                vol.output(host_dst_dir)]
 
         if ref_dir:
-            volume_strings.append(ctn.volume_string(host_src_ref_dir, cntr_src_ref_dir))
+            volume_strings.append(vol.create_volume_string(host_src_ref_dir, cntr_src_ref_dir))
 
         return volume_strings
 

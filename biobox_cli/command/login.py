@@ -17,10 +17,12 @@ import yaml
 import os.path
 import shutil
 
+import biobox.image.volume    as vol
 import biobox_cli.util.misc   as util
 import biobox_cli.util.assets as asset
 import biobox_cli.util.error  as error
 import biobox_cli.container   as docker
+
 
 TEMPORARY_DIRECTORY = '.biobox_tmp'
 
@@ -53,7 +55,7 @@ def create_login_volume(dir_name, files):
     src = util.mkdir_p(os.path.join(TEMPORARY_DIRECTORY, dir_name.strip("/")))
     for f in files:
         create_login_file(src, f)
-    return docker.volume_string(src, dir_name, False)
+    return vol.create_volume_string(src, dir_name, False)
 
 def rm_login_dir():
     shutil.rmtree(TEMPORARY_DIRECTORY)

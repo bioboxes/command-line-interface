@@ -1,4 +1,4 @@
-path    := PATH=$(PWD)/vendor/$(PYTHON_VERSION)/bin:$(shell echo "${PATH}")
+path    := PATH=$(PWD)/.tox/py27-build/bin:$(shell echo "${PATH}")
 version := $(shell $(path) python setup.py --version)
 name    := $(shell $(path) python setup.py --name)
 dist    := dist/$(name)-$(version).tar.gz
@@ -26,24 +26,26 @@ clean:
 #
 #################################################
 
-
-test    = $(path) nosetests --rednose
+test     = tox -e py27-unit -e py3-unit
+autotest = clear && $(test)
+feature  = tox -e py27-feature -e py3-feature
 
 command:
 	@command -v realpath >/dev/null 2>&1 || { echo >&2 "Please install 'realpath' on your system"; exit 1; }
 
 feature: command
-	@echo "======================= Running $(PYTHON_VERSION) feature tests ======================="
-	@$(path) behave --stop $(ARGS)
+	@$(feature)
 
 test: command
-	@echo "======================= Running $(PYTHON_VERSION) tests ======================="
 	@$(test)
 
 autotest:
-	@clear && $(test) || true # Using true starts tests even on failure
-	@fswatch -o ./biobox_cli -o ./test | xargs -n 1 -I {} bash -c "clear && $(test)"
-
+	@$(autotest) || true # Using true starts tests even on failure
+	@fswatch \
+		--exclude 'pyc' \
+		--one-per-batch	./biobox_cli \
+		--one-per-batch ./test \
+		| xargs -n 1 -I {} bash -c "$(autotest)"
 
 #################################################
 #
@@ -51,28 +53,14 @@ autotest:
 #
 #################################################
 
+build: $(dist) test-build
 
-build: $(dist) .test-build-py2 .test-build-py3
-
-.test-build-py3: ./plumbing/test-pip-install $(dist)
-	@$^ $(python-2-image)
-	@touch $@
-
-.test-build-py2: ./plumbing/test-pip-install $(dist)
-	@$^ $(python-3-image)
-	@touch $@
-
-ssh: $(dist)
-	docker run \
-		--interactive \
-		--tty \
-		--volume=$(abspath $(dir $^)):/dist:ro \
-		$(python-2-image) \
-		/bin/bash -c "pip install --user /$^ && clear && bash"
+test-build:
+	tox -e py27-build,py3-build
 
 $(dist): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
-	$(path) python setup.py sdist
-	touch $(dir $@)
+	@$(path) python setup.py sdist --formats=gztar
+	touch $@
 
 #################################################
 #
@@ -81,20 +69,14 @@ $(dist): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
 #################################################
 
 
-bootstrap: vendor/python3 vendor/python2 .images
+bootstrap: .tox .images
 
-vendor/python%: requirements.txt
-	mkdir -p log
-	virtualenv --python=python$* $@ 2>&1 > log/virtualenv.txt
-	./vendor/python$*/bin/pip install -r $< 2>&1 > log/pip.txt
-	touch $@
+.tox: requirements.txt
+	@tox --notest
+	@touch $@
 
 .images: requirements.txt $(shell find images -name "*")
 	docker pull bioboxes/velvet
-	docker pull bioboxes/megahit
-	cp $< images/$(python-2-image)
-	docker build --tag $(python-2-image) images/$(python-2-image)
-	docker build --tag $(python-3-image) images/$(python-3-image)
 	docker build --tag $(verifier-image) images/$(verifier-image)
 	touch $@
 

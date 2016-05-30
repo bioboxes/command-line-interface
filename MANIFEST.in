@@ -2,3 +2,4 @@ include requirements.txt
 include doc/*
 recursive-include biobox_cli/verification *
 recursive-include biobox_cli/assets *
+recursive-exclude test *

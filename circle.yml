@@ -1,12 +1,14 @@
 machine:
+  pre:
+    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.12.0
   services:
     - docker
 
 dependencies:
-  override:
+  post:
     - ./script/bootstrap
   cache_directories:
-    - vendor
+    - .tox
   pre:
     - sudo apt-get update && sudo apt-get install --no-install-recommends build-essential libpython2.7-dev python3-dev realpath
 
@@ -14,8 +16,7 @@ test:
   override:
     - ./script/build
     - ./script/test
-    - ./script/feature2
-    - ./script/feature3
+    - ./script/feature
 
 deployment:
   deploy:

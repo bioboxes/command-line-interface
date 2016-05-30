@@ -1,3 +1,0 @@
-#!/bin/bash
-
-make feature PYTHON_VERSION="python2" ARGS="$@"

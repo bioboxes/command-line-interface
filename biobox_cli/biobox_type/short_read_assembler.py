@@ -14,9 +14,9 @@ Options:
 -m=MEM, --memory=MEM      RAM that should be used
 """
 
-import biobox_cli.container   as ctn
+import biobox.image.volume    as vol
 import biobox_cli.biobox_file as fle
-from biobox_cli.biobox import Biobox
+from biobox_cli.biobox_helper import Biobox
 
 import os
 
@@ -42,9 +42,9 @@ class Assembler(Biobox):
         host_src_dir = os.path.abspath(fastq_file)
 
         volumes = [
-            ctn.volume_string(host_src_dir, cntr_fastq_file),
-            ctn.biobox_file_volume_string(fle.create_biobox_directory(biobox_yaml)),
-            ctn.output_directory_volume_string(host_dst_dir)]
+            vol.create_volume_string(host_src_dir, cntr_fastq_file),
+            vol.biobox_file(fle.create_biobox_directory(biobox_yaml)),
+            vol.output(host_dst_dir)]
         return volumes
 
     def after_run(self, output, host_dst_dir):
