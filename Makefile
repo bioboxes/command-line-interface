@@ -26,8 +26,8 @@ clean:
 #
 #################################################
 
-
-test    = $(path) nosetests --rednose
+test     = tox -e py27-unit -e py3-unit
+autotest = clear && $(test)
 
 command:
 	@command -v realpath >/dev/null 2>&1 || { echo >&2 "Please install 'realpath' on your system"; exit 1; }
@@ -37,13 +37,15 @@ feature: command
 	@$(path) behave --stop $(ARGS)
 
 test: command
-	@echo "======================= Running $(PYTHON_VERSION) tests ======================="
 	@$(test)
 
 autotest:
-	@clear && $(test) || true # Using true starts tests even on failure
-	@fswatch -o ./biobox_cli -o ./test | xargs -n 1 -I {} bash -c "clear && $(test)"
-
+	@$(autotest) || true # Using true starts tests even on failure
+	@fswatch \
+		--exclude 'pyc' \
+		--one-per-batch	./biobox_cli \
+		--one-per-batch ./test \
+		| xargs -n 1 -I {} bash -c "$(autotest)"
 
 #################################################
 #
@@ -81,13 +83,11 @@ $(dist): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
 #################################################
 
 
-bootstrap: vendor/python3 vendor/python2 .images
+bootstrap: .tox .images
 
-vendor/python%: requirements.txt
-	mkdir -p log
-	virtualenv --python=python$* $@ 2>&1 > log/virtualenv.txt
-	./vendor/python$*/bin/pip install -r $< 2>&1 > log/pip.txt
-	touch $@
+.tox: requirements.txt
+	tox --notest
+	@touch $@
 
 .images: requirements.txt $(shell find images -name "*")
 	docker pull bioboxes/velvet
