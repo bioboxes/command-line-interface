@@ -18,19 +18,6 @@ def exit_if_no_image_available(image):
     except NoImageFound:
         error.err_exit('unknown_image', {'image': image})
 
-def volume_string(host_dir, container_dir, read_only = True):
-    access = "ro" if read_only else "rw"
-    return ":".join([os.path.abspath(host_dir), container_dir, access])
-
-def output_directory_volume_string(directory):
-    return volume_string(directory, "/bbx/output", False)
-
-def input_directory_volume_string(directory):
-    return volume_string(directory, "/bbx/input", True)
-
-def biobox_file_volume_string(directory):
-    return volume_string(directory, "/bbx/input")
-
 def create(image, command, volumes = [], memory = None, cpu_shares = None, cpuset = None):
     return docker.client().create_container(
             image,
