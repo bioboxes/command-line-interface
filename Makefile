@@ -28,13 +28,13 @@ clean:
 
 test     = tox -e py27-unit -e py3-unit
 autotest = clear && $(test)
+feature  = tox -e py27-feature -e py3-feature
 
 command:
 	@command -v realpath >/dev/null 2>&1 || { echo >&2 "Please install 'realpath' on your system"; exit 1; }
 
 feature: command
-	@echo "======================= Running $(PYTHON_VERSION) feature tests ======================="
-	@$(path) behave --stop $(ARGS)
+	@$(feature)
 
 test: command
 	@$(test)
