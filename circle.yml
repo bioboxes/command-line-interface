@@ -5,7 +5,7 @@ machine:
     - docker
 
 dependencies:
-  override:
+  post:
     - ./script/bootstrap
   cache_directories:
     - .tox
@@ -16,8 +16,7 @@ test:
   override:
     - ./script/build
     - ./script/test
-    - ./script/feature2
-    - ./script/feature3
+    - ./script/feature
 
 deployment:
   deploy:
