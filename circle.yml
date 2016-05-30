@@ -8,7 +8,7 @@ dependencies:
   override:
     - ./script/bootstrap
   cache_directories:
-    - vendor
+    - .tox
   pre:
     - sudo apt-get update && sudo apt-get install --no-install-recommends build-essential libpython2.7-dev python3-dev realpath
 
