@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v0.3.0] - 2016-06-02
+
+### Added
+
+  * Support for python 3. The command line interface is tested against python
+    2.7 and 3.4.
+
+  * Support for specifying resource consumption using Docker's cgroup flags.
+
 ## [v0.3.0] - 2015-11-05
 
 ### Added
