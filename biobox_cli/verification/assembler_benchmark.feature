@@ -1,4 +1,4 @@
-Feature: Ensuring a short read assembler matches the bioboxes specification
+Feature: Ensuring a the assembler benchmark matches the bioboxes specification
 
   Scenario: A garbled biobox.yaml file.
     Given I create the directory "input"
@@ -144,15 +144,15 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
       | invalid_fasta |
 
 
-  Scenario: Run assembler with basic input
+  Scenario: Run assembler benchmark with basic input
     Given I create the directory "input"
     And I create the directory "output"
     And I copy the example data files:
       | source           | dest                 |
-      | assembly.fasta   | input/assembly.fasta |
+      | assembler_benchmark/assembly.fasta   | input/assembly.fasta |
     And I copy the example data directories:
       | source           | dest                 |
-      | references       | input/references     |
+      | assembler_benchmark/references       | input/references     |
     And I create the file "input/biobox.yaml" with the contents:
       """
       ---
@@ -162,7 +162,7 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
           - id: "1"
             value: "/bbx/input/assembly.fasta"
             type: contigs
-        - fasta_dir: "/bbx/input/reference"
+        - fasta_dir: "/bbx/input/references"
       """
     When I run the command:
       """
@@ -182,10 +182,10 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
     And I create the directory "metadata"
     And I copy the example data files:
       | source           | dest                 |
-      | assembly.fasta   | input/assembly.fasta |
+      | assembler_benchmark/assembly.fasta   | input/assembly.fasta |
     And I copy the example data directories:
       | source           | dest                 |
-      | references       | input/references     |
+      | assembler_benchmark/references       | input/references     |
     And I create the file "input/biobox.yaml" with the contents:
       """
       ---
@@ -195,7 +195,7 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
           - id: "1"
             value: "/bbx/input/assembly.fasta"
             type: contigs
-        - fasta_dir: "/bbx/input/reference"
+        - fasta_dir: "/bbx/input/references"
       """
     When I run the command:
       """

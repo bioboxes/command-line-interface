@@ -26,7 +26,7 @@ def test_create_login_file_literal():
 
 @nose.with_setup(teardown = rm_tmp_file)
 def test_create_login_file_path():
-    value = {'type': 'path', 'src': 'genome_paired_reads.fq.gz', 'dst': TMP_FILE_NAME}
+    value = {'type': 'path', 'src': 'short_read_assembler/genome_paired_reads.fq.gz', 'dst': TMP_FILE_NAME}
     login.create_login_file(TMP_DIR, value)
     hlpr.assert_file_not_empty(TMP_PATH)
 

@@ -120,7 +120,7 @@ Feature: Verification steps for short read assembler bioboxes
     And I create the directory "output"
     And I copy the example data files:
       | source                    | dest              |
-      | genome_paired_reads.fq.gz | input/reads.fq.gz |
+      | short_read_assembler/genome_paired_reads.fq.gz | input/reads.fq.gz |
     And I create the file "input/biobox.yaml" with the contents:
       """
       ---
@@ -153,7 +153,7 @@ Feature: Verification steps for short read assembler bioboxes
     And I create the directory "metadata"
     And I copy the example data files:
       | source                    | dest              |
-      | genome_paired_reads.fq.gz | input/reads.fq.gz |
+      | short_read_assembler/genome_paired_reads.fq.gz | input/reads.fq.gz |
     And I create the file "input/biobox.yaml" with the contents:
       """
       ---

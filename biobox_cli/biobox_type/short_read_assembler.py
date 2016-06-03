@@ -1,19 +1,22 @@
 """
 Usage:
-    biobox run short_read_assembler <image> [--no-rm] --input=FILE --output=FILE [--task=TASK]
+    biobox run short_read_assembler <image> [--memory=MEM] [--cpu-shares=CPU] [--cpuset=CPU] [--no-rm] --input=FILE --output=FILE [--task=TASK]
 
 Options:
--h, --help              Show this screen.
--v, --version           Show version.
--i FILE, --input=FILE   Source FASTQ file containing paired short reads
--o FILE, --output=FILE  Destination FASTA file for assembled contigs
--t TASK, --task=TASK    Optionally specify a biobox task to run [default: default]
--r, --no-rm             Don't remove the container after the process finishes
+-h, --help                Show this screen.
+-v, --version             Show version.
+-i FILE, --input=FILE     Source FASTQ file containing paired short reads
+-o FILE, --output=FILE    Destination FASTA file for assembled contigs
+-t TASK, --task=TASK      Optionally specify a biobox task to run [default: default]
+-r, --no-rm               Don't remove the container after the process finishes
+-c=CPU, --cpu-shares=CPU  CPU shares (relative weight)
+-s=CPU, --cpuset=CPU      CPUs that should be used. E.g:0,1 or 0-1
+-m=MEM, --memory=MEM      RAM that should be used
 """
 
-import biobox_cli.container   as ctn
+import biobox.image.volume    as vol
 import biobox_cli.biobox_file as fle
-from biobox_cli.biobox import Biobox
+from biobox_cli.biobox_helper import Biobox
 
 import os
 
@@ -39,9 +42,9 @@ class Assembler(Biobox):
         host_src_dir = os.path.abspath(fastq_file)
 
         volumes = [
-            ctn.volume_string(host_src_dir, cntr_fastq_file),
-            ctn.biobox_file_volume_string(fle.create_biobox_directory(biobox_yaml)),
-            ctn.output_directory_volume_string(host_dst_dir)]
+            vol.create_volume_string(host_src_dir, cntr_fastq_file),
+            vol.biobox_file(fle.create_biobox_directory(biobox_yaml)),
+            vol.output(host_dst_dir)]
         return volumes
 
     def after_run(self, output, host_dst_dir):

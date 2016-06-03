@@ -17,7 +17,7 @@ Biobox types:
     short_read_assembler    Assemble short reads into contigs
 """
 
-import sys, string
+import sys
 
 from fn import F
 
@@ -35,5 +35,6 @@ def input_args():
     """
     return fn.thread([
         sys.argv[1:],
-        F(map, string.strip),
-        F(filter, fn.is_not_empty)])
+        F(map, str.strip),
+        F(filter, fn.is_not_empty),
+        F(list)])

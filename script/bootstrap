@@ -1,3 +1,4 @@
 #!/bin/bash
 
-make bootstrap
+make bootstrap "PYTHON_VERSION=python3"
+make bootstrap "PYTHON_VERSION=python2"

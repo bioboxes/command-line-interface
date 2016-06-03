@@ -1,3 +1,8 @@
+try:
+    from functools import reduce
+except ImportError:
+    pass
+
 def get(key):
     """
     Function that returns a function that will look up the given key in a
@@ -24,7 +29,7 @@ def is_not_empty(x):
     return not is_empty(x)
 
 def is_empty(x):
-    return len(x) == 0
+    return len(list(x)) == 0
 
 def first(x):
     return x[0]

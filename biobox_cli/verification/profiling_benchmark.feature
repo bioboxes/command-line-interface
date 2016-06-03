@@ -1,4 +1,4 @@
-Feature: Ensuring a short read assembler matches the bioboxes specification
+Feature: Ensuring a the profiling benchmark matches the bioboxes specification
 
   Scenario: A garbled biobox.yaml file.
     Given I create the directory "input"
@@ -25,17 +25,14 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
     And I create the directory "output"
     And I create the file "input/biobox.yaml" with the contents:
       """
+      ---
       arguments:
-        assemblies:
-          - path: /bbx/mnt/input/assembly.fasta
-            id: ray
-            type: contig
-            format: bioboxes.org:/fasta
-        reads:
-          - path: /bbx/mnt/input/reads.fq.gz
-            id: lib1
-            type: paired
-            format: bioboxes.org:/fastq
+        prediction:
+          path: /bbx/mnt/input/pred
+          format: bioboxes.org:/profiling:0.9
+        ground_truth:
+          path: /bbx/mnt/input/truth
+          format: bioboxes.org:/profiling:0.9
       """
     When I run the command:
     """
@@ -52,18 +49,14 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
     And I create the directory "output"
     And I create the file "input/biobox.yaml" with the contents:
       """
-      version: "0.2"
+      version: "0.1"
       arguments:
-        assemblies:
-          - path: /bbx/mnt/input/assembly.fasta
-            id: ray
-            type: contig
-            format: bioboxes.org:/fasta
-        reads:
-          - path: /bbx/mnt/input/reads.fq.gz
-            id: lib1
-            type: paired
-            format: bioboxes.org:/fastq
+        prediction:
+          path: /bbx/mnt/input/pred
+          format: bioboxes.org:/profiling:0.9
+        ground_truth:
+          path: /bbx/mnt/input/truth
+          format: bioboxes.org:/profiling:0.9
       """
     When I run the command:
     """
@@ -76,7 +69,7 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
     Then the exit code should be 1
     And the stderr should contain:
       """
-      '0.2' does not match '^0.2.\\d+$'
+      '0.1' does not match '^0.1.\\d+$'
       """
 
   Scenario: An biobox.yaml with a wrong version number.
@@ -84,30 +77,25 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
     And I create the directory "output"
     And I create the file "input/biobox.yaml" with the contents:
     """
-      version: "0.8.0"
-      arguments:
-        assemblies:
-          - path: /bbx/mnt/input/assembly.fasta
-            id: ray
-            type: contig
-            format: bioboxes.org:/fasta
-        reads:
-          - path: /bbx/mnt/input/reads.fq.gz
-            id: lib1
-            type: paired
-            format: bioboxes.org:/fastq
+    version: "0.8.0"
+    arguments:
+      prediction:
+        path: /bbx/mnt/input/pred
+        format: bioboxes.org:/profiling:0.9
+      ground_truth:
+        path: /bbx/mnt/input/truth
+        format: bioboxes.org:/profiling:0.9
      """
     When I run the command:
       """
       docker run \
-        --env="TASK=default" \
         --volume="$(pwd)/input:/bbx/mnt/input:ro" \
         ${IMAGE} ${TASK}
       """
     Then the exit code should be 1
     And the stderr should contain:
       """
-      '0.8.0' does not match '^0.2.\\d+$'
+      '0.8.0' does not match '^0.1.\\d+$'
       """
 
   Scenario: An biobox.yaml with a missing arguments field.
@@ -115,12 +103,11 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
     And I create the directory "output"
     And I create the file "input/biobox.yaml" with the contents:
       """
-      version: "0.2.0"
+      version: "0.1.0"
       """
     When I run the command:
       """
       docker run \
-        --env="TASK=default" \
         --volume="$(pwd)/input:/bbx/mnt/input" \
         ${IMAGE} ${TASK}
       """
@@ -130,23 +117,19 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
       'arguments' is a required property
       """
 
-  Scenario Outline: A biobox.yaml with an additional unknown field
+  Scenario Outline: An biobox.yaml with an additional unknown field
     Given I create the directory "input"
     And I create the directory "output"
     And I create the file "input/biobox.yaml" with the contents:
       """
-      version: "0.2.0"
+      version: "0.1.0"
       arguments:
-        assemblies:
-          - path: /bbx/mnt/input/assembly.fasta
-            id: ray
-            type: contig
-            format: bioboxes.org:/fasta
-        reads:
-          - path: /bbx/mnt/input/reads.fq.gz
-            id: lib1
-            type: paired
-            format: bioboxes.org:/fastq
+        prediction:
+          path: /bbx/mnt/input/pred
+          format: bioboxes.org:/profiling:0.9
+        ground_truth:
+          path: /bbx/mnt/input/truth
+          format: bioboxes.org:/profiling:0.9
       <field>: {}
       """
     When I run the command:
@@ -160,33 +143,30 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
       """
       Additional properties are not allowed ('<field>' was unexpected)
       """
-
     Examples:
       | field         |
       | unknown       |
       | invalid_fasta |
 
-  Scenario: Run read based assembler benchmark container with basic input
+
+  Scenario: Run profiling benchmark with basic input
     Given I create the directory "input"
     And I create the directory "output"
     And I copy the example data files:
-      | source                      | dest                 |
-      | assembler_read_based_benchmark/genome_paired_reads.fq.gz   | input/reads.fq.gz               |
-      | assembler_read_based_benchmark/assembly.fasta   | input/assembly.fasta  |
+      | source                                     | dest        |
+      | profiling_benchmark/ground_truth.profile   | input/truth |
+      | profiling_benchmark/prediction.profile     | input/pred  |
     And I create the file "input/biobox.yaml" with the contents:
       """
-      version: "0.2.0"
+      ---
+      version: "0.1.0"
       arguments:
-        assemblies:
-          - path: /bbx/mnt/input/assembly.fasta
-            id: ray
-            type: contig
-            format: bioboxes.org:/fasta
-        reads:
-          - path: /bbx/mnt/input/reads.fq.gz
-            id: lib1
-            type: paired
-            format: bioboxes.org:/fastq
+        prediction:
+          path: /bbx/mnt/input/pred
+          format: bioboxes.org:/profiling:0.9
+        ground_truth:
+          path: /bbx/mnt/input/truth
+          format: bioboxes.org:/profiling:0.9
       """
     When I run the command:
       """
@@ -205,28 +185,25 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
     And I create the directory "output"
     And I create the directory "metadata"
     And I copy the example data files:
-      | source                      | dest                 |
-      | assembler_read_based_benchmark/genome_paired_reads.fq.gz   | input/reads.fq.gz               |
-      | assembler_read_based_benchmark/assembly.fasta   | input/assembly.fasta  |
+      | source                                     | dest        |
+      | profiling_benchmark/ground_truth.profile   | input/truth |
+      | profiling_benchmark/prediction.profile     | input/pred  |
     And I create the file "input/biobox.yaml" with the contents:
       """
-      version: "0.2.0"
+      ---
+      version: "0.1.0"
       arguments:
-        assemblies:
-          - path: /bbx/mnt/input/assembly.fasta
-            id: ray
-            type: contig
-            format: bioboxes.org:/fasta
-        reads:
-          - path: /bbx/mnt/input/reads.fq.gz
-            id: lib1
-            type: paired
-            format: bioboxes.org:/fastq
+        prediction:
+          path: /bbx/mnt/input/pred
+          format: bioboxes.org:/profiling:0.9
+        ground_truth:
+          path: /bbx/mnt/input/truth
+          format: bioboxes.org:/profiling:0.9
       """
     When I run the command:
       """
         docker run \
-          --volume="$(pwd)/metadata:/bbx/mnt/metadata:rw" \
+          --volume="$(pwd)/metadata:/bbx/metadata:rw" \
           --volume="$(pwd)/input:/bbx/mnt/input:ro" \
           --volume="$(pwd)/output:/bbx/mnt/output:rw" \
           ${IMAGE} ${TASK}
@@ -235,4 +212,3 @@ Feature: Ensuring a short read assembler matches the bioboxes specification
     And the following files should exist and not be empty:
       | file               |
       | output/biobox.yaml |
-      | metadata/log.txt   |
