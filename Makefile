@@ -41,23 +41,23 @@ feature   = tox -e py27-feature -e py3-feature -- $(ARGS)
 command:
 	@command -v realpath >/dev/null 2>&1 || { echo >&2 "Please install 'realpath' on your system"; exit 1; }
 
-feature: command
+feature: tmp/tests command
 	@$(feature)
 
 # "Work in Progress" unit tests
 # Useful for testing only the code currently being developed
 # Should not however be checked into version control
-wip: command
+wip: tmp/tests command
 	@$(wip)
 
-test: command
+test: tmp/tests command
 	@if test -n "$(wip-found)"; then\
 		echo "$(ERROR_COLOR)Work in progress tests found: '@pytest.mark.wip'. Please remove first.$(NO_COLOR)\n"; \
 		exit 1; \
 	fi
 	@$(test)
 
-autotest:
+autotest: tmp/tests
 	@$(autotest) || true # Using true starts tests even on failure
 	@fswatch \
 		--exclude 'pyc' \
@@ -90,7 +90,7 @@ $(dist): $(shell find biobox_cli) requirements/default.txt setup.py MANIFEST.in
 #################################################
 
 
-bootstrap: .tox .images
+bootstrap: .tox .images tmp/tests
 
 .tox: requirements/default.txt requirements/development.txt
 	@tox --notest
@@ -100,5 +100,11 @@ bootstrap: .tox .images
 	docker pull bioboxes/velvet
 	docker build --tag $(verifier-image) images/$(verifier-image)
 	touch $@
+
+# Docker cannot access directories outside of the user home directory on OSX.
+# This is because a virtual machine is used which has the user $HOME mounted
+# into it
+tmp/tests:
+	mkdir -p $@
 
 .PHONY: bootstrap build feature test-build publish test command
