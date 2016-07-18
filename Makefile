@@ -3,8 +3,6 @@ version := $(shell $(path) python setup.py --version)
 name    := $(shell $(path) python setup.py --name)
 dist    := dist/$(name)-$(version).tar.gz
 
-python-3-image := py3
-python-2-image := py2
 verifier-image := test-verify
 
 publish: $(dist)
