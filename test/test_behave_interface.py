@@ -1,4 +1,3 @@
-import nose.tools                  as nt
 import biobox_cli.behave_interface as behave
 
 def feature(statuses):
@@ -14,24 +13,24 @@ def scenario(status = "failed", name = "scenario name"):
 
 def test_get_failing_scenarios_for_single_pass():
     features = [feature(["passing"])]
-    nt.assert_equal([], behave.get_failing_scenarios(features))
+    assert [] == behave.get_failing_scenarios(features)
 
 def test_get_failing_scenarios_for_single_failure():
     features = [feature(["failed"])]
-    nt.assert_equal([scenario()], behave.get_failing_scenarios(features))
+    assert [scenario()] == behave.get_failing_scenarios(features)
 
 def test_get_failing_scenarios_for_pass_and_failure():
     features = [feature(["failed", "passing"])]
-    nt.assert_equal([scenario()], behave.get_failing_scenarios(features))
+    assert [scenario()] == behave.get_failing_scenarios(features)
 
 def test_get_failing_scenarios_for_multiple_failing_scenarios():
     features = [feature(["failed", "passing"]),
                 feature(["failed", "passing"])]
-    nt.assert_equal([scenario(), scenario()], behave.get_failing_scenarios(features))
+    assert [scenario(), scenario()] == behave.get_failing_scenarios(features)
 
 def test_get_failing_scenarios_with_unrun_scenarios():
     features = [feature(["passing", "failed", "not-run"])]
-    nt.assert_equal([scenario()], behave.get_failing_scenarios(features))
+    assert [scenario()] == behave.get_failing_scenarios(features)
 
 def test_get_scenarios_and_status():
     features = [feature(["failed", "passing"]),
@@ -40,8 +39,8 @@ def test_get_scenarios_and_status():
                 ["scenario name", "passing"],
                 ["scenario name", "failed"],
                 ["scenario name", "passing"]]
-    nt.assert_equal(expected, behave.get_scenarios_and_statuses(features))
+    assert expected == behave.get_scenarios_and_statuses(features)
 
 def test_scenario_name():
-    nt.assert_equal("a", behave.scenario_name(scenario("failed", "a")))
-    nt.assert_equal("b", behave.scenario_name(scenario("passing", "b")))
+    assert "a" == behave.scenario_name(scenario("failed", "a"))
+    assert "b" == behave.scenario_name(scenario("passing", "b"))
