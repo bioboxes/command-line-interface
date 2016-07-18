@@ -56,7 +56,7 @@ build: $(dist) test-build
 test-build:
 	tox -e py27-build,py3-build
 
-$(dist): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
+$(dist): $(shell find biobox_cli) requirements/default.txt setup.py MANIFEST.in
 	@$(path) python setup.py sdist --formats=gztar
 	touch $@
 
@@ -69,11 +69,11 @@ $(dist): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
 
 bootstrap: .tox .images
 
-.tox: requirements.txt
+.tox: requirements/default.txt requirements/development.txt
 	@tox --notest
 	@touch $@
 
-.images: requirements.txt $(shell find images -name "*")
+.images: $(shell find images -name "*")
 	docker pull bioboxes/velvet
 	docker build --tag $(verifier-image) images/$(verifier-image)
 	touch $@
