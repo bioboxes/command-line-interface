@@ -32,6 +32,10 @@ class Assembler_Benchmark(Biobox):
         fasta_file = opts['--input-fasta']
         ref_dir = opts['--input-ref']
 
+        output = opts['--output']
+        if not os.path.exists(output):
+            os.makedirs(output)
+
         host_src_fasta_file = os.path.abspath(fasta_file)
         if ref_dir:
             host_src_ref_dir = os.path.abspath(ref_dir)

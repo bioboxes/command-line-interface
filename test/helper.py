@@ -4,6 +4,9 @@ import biobox_cli.container as ctn
 def project_root():
     return os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
+def verification_file(path):
+    return os.path.join(project_root(), "biobox_cli", "verification", "data", path)
+
 def is_ci_server():
     return "CIRCLECI" in os.environ.keys()
 

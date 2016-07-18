@@ -25,6 +25,7 @@ class Biobox:
         memory      = opts['--memory']
         cpuset      = opts['--cpuset']
         cpushares   = opts['--cpu-shares']
+
         host_dst_dir = tmp.mkdtemp()
         volumes = self.prepare_volumes(opts, host_dst_dir)
         ctn.exit_if_no_image_available(image)
