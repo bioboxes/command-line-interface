@@ -5,15 +5,23 @@ dist    := dist/$(name)-$(version).tar.gz
 
 verifier-image := test-verify
 
+NO_COLOR=\x1b[0m
+OK_COLOR=\x1b[32;01m
+ERROR_COLOR=\x1b[31;01m
+WARN_COLOR=\x1b[33;01m
+
+#################################################
+#
+# Publish the pip package
+#
+#################################################
+
 publish: $(dist)
 	@$(path) twine upload \
 		--username ${PYPI_USERNAME} \
 		--password ${PYPI_PASSWORD} \
 		$^
 	./plumbing/rebuild-site
-
-console:
-	@$(path) python -i console.py
 
 clean:
 	rm -rf dist *.egg-info
@@ -24,9 +32,11 @@ clean:
 #
 #################################################
 
-test     = tox -e py27-unit -e py3-unit
-autotest = clear && $(test)
-feature  = tox -e py27-feature -e py3-feature $(ARGS)
+test      = tox -e py27-unit -e py3-unit -- $(ARGS)
+autotest  = clear && $(test) -m \'not slow\'
+wip       = clear && $(test) -m \'wip\'
+wip-found = $(shell find test -name '*.py' | xargs grep '@pytest.mark.wip')
+feature   = tox -e py27-feature -e py3-feature -- $(ARGS)
 
 command:
 	@command -v realpath >/dev/null 2>&1 || { echo >&2 "Please install 'realpath' on your system"; exit 1; }
@@ -34,7 +44,17 @@ command:
 feature: command
 	@$(feature)
 
+# "Work in Progress" unit tests
+# Useful for testing only the code currently being developed
+# Should not however be checked into version control
+wip: command
+	@$(wip)
+
 test: command
+	@if test -n "$(wip-found)"; then\
+		echo "$(ERROR_COLOR)Work in progress tests found: '@pytest.mark.wip'. Please remove first.$(NO_COLOR)\n"; \
+		exit 1; \
+	fi
 	@$(test)
 
 autotest:
@@ -44,6 +64,9 @@ autotest:
 		--one-per-batch	./biobox_cli \
 		--one-per-batch ./test \
 		| xargs -n 1 -I {} bash -c "$(autotest)"
+
+console:
+	@$(path) python -i console.py
 
 #################################################
 #
