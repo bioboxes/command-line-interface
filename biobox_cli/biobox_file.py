@@ -16,7 +16,7 @@ def fasta_arguments(args):
     return files_values("fasta", args)
 
 def reference_argument(ref):
-    return {"fasta_dir": [{"id" : 1, "type" : "reference", "value" : "ref"}]}
+    return {"fasta_dir": [{"id" : 1, "type" : "reference", "value" : ref}]}
 
 def files_values(identifier, args):
     values = [entry(identifier + "_" + str(i), p_c, t) for (i, (p_c, t)) in enumerate(args)]
