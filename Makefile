@@ -90,11 +90,7 @@ $(dist): $(shell find biobox_cli) requirements/default.txt setup.py MANIFEST.in
 #################################################
 
 
-bootstrap: .tox .images tmp/tests
-
-.tox: requirements/default.txt requirements/development.txt
-	@tox --notest
-	@touch $@
+bootstrap: .images tmp/tests
 
 .images: $(shell find images -name "*")
 	docker pull bioboxes/velvet
