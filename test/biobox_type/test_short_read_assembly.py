@@ -10,7 +10,6 @@ def create_args(output):
             "--output={}".format(output),
             "--no-rm"]
 
-@pytest.mark.wip
 @pytest.mark.slow
 def test_short_read_assembler():
     path = tempfile.mkdtemp()

@@ -28,39 +28,17 @@ class Assembler_Benchmark(Biobox):
         output_files = os.listdir(biobox_output_dir)
         list(map(lambda f: shutil.move(os.path.join(biobox_output_dir,f), dst), output_files))
 
-    def prepare_volumes(self, opts, host_dst_dir):
-        fasta_file = opts['--input-fasta']
-        ref_dir = opts['--input-ref']
-
+    def prepare_config(self, opts):
         output = opts['--output']
         if not os.path.exists(output):
             os.makedirs(output)
 
-        host_src_fasta_file = os.path.abspath(fasta_file)
-        if ref_dir:
-            host_src_ref_dir = os.path.abspath(ref_dir)
+        args = [{"fasta" : [ {"id": 0, "type": "contigs", "value": opts['--input-fasta']}]}]
 
-        cntr_src_fasta = "/fasta/input.fa"
-        fasta_values = [(cntr_src_fasta, "contig")]
-        fasta_yaml_values = fle.fasta_arguments(fasta_values)
-
-        yaml_values = [fasta_yaml_values]
-        if ref_dir:
-            cntr_src_ref_dir = "/ref"
-            ref_dir_yaml_values = fle.reference_argument(cntr_src_ref_dir)
-            yaml_values.append(ref_dir_yaml_values)
-
-        biobox_yaml = fle.generate(yaml_values)
-
-        volume_strings = [
-                vol.create_volume_string(host_src_fasta_file, cntr_src_fasta),
-                vol.biobox_file(fle.create_biobox_directory(biobox_yaml)),
-                vol.output(host_dst_dir)]
-
-        if ref_dir:
-            volume_strings.append(vol.create_volume_string(host_src_ref_dir, cntr_src_ref_dir))
-
-        return volume_strings
+        if opts['--input-ref']:
+            return args + [{"fasta_dir": [ {"id": 1, "type": "references", "value": opts['--input-ref']} ] }]
+        else:
+            return args
 
     def after_run(self, output, host_dst_dir):
         self.copy_result_files(host_dst_dir, output)
