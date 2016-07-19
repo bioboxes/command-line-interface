@@ -34,10 +34,3 @@ class Biobox:
         ctn.run(ctnr)
         self.after_run(output, host_dst_dir)
         return ctnr
-
-    def remove(self, container):
-            """
-            Removes a container
-            Note this method is not tested due to limitations of circle ci
-            """
-            ctn.remove(container)
