@@ -162,7 +162,10 @@ Feature: Ensuring a the assembler benchmark matches the bioboxes specification
           - id: "1"
             value: "/bbx/input/assembly.fasta"
             type: contigs
-        - fasta_dir: "/bbx/input/references"
+        - fasta_dir:
+          - id: 1
+            type: references
+            value: /bbx/input/references
       """
     When I run the command:
       """
@@ -195,7 +198,10 @@ Feature: Ensuring a the assembler benchmark matches the bioboxes specification
           - id: "1"
             value: "/bbx/input/assembly.fasta"
             type: contigs
-        - fasta_dir: "/bbx/input/references"
+        - fasta_dir:
+          - id: 1
+            type: references
+            value: /bbx/input/references
       """
     When I run the command:
       """

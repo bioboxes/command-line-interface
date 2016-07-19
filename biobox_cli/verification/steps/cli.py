@@ -1,10 +1,8 @@
 import os, re, os.path, shutil
-import nose.tools as nt
 from behave import *
 
 def get_stream(context, stream):
-    nt.assert_in(stream, ['stderr', 'stdout'],
-            "Unknown output stream {}".format(stream))
+    assert stream in ['stderr', 'stdout'], "Unknown output stream {}".format(stream)
     return getattr(context.output, stream)
 
 def get_env_path(context, file_):
@@ -15,11 +13,10 @@ def get_data_file_path(file_):
     return os.path.join(dir_, '..', '..', 'verification', 'data', file_)
 
 def assert_not_empty(obj):
-    nt.assert_true(len(obj) > 0)
+    assert len(obj) > 0
 
 def assert_file_exists(file_):
-    nt.assert_true(os.path.isfile(file_),
-            "The file \"{}\" does not exist.".format(file_))
+    assert os.path.isfile(file_), "The file \"{}\" does not exist.".format(file_)
 
 def assert_file_not_empty(file_):
     with open(file_, 'r') as f:
@@ -27,7 +24,6 @@ def assert_file_not_empty(file_):
 
 def remove_warnings(string_):
     return re.sub("^WARNING:.+\n", "", string_)
-
 
 
 @given(u'I create the directory "{directory}"')
@@ -43,7 +39,7 @@ def step_impl(context, file_):
 def step_impl(context):
     for row in context.table.rows:
         shutil.copy(get_data_file_path(row['source']),
-                get_env_path(context, row['dest']))\
+                get_env_path(context, row['dest']))
 
 @given(u'I copy the example data directories')
 def step_impl(context):
@@ -61,46 +57,46 @@ def step_impl(context):
 @then(u'the {stream} should be empty')
 def step_impl(context, stream):
     output = get_stream(context, stream)
-    nt.assert_equal(output, "",
-            "The {} should be empty but contains:\n\n{}".format(stream, output))
+    assert output == "",\
+        "The {} should be empty but contains:\n\n{}".format(stream, output)
 
 @then(u'excluding warnings the {stream} should be empty')
 def step_impl(context, stream):
     output = get_stream(context, stream)
-    nt.assert_equal(remove_warnings(output), "",
-            "The {} should be empty but contains:\n\n{}".format(stream, output))
+    assert remove_warnings(output) == "",\
+        "The {} should be empty but contains:\n\n{}".format(stream, output)
 
 @then(u'the exit code should be {code}')
 def step_impl(context, code):
     returned = context.output.returncode
-    nt.assert_equal(returned, int(code),
-            "Process should return exit code {} but was {}".format(code, returned))
+    assert returned == int(code),\
+        "Process should return exit code {} but was {}".format(code, returned)
 
 @then(u'the {stream} should contain')
 def step_impl(context, stream):
     output = get_stream(context, stream)
-    nt.assert_in(context.text, output)
+    assert context.text in output
 
 @then(u'the {stream} should equal')
 def step_impl(context, stream):
     output = get_stream(context, stream)
-    nt.assert_equal(context.text, output)
+    assert context.text == output
 
 @then(u'excluding warnings the {stream} should equal')
 def step_impl(context, stream):
     output = get_stream(context, stream)
-    nt.assert_equal(context.text, remove_warnings(output))
+    assert context.text == remove_warnings(output)
 
 @then(u'the {stream} should match /{regexp}/')
 def step_impl(context, stream, regexp):
     output = get_stream(context, stream)
-    nt.assert_not_equal(None, re.match(regexp, output),
-      "Regular expression {} not found in:\n'{}'".format(regexp, output))
+    assert re.match(regexp, output) != None,\
+        "Regular expression {} not found in:\n'{}'".format(regexp, output)
 
 @then(u'the directory "{}" should not exist')
 def step_impl(context, dir_):
-    nt.assert_false(os.path.isdir(dir_),
-            "The directory \"{}\" should not exist.".format(dir_))
+    assert not os.path.isdir(dir_),\
+        "The directory \"{}\" should not exist.".format(dir_)
 
 @then(u'the file "{}" should exist')
 def step_impl(context, file_):

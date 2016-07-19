@@ -3,9 +3,18 @@ version := $(shell $(path) python setup.py --version)
 name    := $(shell $(path) python setup.py --name)
 dist    := dist/$(name)-$(version).tar.gz
 
-python-3-image := py3
-python-2-image := py2
 verifier-image := test-verify
+
+NO_COLOR=\x1b[0m
+OK_COLOR=\x1b[32;01m
+ERROR_COLOR=\x1b[31;01m
+WARN_COLOR=\x1b[33;01m
+
+#################################################
+#
+# Publish the pip package
+#
+#################################################
 
 publish: $(dist)
 	@$(path) twine upload \
@@ -13,9 +22,6 @@ publish: $(dist)
 		--password ${PYPI_PASSWORD} \
 		$^
 	./plumbing/rebuild-site
-
-console:
-	@$(path) python -i console.py
 
 clean:
 	rm -rf dist *.egg-info
@@ -26,26 +32,41 @@ clean:
 #
 #################################################
 
-test     = tox -e py27-unit -e py3-unit
-autotest = clear && $(test)
-feature  = tox -e py27-feature -e py3-feature
+test      = tox -e py27-unit -e py3-unit -- $(ARGS)
+autotest  = clear && $(test) -m \'not slow\'
+wip       = clear && $(test) -m \'wip\'
+wip-found = $(shell find test -name '*.py' | xargs grep '@pytest.mark.wip')
+feature   = tox -e py27-feature -e py3-feature -- $(ARGS)
 
 command:
 	@command -v realpath >/dev/null 2>&1 || { echo >&2 "Please install 'realpath' on your system"; exit 1; }
 
-feature: command
+feature: tmp/tests command
 	@$(feature)
 
-test: command
+# "Work in Progress" unit tests
+# Useful for testing only the code currently being developed
+# Should not however be checked into version control
+wip: tmp/tests command
+	@$(wip)
+
+test: tmp/tests command
+	@if test -n "$(wip-found)"; then\
+		echo "$(ERROR_COLOR)Work in progress tests found: '@pytest.mark.wip'. Please remove first.$(NO_COLOR)\n"; \
+		exit 1; \
+	fi
 	@$(test)
 
-autotest:
+autotest: tmp/tests
 	@$(autotest) || true # Using true starts tests even on failure
 	@fswatch \
 		--exclude 'pyc' \
 		--one-per-batch	./biobox_cli \
 		--one-per-batch ./test \
 		| xargs -n 1 -I {} bash -c "$(autotest)"
+
+console:
+	@$(path) python -i console.py
 
 #################################################
 #
@@ -58,7 +79,7 @@ build: $(dist) test-build
 test-build:
 	tox -e py27-build,py3-build
 
-$(dist): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
+$(dist): $(shell find biobox_cli) requirements/default.txt setup.py MANIFEST.in
 	@$(path) python setup.py sdist --formats=gztar
 	touch $@
 
@@ -69,15 +90,21 @@ $(dist): $(shell find biobox_cli) requirements.txt setup.py MANIFEST.in
 #################################################
 
 
-bootstrap: .tox .images
+bootstrap: .tox .images tmp/tests
 
-.tox: requirements.txt
+.tox: requirements/default.txt requirements/development.txt
 	@tox --notest
 	@touch $@
 
-.images: requirements.txt $(shell find images -name "*")
+.images: $(shell find images -name "*")
 	docker pull bioboxes/velvet
 	docker build --tag $(verifier-image) images/$(verifier-image)
 	touch $@
+
+# Docker cannot access directories outside of the user home directory on OSX.
+# This is because a virtual machine is used which has the user $HOME mounted
+# into it
+tmp/tests:
+	mkdir -p $@
 
 .PHONY: bootstrap build feature test-build publish test command

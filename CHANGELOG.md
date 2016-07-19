@@ -3,7 +3,17 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v0.3.0] - 2016-06-02
+## v0.5.0 - DATE
+
+### Changed
+
+  * Implemented support for the changed QUAST interface discussed in [Issue
+    194][194].
+
+[194]: https://github.com/bioboxes/rfc/issues/194
+
+
+## v0.4.0 - 2016-06-02
 
 ### Added
 
@@ -12,7 +22,7 @@ project adheres to [Semantic Versioning](http://semver.org/).
 
   * Support for specifying resource consumption using Docker's cgroup flags.
 
-## [v0.3.0] - 2015-11-05
+## v0.3.0 - 2015-11-05
 
 ### Added
 
@@ -45,7 +55,7 @@ project adheres to [Semantic Versioning](http://semver.org/).
     verification failure message to the use instead of correctly informing the
     user the image does not exist.
 
-## [v0.2.2] - 2015-08-27
+## v0.2.2 - 2015-08-27
 
 ### Added
 
@@ -55,7 +65,7 @@ project adheres to [Semantic Versioning](http://semver.org/).
   * A trigger `plumbing/rebuild-website` to rebuild the bioboxes.org website
     when a PR is merged into the master branch.
 
-## [v0.2.1] - 2015-08-14
+## v0.2.1 - 2015-08-14
 
 ### Fixed
 
@@ -66,7 +76,7 @@ project adheres to [Semantic Versioning](http://semver.org/).
     specifying their inclusion using `find_packages()` and `package_data` in
     the `setup.py` configuration file.
 
-## [v0.2.0] - 2015-08-12
+## v0.2.0 - 2015-08-12
 
 ### Added
 
@@ -90,7 +100,7 @@ project adheres to [Semantic Versioning](http://semver.org/).
   * Bug where bundled files could not be found if install in separate
     directories
 
-## [v0.1.0] - 2015-08-10
+## v0.1.0 - 2015-08-10
 
 ### Added
 
