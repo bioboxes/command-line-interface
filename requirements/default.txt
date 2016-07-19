@@ -1,5 +1,5 @@
 behave             == 1.2.5
-biobox-py          == 0.2.1
+biobox-py          == 0.3.0
 docker-py          == 1.8.1
 dockerpty          == 0.3.2
 docopt             == 0.6.2
