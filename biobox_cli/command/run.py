@@ -23,4 +23,4 @@ def run(argv):
     bbx = Biobox()
     ctnr = bbx.run(argv)
     if not '--no-rm' in argv:
-        bbx.remove(ctnr)
+        ctn.remove(ctnr)

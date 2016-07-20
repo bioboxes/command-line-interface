@@ -10,8 +10,12 @@ project adheres to [Semantic Versioning](http://semver.org/).
   * Implemented support for the changed QUAST interface discussed in [Issue
     194][194].
 
-[194]: https://github.com/bioboxes/rfc/issues/194
+  * Switched to use biobox.py python library. Many of the functions have been
+    extracted to this library. This library also simplifies running biobox
+    containers by taking care of where the host directories are mounted into
+    the container, and correspondingly updating the mounted biobox.yaml.
 
+[194]: https://github.com/bioboxes/rfc/issues/194
 
 ## v0.4.0 - 2016-06-02
 
