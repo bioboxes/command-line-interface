@@ -12,6 +12,7 @@ Available Biobox types:
   short_read_assembler  Assemble short reads into contigs
 """
 
+
 import biobox_cli.util.misc as util
 from biobox_cli.biobox_helper import Biobox as ABiobox
 
@@ -22,4 +23,4 @@ def run(argv):
     bbx = Biobox()
     ctnr = bbx.run(argv)
     if not '--no-rm' in argv:
-        bbx.remove(ctnr)
+        ctn.remove(ctnr)

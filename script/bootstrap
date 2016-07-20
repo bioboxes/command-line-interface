@@ -1,4 +1,8 @@
 #!/bin/bash
 
-make bootstrap "PYTHON_VERSION=python3"
-make bootstrap "PYTHON_VERSION=python2"
+make bootstrap
+
+if [ -z $(git remote | grep biobox) ]; then
+	git remote add biobox git@github.com:bioboxes/command-line-interface.git
+	git fetch biobox
+fi

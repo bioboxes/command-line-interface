@@ -1,4 +1,4 @@
-include requirements.txt
+include requirements/*
 include doc/*
 recursive-include biobox_cli/verification *
 recursive-include biobox_cli/assets *

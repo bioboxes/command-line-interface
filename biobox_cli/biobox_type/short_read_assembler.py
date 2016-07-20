@@ -14,7 +14,6 @@ Options:
 -m=MEM, --memory=MEM      RAM that should be used
 """
 
-import biobox.image.volume    as vol
 import biobox_cli.biobox_file as fle
 from biobox_cli.biobox_helper import Biobox
 
@@ -28,25 +27,11 @@ class Assembler(Biobox):
         import shutil
         shutil.move(src, dst)
 
-    def get_yaml(self):
-        return self.yaml_data
-
-    def prepare_volumes(self, opts, host_dst_dir):
-        fastq_file  = opts['--input']
-
-        cntr_fastq_file = "/fastq/input.fq.gz"
-        fastq_values = [(cntr_fastq_file, "paired")]
-        yaml_data = [fle.fastq_arguments(fastq_values)]
-        biobox_yaml = fle.generate(yaml_data)
-
-        host_src_dir = os.path.abspath(fastq_file)
-
-        volumes = [
-            vol.create_volume_string(host_src_dir, cntr_fastq_file),
-            vol.biobox_file(fle.create_biobox_directory(biobox_yaml)),
-            vol.output(host_dst_dir)]
-        return volumes
+    def prepare_config(self, opts):
+        return [
+            {"fastq": [
+                {"id": 0, "type": "paired", "value": opts['--input']}]}]
 
     def after_run(self, output, host_dst_dir):
-        biobox_output = fle.parse(host_dst_dir)
+        biobox_output = fle.get_biobox_file_contents(host_dst_dir)
         self.copy_contigs_file(host_dst_dir, biobox_output, output)

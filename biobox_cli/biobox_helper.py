@@ -1,15 +1,19 @@
+import tempfile, inspect
 from abc import ABCMeta, abstractmethod
-import biobox_cli.container   as ctn
-import biobox_cli.util.misc   as util
-import tempfile as tmp
-import inspect
 from fn import monad
+
+import biobox.image.execute as biobox
+import biobox_cli.container as ctn
+import biobox_cli.util.misc as util
+
+def int_or_none(c):
+    return monad.Option.from_call(lambda x: int(x), c).get_or(None)
 
 class Biobox:
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def prepare_volumes(opts):
+    def prepare_config(self, opts):
         pass
 
     @abstractmethod
@@ -22,21 +26,18 @@ class Biobox:
         task        = opts['--task']
         image       = opts['<image>']
         output      = opts['--output']
-        memory      = opts['--memory']
-        cpuset      = opts['--cpuset']
-        cpushares   = opts['--cpu-shares']
-        host_dst_dir = tmp.mkdtemp()
-        volumes = self.prepare_volumes(opts, host_dst_dir)
-        ctn.exit_if_no_image_available(image)
-        cpushares = monad.Option.from_call(lambda x: int(x),cpushares).get_or(None)
-        ctnr = ctn.create(image, task, volumes, memory=memory, cpuset=cpuset, cpu_shares=cpushares)
-        ctn.run(ctnr)
-        self.after_run(output, host_dst_dir)
-        return ctnr
 
-    def remove(self, container):
-            """
-            Removes a container
-            Note this method is not tested due to limitations of circle ci
-            """
-            ctn.remove(container)
+        # Check the image exists
+        ctn.exit_if_no_image_available(image)
+
+        # Additional non-biobox args to pass to the docker daemon
+        docker_args = {'mem_limit': opts['--memory'],
+                       'cpuset': opts['--cpuset'],
+                       'cpu_shares': int_or_none(opts['--cpu-shares'])}
+
+        output_dir = tempfile.mkdtemp()
+
+        ctnr = biobox.create_container(image, self.prepare_config(opts), output_dir, task, docker_args)
+        ctn.run(ctnr)
+        self.after_run(output, output_dir)
+        return ctnr

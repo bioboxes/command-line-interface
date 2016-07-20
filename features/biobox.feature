@@ -78,10 +78,10 @@ Feature: A CLI to run biobox-compatible Docker containers
     Given I create the directory "input"
     And I create the directory "output"
     And I copy the example data files:
-      | source         | dest                 |
+      | source                             | dest                 |
       | assembler_benchmark/assembly.fasta | input/assembly.fasta |
     And I copy the example data directories:
-      | source     | dest             |
+      | source                         | dest             |
       | assembler_benchmark/references | input/references |
     When I run the command:
       """
