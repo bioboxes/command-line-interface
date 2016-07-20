@@ -15,15 +15,6 @@ def exit_if_no_image_available(image):
     except NoImageFound:
         error.err_exit('unknown_image', {'image': image})
 
-def create(image, command, volumes = [], memory = None, cpu_shares = None, cpuset = None):
-    return docker.client().create_container(
-            image,
-            command,
-            cpu_shares = cpu_shares,
-            cpuset = cpuset,
-            volumes     = list(map(vol.get_host_path, volumes)),
-            host_config = docker.client().create_host_config(binds=volumes, mem_limit=memory))
-
 def create_tty(image, tty, volumes = []):
     command = ""
     return docker.client().create_container(
