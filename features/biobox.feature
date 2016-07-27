@@ -46,7 +46,7 @@ Feature: A CLI to run biobox-compatible Docker containers
 
   Scenario Outline: Running a biobox short read assembler container
     Given I copy the example data files:
-      | source                    | dest        |
+      | source                                         | dest        |
       | short_read_assembler/genome_paired_reads.fq.gz | reads.fq.gz |
     When I run the command:
       """
@@ -57,8 +57,7 @@ Feature: A CLI to run biobox-compatible Docker containers
         <ressources> \
         --no-rm \
         --input=<input> \
-        --output=<output> \
-        <args>
+        --output=<output>
       """
     Then the stdout should be empty
     And the stderr should be empty
@@ -67,12 +66,12 @@ Feature: A CLI to run biobox-compatible Docker containers
     And the file "contigs.fa" should not be empty
 
     Examples:
-      | assembler        | ressources                                       |    args                        | input                   | output                   |
-      | bioboxes/velvet  |                                                  |                                | reads.fq.gz             | contigs.fa               |
-      | bioboxes/velvet  |                                                  |                                | $(realpath reads.fq.gz) | contigs.fa               |
-      | bioboxes/velvet  |                                                  |                                | reads.fq.gz             | $(realpath .)/contigs.fa |
-      | bioboxes/velvet  | --memory=1g --cpu-shares=512                     |                                | reads.fq.gz             | $(realpath .)/contigs.fa |
-      | bioboxes/velvet  | -m 1g -c 512                                     |                                | $(realpath reads.fq.gz) | contigs.fa               |
+      | assembler       | ressources                   | input                   | output                   |
+      | bioboxes/velvet |                              | reads.fq.gz             | contigs.fa               |
+      | bioboxes/velvet |                              | $(realpath reads.fq.gz) | contigs.fa               |
+      | bioboxes/velvet |                              | reads.fq.gz             | $(realpath .)/contigs.fa |
+      | bioboxes/velvet | --memory=1g --cpu-shares=512 | reads.fq.gz             | $(realpath .)/contigs.fa |
+      | bioboxes/velvet | -m 1g -c 512                 | $(realpath reads.fq.gz) | contigs.fa               |
 
   Scenario Outline: Running a biobox assembler benchmark container
     Given I create the directory "input"
@@ -93,8 +92,7 @@ Feature: A CLI to run biobox-compatible Docker containers
         --no-rm \
         --input-fasta=<input-fasta> \
         <input-ref> \
-        --output=<output> \
-        <args>
+        --output=<output>
       """
     Then the stdout should be empty
     And the stderr should be empty
@@ -102,10 +100,10 @@ Feature: A CLI to run biobox-compatible Docker containers
     And the file "output/biobox.yaml" should exist
     And the file "output/biobox.yaml" should not be empty
     Examples:
-      | benchmark      | args | ressources                                              | input-fasta                      | input-ref                                | output             |
-      | bioboxes/quast |      |                                                         | $(realpath input/assembly.fasta) | --input-ref=$(realpath input/references) | $(realpath output) |
-      | bioboxes/quast |      |                                                         | input/assembly.fasta             | --input-ref=input/references             | output             |
-      | bioboxes/quast |      |                                                         | input/assembly.fasta             |                                          | output             |
-      | bioboxes/quast |      | --memory=1g --cpu-shares=512                            | $(realpath input/assembly.fasta) | --input-ref=$(realpath input/references) | $(realpath output) |
-      | bioboxes/quast |      | -m 1g -c 512                                            | input/assembly.fasta             | --input-ref=input/references             | output             |
-      | bioboxes/quast |      | -m 1g -c 512                                            | input/assembly.fasta             |                                          | output             |
+      | benchmark      | ressources                   | input-fasta                      | input-ref                                | output             |
+      | bioboxes/quast |                              | $(realpath input/assembly.fasta) | --input-ref=$(realpath input/references) | $(realpath output) |
+      | bioboxes/quast |                              | input/assembly.fasta             | --input-ref=input/references             | output             |
+      | bioboxes/quast |                              | input/assembly.fasta             |                                          | output             |
+      | bioboxes/quast | --memory=1g --cpu-shares=512 | $(realpath input/assembly.fasta) | --input-ref=$(realpath input/references) | $(realpath output) |
+      | bioboxes/quast | -m 1g -c 512                 | input/assembly.fasta             | --input-ref=input/references             | output             |
+      | bioboxes/quast | -m 1g -c 512                 | input/assembly.fasta             |                                          | output             |
