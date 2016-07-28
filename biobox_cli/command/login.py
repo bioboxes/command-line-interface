@@ -13,9 +13,8 @@ Available Biobox types:
   short_read_assembler  Assemble short reads into contigs
 """
 
-import yaml
-import os.path
-import shutil
+import os.path, shutil
+import ruamel.yaml as yaml
 
 import biobox.image.volume    as vol
 import biobox_cli.util.misc   as util

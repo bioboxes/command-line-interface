@@ -14,6 +14,8 @@ Available Biobox types:
 
 
 import biobox_cli.util.misc as util
+import biobox_cli.container as ctn
+
 from biobox_cli.biobox_helper import Biobox as ABiobox
 
 def run(argv):

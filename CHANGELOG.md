@@ -3,7 +3,26 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
-## v0.5.0 - DATE
+## v0.5.1 - 2016-07-28
+
+### Fixed
+
+  * Containers are removed when the --no-rm flag is given as a command line
+    argument. A unit-test not run on the CI server is added to ensure this
+    works correctly.
+
+  * Switched yaml library to ruamel.yaml which supports python3 and is actively
+    maintained. The previous library PyYAML sometimes generated python import
+    errors when running on python 3. The underlying bioboxes-py library has
+    also made the same switch.
+
+### Changed
+
+  * Simplified the feature tests, removing some redundant scenarios and
+    consolidating the existing scenarios so multiple flags can be tested in the
+    same scenario.
+
+## v0.5.0 - 2016-07-20
 
 ### Changed
 
@@ -126,9 +145,3 @@ project adheres to [Semantic Versioning](http://semver.org/).
 
   * More verbose error messages. The user now gets clearer error messages when
     the biobox is not available or the command is called incorrectly.
-
-[v0.3.0]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.3.0
-[v0.2.2]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.2.2
-[v0.2.1]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.2.1
-[v0.2.0]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.2.0
-[v0.1.0]: https://github.com/bioboxes/command-line-interface/releases/tag/v0.1.0

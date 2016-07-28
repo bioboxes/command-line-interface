@@ -1,5 +1,5 @@
 import os
-import yaml
+import ruamel.yaml as yaml
 
 def generate(args):
     output = {"version" : "0.9.0", "arguments" : args}
