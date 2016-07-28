@@ -9,7 +9,7 @@ def create_args(output):
             "--input={}".format(helper.verification_file('short_read_assembler/genome_paired_reads.fq.gz')),
             "--output={}".format(output)]
 
-@pytest.mark.no_ci
+@pytest.mark.noci
 @pytest.mark.slow
 def test_short_read_assembler():
     # Will run the remove() function

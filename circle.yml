@@ -13,10 +13,9 @@ dependencies:
 test:
   pre:
     - mkdir -p $CIRCLE_TEST_REPORTS/cucumber
-    - mkdir -p $CIRCLE_TEST_REPORTS/pytest
   override:
     - ./script/build
-    - ./script/test --junitxml=$CIRCLE_TEST_REPORTS/pytest/junit.xml
+    - make ci_test
     - ./script/feature --junit --junit-directory $CIRCLE_TEST_REPORTS/cucumber
 
 deployment:

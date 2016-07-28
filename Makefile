@@ -35,6 +35,7 @@ clean:
 test      = tox -e py27-unit -e py3-unit -- $(ARGS)
 autotest  = clear && $(test) -m \'not slow\'
 wip       = clear && $(test) -m \'wip\'
+ci        = clear && $(test) -m \'not noci\'
 wip-found = $(shell find test -name '*.py' | xargs grep '@pytest.mark.wip')
 feature   = tox -e py27-feature -e py3-feature -- $(ARGS)
 
@@ -43,6 +44,9 @@ command:
 
 feature: tmp/tests command
 	@$(feature)
+
+ci_test:
+	$(ci)
 
 # "Work in Progress" unit tests
 # Useful for testing only the code currently being developed
