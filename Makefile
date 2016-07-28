@@ -94,6 +94,7 @@ bootstrap: .images tmp/tests
 
 .images: $(shell find images -name "*")
 	docker pull bioboxes/velvet
+	docker pull bioboxes/quast
 	docker build --tag $(verifier-image) images/$(verifier-image)
 	touch $@
 

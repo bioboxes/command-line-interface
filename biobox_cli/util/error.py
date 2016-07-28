@@ -1,4 +1,5 @@
-import yaml, sys
+import sys
+import ruamel.yaml            as yaml
 import biobox_cli.util.assets as asset
 
 def err_message(msg_key, locals_):

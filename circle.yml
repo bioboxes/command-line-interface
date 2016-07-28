@@ -11,10 +11,13 @@ dependencies:
     - sudo apt-get update && sudo apt-get install --no-install-recommends build-essential libpython2.7-dev python3-dev realpath
 
 test:
+  pre:
+    - mkdir -p $CIRCLE_TEST_REPORTS/cucumber
+    - mkdir -p $CIRCLE_TEST_REPORTS/pytest
   override:
     - ./script/build
-    - ./script/test
-    - ./script/feature
+    - ./script/test --junitxml=$CIRCLE_TEST_REPORTS/pytest/junit.xml
+    - ./script/feature --junit --junit-directory $CIRCLE_TEST_REPORTS/cucumber
 
 deployment:
   deploy:
