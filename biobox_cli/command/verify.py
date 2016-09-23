@@ -91,6 +91,9 @@ def run(argv):
             fn.unique,
             F("\n".join)])
         print(output)
+        if behave.is_failed(results):
+            exit(1)
+
     elif behave.is_failed(results):
         if log:
             sys.stderr = open(log, "w+")
