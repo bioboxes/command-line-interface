@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
+## v0.5.2 - 2016-09-23
+
+### Fixed
+
+  * Image verification with `--verbose` returns non-zero exit code if
+    verification fails.
+
 ## v0.5.1 - 2016-07-28
 
 ### Fixed

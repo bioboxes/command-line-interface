@@ -14,6 +14,7 @@ Feature: A CLI to verify images are biobox-compatible
       | short_read_assembler | bioboxes/velvet  | --task=default  |
       | assembler_benchmark  | bioboxes/quast   |                 |
 
+
   Scenario: Generating a verbose output of biobox image verification
     When I run the command:
       """
@@ -37,15 +38,16 @@ Feature: A CLI to verify images are biobox-compatible
     """
     And the exit code should be 0
 
+
   Scenario Outline: Verifying an invalid biobox image
     When I run the command:
       """
-      biobox verify short_read_assembler test-verify --task <task>
+      biobox verify short_read_assembler bioboxes/crash-test-biobox --task <task>
       """
     Then the stdout should be empty
     And the stderr should equal:
       """
-      Error "test-verify" is not a valid short_read_assembler biobox.
+      Error "bioboxes/crash-test-biobox" is not a valid short_read_assembler biobox.
       Should return an error when the biobox.yaml is in an invalid format.
 
       """
@@ -55,14 +57,14 @@ Feature: A CLI to verify images are biobox-compatible
       | task     |
       | exit-0   |
       | exit-1   |
-      | exit-128 |
+
 
   Scenario: Generating a verbose output of failing biobox image verification
     When I run the command:
       """
       biobox verify \
         short_read_assembler \
-        test-verify \
+        bioboxes/crash-test-biobox \
         --verbose
       """
     Then the stderr should be empty
@@ -77,4 +79,4 @@ Feature: A CLI to verify images are biobox-compatible
     Create a 'log.txt' file when a metadata directory is mounted.            FAIL
 
     """
-    And the exit code should be 0
+    And the exit code should be 1
