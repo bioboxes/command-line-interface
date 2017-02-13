@@ -25,10 +25,24 @@ def assert_file_not_empty(file_):
 def remove_warnings(string_):
     return re.sub("^WARNING:.+\n", "", string_)
 
+def download_file(link, out):
+    import wget
+    return wget.download(link, out)
+
+def extract_file(file, out):
+    import tarfile
+    tar = tarfile.open(file)
+    tar.extractall(path=out)
+    tar.close()
 
 @given(u'I create the directory "{directory}"')
 def step_impl(context, directory):
     os.makedirs(get_env_path(context, directory))
+
+@given(u'I download and extract the file "{link}" to "{dest}"')
+def step_impl(context, link, dest):
+    normalized_dest = get_env_path(context, dest)
+    extract_file(download_file(link, normalized_dest), normalized_dest)
 
 @given(u'I create the file "{file_}" with the contents')
 def step_impl(context, file_):
