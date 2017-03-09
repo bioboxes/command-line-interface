@@ -10,14 +10,14 @@ Feature: Ensuring a the profiling matches the bioboxes specification
     When I run the command:
     """
     docker run \
-      --volume="$(pwd)/input:/bbx/mnt/input" \
+      --volume="$(pwd)/input:/bbx/input" \
       ${IMAGE} \
       ${TASK}
     """
     Then the exit code should be 1
     And the stderr should contain:
       """
-      Error parsing the YAML file: /bbx/mnt/input/biobox.yaml
+      Error parsing the YAML file: /bbx/input/biobox.yaml
       """
 
   Scenario: An biobox.yaml missing the version number.
@@ -27,17 +27,19 @@ Feature: Ensuring a the profiling matches the bioboxes specification
       """
       ---
       arguments:
-        reads:
-          - format: bioboxes.org:/fastq
-            path: /path/to/fastq
-        databases:
-          taxonomy:
-            path: /path/to/taxonomy
-            format: bioboxes.org:/taxonomy_ncbi_dumps
+        - fastq:
+          - type: fastq
+            value: /path/to/fastq
+        - database:
+            type: bioboxes.org:/taxonomy_ncbi_dumps
+            value: /tmp/taxonomy
+        - cache:
+            type: directory
+            value: /tmp/cache
       """
     When I run the command:
     """
-    docker run --volume="$(pwd)/input:/bbx/mnt/input" ${IMAGE} ${TASK}
+    docker run --volume="$(pwd)/input:/bbx/input" ${IMAGE} ${TASK}
     """
     Then the exit code should be 1
     And the stderr should contain:
@@ -52,19 +54,20 @@ Feature: Ensuring a the profiling matches the bioboxes specification
       """
       version: "0.1"
       arguments:
-        reads:
-          - format: bioboxes.org:/fastq
-            path: /path/to/fastq
-        databases:
-          taxonomy:
-            path: /path/to/taxonomy
-            format: bioboxes.org:/taxonomy_ncbi_dumps
+        - fastq:
+          - type: fastq
+            value: /path/to/fastq
+        - database:
+            type: bioboxes.org:/taxonomy_ncbi_dumps
+            value: /tmp/taxonomy
+        - cache:
+            type: directory
+            value: /tmp/cache
       """
     When I run the command:
     """
     docker run \
-      --env="TASK=default" \
-      --volume="$(pwd)/input:/bbx/mnt/input:ro" \
+      --volume="$(pwd)/input:/bbx/input:ro" \
       ${IMAGE} \
       ${TASK}
     """
@@ -80,13 +83,15 @@ Feature: Ensuring a the profiling matches the bioboxes specification
     """
     version: "0.8.0"
     arguments:
-      reads:
-        - format: bioboxes.org:/fastq
-          path: /path/to/fastq
-      databases:
-        taxonomy:
-          path: /path/to/taxonomy
-          format: bioboxes.org:/taxonomy_ncbi_dumps
+      - fastq:
+        - type: fastq
+          value: /path/to/fastq
+      - database:
+          type: bioboxes.org:/taxonomy_ncbi_dumps
+          value: /tmp/taxonomy
+      - cache:
+          type: directory
+          value: /tmp/cache
      """
     When I run the command:
       """
@@ -123,19 +128,21 @@ Feature: Ensuring a the profiling matches the bioboxes specification
       """
       version: "0.1.0"
       arguments:
-        reads:
-          - format: bioboxes.org:/fastq
-            path: /path/to/fastq
-        databases:
-          taxonomy:
-            path: /path/to/taxonomy
-            format: bioboxes.org:/taxonomy_ncbi_dumps
+        - fastq:
+          - type: fastq
+            value: /path/to/fastq
+        - database:
+            type: bioboxes.org:/taxonomy_ncbi_dumps
+            value: /tmp/taxonomy
+        - cache:
+            type: directory
+            value: /tmp/cache
       <field>: {}
       """
     When I run the command:
       """
       docker run \
-        --volume="$(pwd)/input:/bbx/mnt/input:ro" \
+        --volume="$(pwd)/input:/bbx/input:ro" \
         ${IMAGE} ${TASK}
       """
     Then the exit code should be 1
@@ -160,19 +167,18 @@ Feature: Ensuring a the profiling matches the bioboxes specification
       ---
       version: "1.0.0"
       arguments:
-        reads:
-          - format: bioboxes.org:/fastq
-            path: /bbx/mnt/input/reads.fq.gz
-        databases:
-          taxonomy:
-            path: /bbx/mnt/input
-            format: bioboxes.org:/taxonomy_ncbi_dumps
+        - fastq:
+          - type: fastq
+            value: /bbx/input/reads.fq.gz
+        - database:
+            type: bioboxes.org:/taxonomy_ncbi_dumps
+            value: /bbx/input
       """
     When I run the command:
       """
       docker run \
-        --volume="$(pwd)/input:/bbx/mnt/input:ro" \
-        --volume="$(pwd)/output:/bbx/mnt/output:rw" \
+        --volume="$(pwd)/input:/bbx/input:ro" \
+        --volume="$(pwd)/output:/bbx/output:rw" \
         ${IMAGE} ${TASK}
       """
     Then the exit code should be 0
