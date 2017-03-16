@@ -28,6 +28,9 @@ class Assembler_Benchmark(Biobox):
         output_files = os.listdir(biobox_output_dir)
         list(map(lambda f: shutil.move(os.path.join(biobox_output_dir,f), dst), output_files))
 
+    def get_version(self):
+        return "0.9.0"
+
     def prepare_config(self, opts):
         output = opts['--output']
         if not os.path.exists(output):

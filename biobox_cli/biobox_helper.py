@@ -20,6 +20,10 @@ class Biobox:
     def after_run(self, host_dst_dir):
         pass
 
+    @abstractmethod
+    def get_version(self):
+        pass
+
     def run(self, argv):
         doc = inspect.getdoc(inspect.getmodule(self))
         opts = util.parse_docopt(doc, argv, False)
@@ -36,8 +40,10 @@ class Biobox:
                        'cpu_shares': int_or_none(opts['--cpu-shares'])}
 
         output_dir = tempfile.mkdtemp()
+        dirs = {"output": output_dir}
 
-        ctnr = biobox.create_container(image, self.prepare_config(opts), output_dir, task, docker_args)
+        config = self.prepare_config(opts)
+        ctnr = biobox.create_container(image, config, dirs, task, self.get_version(), docker_args)
         ctn.run(ctnr)
         self.after_run(output, output_dir)
         return ctnr
