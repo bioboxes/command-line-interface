@@ -3,11 +3,13 @@
 All notable changes to this project will be documented in this file. This
 project adheres to [Semantic Versioning](http://semver.org/).
 
-## v0.6.0 - 2016-02-13
+## v0.6.0 - 2016-03-16
 
 ### Added
 
   * Profiling verify command
+
+  * Profiling run command
 
 ## v0.5.2 - 2016-09-23
 
