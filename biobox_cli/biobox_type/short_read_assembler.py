@@ -32,6 +32,9 @@ class Assembler(Biobox):
             {"fastq": [
                 {"id": 0, "type": "paired", "value": opts['--input']}]}]
 
+    def get_version(self):
+        return "0.9.0"
+
     def after_run(self, output, host_dst_dir):
         biobox_output = fle.get_biobox_file_contents(host_dst_dir)
         self.copy_contigs_file(host_dst_dir, biobox_output, output)
