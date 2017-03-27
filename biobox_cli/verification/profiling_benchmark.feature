@@ -10,14 +10,14 @@ Feature: Ensuring a the profiling benchmark matches the bioboxes specification
     When I run the command:
     """
     docker run \
-      --volume="$(pwd)/input:/bbx/mnt/input" \
+      --volume="$(pwd)/input:/bbx/input" \
       ${IMAGE} \
       ${TASK}
     """
     Then the exit code should be 1
     And the stderr should contain:
       """
-      Error parsing the YAML file: /bbx/mnt/input/biobox.yaml
+      Error parsing the YAML file: /bbx/input/biobox.yaml
       """
 
   Scenario: An biobox.yaml missing the version number.
@@ -27,16 +27,16 @@ Feature: Ensuring a the profiling benchmark matches the bioboxes specification
       """
       ---
       arguments:
-        prediction:
-          path: /bbx/mnt/input/pred
-          format: bioboxes.org:/profiling:0.9
-        ground_truth:
-          path: /bbx/mnt/input/truth
-          format: bioboxes.org:/profiling:0.9
+        - prediction:
+            value: /bbx/input/pred
+            type: bioboxes.org:/profiling:0.9
+        - ground_truth:
+            value: /bbx/input/truth
+            type: bioboxes.org:/profiling:0.9
       """
     When I run the command:
     """
-    docker run --volume="$(pwd)/input:/bbx/mnt/input" ${IMAGE} ${TASK}
+    docker run --volume="$(pwd)/input:/bbx/input" ${IMAGE} ${TASK}
     """
     Then the exit code should be 1
     And the stderr should contain:
@@ -49,27 +49,26 @@ Feature: Ensuring a the profiling benchmark matches the bioboxes specification
     And I create the directory "output"
     And I create the file "input/biobox.yaml" with the contents:
       """
-      version: "0.1"
+      version: "1.0"
       arguments:
-        prediction:
-          path: /bbx/mnt/input/pred
-          format: bioboxes.org:/profiling:0.9
-        ground_truth:
-          path: /bbx/mnt/input/truth
-          format: bioboxes.org:/profiling:0.9
+        - prediction:
+            value: /bbx/input/pred
+            type: bioboxes.org:/profiling:0.9
+        - ground_truth:
+            value: /bbx/input/truth
+            type: bioboxes.org:/profiling:0.9
       """
     When I run the command:
     """
     docker run \
-      --env="TASK=default" \
-      --volume="$(pwd)/input:/bbx/mnt/input:ro" \
+      --volume="$(pwd)/input:/bbx/input:ro" \
       ${IMAGE} \
       ${TASK}
     """
     Then the exit code should be 1
     And the stderr should contain:
       """
-      '0.1' does not match '^0.1.\\d+$'
+      '1.0' does not match '^1.0.\\d+$'
       """
 
   Scenario: An biobox.yaml with a wrong version number.
@@ -79,23 +78,23 @@ Feature: Ensuring a the profiling benchmark matches the bioboxes specification
     """
     version: "0.8.0"
     arguments:
-      prediction:
-        path: /bbx/mnt/input/pred
-        format: bioboxes.org:/profiling:0.9
-      ground_truth:
-        path: /bbx/mnt/input/truth
-        format: bioboxes.org:/profiling:0.9
+      - prediction:
+          value: /bbx/input/pred
+          type: bioboxes.org:/profiling:0.9
+      - ground_truth:
+          value: /bbx/input/truth
+          type: bioboxes.org:/profiling:0.9
      """
     When I run the command:
       """
       docker run \
-        --volume="$(pwd)/input:/bbx/mnt/input:ro" \
+        --volume="$(pwd)/input:/bbx/input:ro" \
         ${IMAGE} ${TASK}
       """
     Then the exit code should be 1
     And the stderr should contain:
       """
-      '0.8.0' does not match '^0.1.\\d+$'
+      '0.8.0' does not match '^1.0.\\d+$'
       """
 
   Scenario: An biobox.yaml with a missing arguments field.
@@ -103,12 +102,12 @@ Feature: Ensuring a the profiling benchmark matches the bioboxes specification
     And I create the directory "output"
     And I create the file "input/biobox.yaml" with the contents:
       """
-      version: "0.1.0"
+      version: "1.0.0"
       """
     When I run the command:
       """
       docker run \
-        --volume="$(pwd)/input:/bbx/mnt/input" \
+        --volume="$(pwd)/input:/bbx/input" \
         ${IMAGE} ${TASK}
       """
     Then the exit code should be 1
@@ -122,20 +121,21 @@ Feature: Ensuring a the profiling benchmark matches the bioboxes specification
     And I create the directory "output"
     And I create the file "input/biobox.yaml" with the contents:
       """
-      version: "0.1.0"
+      version: "1.0.0"
       arguments:
-        prediction:
-          path: /bbx/mnt/input/pred
-          format: bioboxes.org:/profiling:0.9
-        ground_truth:
-          path: /bbx/mnt/input/truth
-          format: bioboxes.org:/profiling:0.9
+        - prediction:
+            value: /bbx/input/pred
+            type: bioboxes.org:/profiling:0.9
+        - ground_truth:
+            value: /bbx/input/truth
+            type: bioboxes.org:/profiling:0.9
+
       <field>: {}
       """
     When I run the command:
       """
       docker run \
-        --volume="$(pwd)/input:/bbx/mnt/input:ro" \
+        --volume="$(pwd)/input:/bbx/input:ro" \
         ${IMAGE} ${TASK}
       """
     Then the exit code should be 1
@@ -159,20 +159,20 @@ Feature: Ensuring a the profiling benchmark matches the bioboxes specification
     And I create the file "input/biobox.yaml" with the contents:
       """
       ---
-      version: "0.1.0"
+      version: 1.0.0
       arguments:
-        prediction:
-          path: /bbx/mnt/input/pred
-          format: bioboxes.org:/profiling:0.9
-        ground_truth:
-          path: /bbx/mnt/input/truth
-          format: bioboxes.org:/profiling:0.9
+        - prediction:
+            value: /bbx/input/pred
+            type: bioboxes.org:/profiling:0.9
+        - ground_truth:
+            value: /bbx/input/truth
+            type: bioboxes.org:/profiling:0.9
       """
     When I run the command:
       """
       docker run \
-        --volume="$(pwd)/input:/bbx/mnt/input:ro" \
-        --volume="$(pwd)/output:/bbx/mnt/output:rw" \
+        --volume="$(pwd)/input:/bbx/input:ro" \
+        --volume="$(pwd)/output:/bbx/output:rw" \
         ${IMAGE} ${TASK}
       """
     Then the exit code should be 0
@@ -191,21 +191,21 @@ Feature: Ensuring a the profiling benchmark matches the bioboxes specification
     And I create the file "input/biobox.yaml" with the contents:
       """
       ---
-      version: "0.1.0"
+      version: "1.0.0"
       arguments:
-        prediction:
-          path: /bbx/mnt/input/pred
-          format: bioboxes.org:/profiling:0.9
-        ground_truth:
-          path: /bbx/mnt/input/truth
-          format: bioboxes.org:/profiling:0.9
+        - prediction:
+            value: /bbx/input/pred
+            type: bioboxes.org:/profiling:0.9
+        - ground_truth:
+            value: /bbx/input/truth
+            type: bioboxes.org:/profiling:0.9
       """
     When I run the command:
       """
         docker run \
           --volume="$(pwd)/metadata:/bbx/metadata:rw" \
-          --volume="$(pwd)/input:/bbx/mnt/input:ro" \
-          --volume="$(pwd)/output:/bbx/mnt/output:rw" \
+          --volume="$(pwd)/input:/bbx/input:ro" \
+          --volume="$(pwd)/output:/bbx/output:rw" \
           ${IMAGE} ${TASK}
         """
     Then the exit code should be 0
