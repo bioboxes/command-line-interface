@@ -10,6 +10,9 @@ Options:
 
 Available Biobox types:
   short_read_assembler  Assemble short reads into contigs
+  assembler_benchmark   Benchmark short reads assembler
+  profiling             Profile short reads
+  profiling_benchmark   Benchmark profiling tools
 """
 
 
