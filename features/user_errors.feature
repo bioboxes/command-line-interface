@@ -3,7 +3,7 @@ Feature: Providing useful errors to a user when they run the tool incorrectly
   Scenario Outline: Trying to run an unknown command
     When I run the command:
       """
-      biobox <cmd> short_read_assembler bioboxes/velvet --help
+      biobox <cmd> short_read_assembler bioboxes/crash-test-biobox --help
       """
     Then the stdout should be empty
     And the exit code should be 1
@@ -23,7 +23,7 @@ Feature: Providing useful errors to a user when they run the tool incorrectly
   Scenario Outline: Trying to use an unknown biobox type
     When I run the command:
       """
-      biobox <command> unknown bioboxes/velvet
+      biobox <command> unknown bioboxes/crash-test-biobox
       """
     Then the stdout should be empty
     And the exit code should be 1

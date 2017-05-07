@@ -3,16 +3,16 @@ Feature: A CLI to verify images are biobox-compatible
   Scenario Outline: Verifying a valid biobox image
     When I run the command:
       """
-      biobox verify <type> <image> <args>
+      biobox verify <type> bioboxes/crash-test-biobox --task=<task>
       """
     Then the stdout should be empty
     And the stderr should be empty
     And the exit code should be 0
 
     Examples:
-      | type                 | image            | args            |
-      | short_read_assembler | bioboxes/velvet  | --task=default  |
-      | assembler_benchmark  | bioboxes/quast   |                 |
+      | type                 | task                 |
+      | short_read_assembler | short-read-assembler |
+      | assembler_benchmark  | quast                |
 
 
   Scenario: Generating a verbose output of biobox image verification
@@ -20,9 +20,9 @@ Feature: A CLI to verify images are biobox-compatible
       """
       biobox verify \
         short_read_assembler \
-        bioboxes/velvet \
+        bioboxes/crash-test-biobox \
         --verbose \
-        --t default
+        --t short-read-assembler
       """
     Then the stderr should be empty
     And the stdout should equal:

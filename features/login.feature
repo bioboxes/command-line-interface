@@ -3,7 +3,7 @@ Feature: Allow a user to ssh into an image to test internally
   Scenario: Logging into an image and listing file locations
     When I run the interactive command:
       """
-      biobox login short_read_assembler bioboxes/velvet
+      biobox login short_read_assembler bioboxes/crash-test-biobox
       """
     And I type:
       """

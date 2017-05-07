@@ -56,7 +56,8 @@ Feature: A CLI to run biobox-compatible Docker containers
       biobox \
         run \
         short_read_assembler \
-        bioboxes/velvet \
+        bioboxes/crash-test-biobox \
+        --task=short-read-assembler \
         --no-rm \
         --input=$(realpath reads.fq.gz) \
         --output=$(realpath .)/contigs.fa
@@ -77,7 +78,8 @@ Feature: A CLI to run biobox-compatible Docker containers
       biobox \
         run \
         short_read_assembler \
-        <assembler> \
+        bioboxes/crash-test-biobox \
+        --task=short-read-assembler \
         <resources> \
         --no-rm \
         --input=reads.fq.gz \
@@ -90,9 +92,9 @@ Feature: A CLI to run biobox-compatible Docker containers
     And the file "contigs.fa" should not be empty
 
     Examples:
-      | assembler       | resources        |
-      | bioboxes/velvet | --memory=1g      |
-      | bioboxes/velvet | --cpu-shares=512 |
+      | resources        |
+      | --memory=1g      |
+      | --cpu-shares=512 |
 
 
   Scenario Outline: Running a biobox assembler benchmark container
@@ -109,9 +111,10 @@ Feature: A CLI to run biobox-compatible Docker containers
       biobox \
         run \
         assembler_benchmark \
-        bioboxes/quast \
+        bioboxes/crash-test-biobox \
         <resources> \
         --no-rm \
+        --task=quast \
         --input-fasta=input/assembly.fasta \
         --output=output
       """
