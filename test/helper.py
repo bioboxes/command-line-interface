@@ -1,6 +1,9 @@
 import os, os.path
 import biobox_cli.container as ctn
 
+def test_image():
+    return 'bioboxes/crash-test-biobox@sha256:fdfdda8192dd919e6cac37366784ec8cfbf52c6fec53fe942a7f1940bd7642e8'
+
 def project_root():
     return os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -8,7 +11,7 @@ def verification_file(path):
     return os.path.join(project_root(), "biobox_cli", "verification", "data", path)
 
 def is_ci_server():
-    return "CIRCLECI" in os.environ.keys()
+    return "CI" in os.environ.keys()
 
 def remove_container(container):
     if not is_ci_server():

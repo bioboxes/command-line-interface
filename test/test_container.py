@@ -5,7 +5,8 @@ import biobox_cli.command.run as biobox
 def create_args(output):
     return ["run",
             "short_read_assembler",
-            "bioboxes/velvet",
+            helper.test_image(),
+            "--task=short-read-assembler",
             "--input={}".format(helper.verification_file('short_read_assembler/genome_paired_reads.fq.gz')),
             "--output={}".format(output)]
 

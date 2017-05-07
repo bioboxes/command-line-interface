@@ -97,6 +97,7 @@ $(dist): $(shell find biobox_cli) requirements/default.txt setup.py MANIFEST.in
 bootstrap: .images tmp/tests
 
 .images: $(shell find images -name "*")
+	docker pull bioboxes/crash-test-biobox@sha256:fdfdda8192dd919e6cac37366784ec8cfbf52c6fec53fe942a7f1940bd7642e8
 	docker pull bioboxes/velvet
 	docker pull bioboxes/quast
 	docker build --tag $(verifier-image) images/$(verifier-image)
