@@ -13,16 +13,28 @@ class Biobox:
     __metaclass__ = ABCMeta
 
     @abstractmethod
+    def validate_inputs(self, opts):
+        """
+        Check the inputs are valid and able to be used to execute the biobox. For
+        example do the given inputs exist.
+        """
+        pass
+
+
+    @abstractmethod
     def prepare_config(self, opts):
         pass
+
 
     @abstractmethod
     def after_run(self, host_dst_dir):
         pass
 
+
     @abstractmethod
     def get_version(self):
         pass
+
 
     def run(self, argv):
         doc = inspect.getdoc(inspect.getmodule(self))
@@ -30,6 +42,9 @@ class Biobox:
         task        = opts['--task']
         image       = opts['<image>']
         output      = opts['--output']
+
+        # Check the given inputs are valid
+        self.validate_inputs(opts)
 
         # Check the image exists
         ctn.exit_if_no_image_available(image)
@@ -41,6 +56,7 @@ class Biobox:
 
         output_dir = tempfile.mkdtemp()
         dirs = {"output": output_dir}
+
 
         config = self.prepare_config(opts)
         ctnr = biobox.create_container(image, config, dirs, task, self.get_version(), docker_args)

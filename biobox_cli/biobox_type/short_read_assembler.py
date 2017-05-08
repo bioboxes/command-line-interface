@@ -21,6 +21,14 @@ import os
 
 class Assembler(Biobox):
 
+    def validate_inputs(self, opts):
+        from biobox_cli.exception import InputFileNotFound
+        input_file = os.path.abspath(opts['--input'])
+        if not os.path.isfile(input_file):
+            msg = "Given input file does not exist: {}"
+            raise InputFileNotFound(msg.format(input_file))
+
+
     def copy_contigs_file(self,biobox_output_dir, biobox_output, dst):
         contigs = biobox_output['arguments'][0]['fasta'][0]['value']
         src = os.path.join(biobox_output_dir, contigs)

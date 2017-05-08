@@ -20,6 +20,26 @@ Feature: Providing useful errors to a user when they run the tool incorrectly
       | unknown |
 
 
+  Scenario: Trying to run short read assembly when the input file does not exist
+    When I run the command:
+      """
+      biobox \
+        run \
+        short_read_assembler \
+        bioboxes/crash-test-biobox \
+        --task=short-read-assembler \
+        --no-rm \
+        --input=missing-file \
+        --output=contigs.fa
+      """
+    Then the stdout should be empty
+    And the exit code should be 1
+    And the stderr should contain:
+      """
+      Given input file does not exist:
+      """
+
+
   Scenario Outline: Trying to use an unknown biobox type
     When I run the command:
       """
@@ -39,6 +59,7 @@ Feature: Providing useful errors to a user when they run the tool incorrectly
       | login   |
       | run     |
       | verify  |
+
 
   @internet
   Scenario Outline: Trying to use an unknown biobox image

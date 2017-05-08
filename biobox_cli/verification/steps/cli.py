@@ -94,7 +94,7 @@ def step_impl(context, stream):
 @then(u'the {stream} should equal')
 def step_impl(context, stream):
     output = get_stream(context, stream)
-    assert context.text == output
+    assert context.text == output, "'{}' =/= '{}'".format(context.text, output)
 
 @then(u'excluding warnings the {stream} should equal')
 def step_impl(context, stream):

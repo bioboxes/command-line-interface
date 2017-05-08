@@ -12,17 +12,24 @@ Available Biobox types:
   short_read_assembler  Assemble short reads into contigs
 """
 
-
+import sys
 import biobox_cli.util.misc as util
 import biobox_cli.container as ctn
 
 from biobox_cli.biobox_helper import Biobox as ABiobox
+from biobox.exception         import BioboxesException
 
 def run(argv):
     opts = util.parse_docopt(__doc__, argv, True)
     module = util.select_module("biobox_type", opts["<biobox_type>"])
     Biobox = next(util.get_subclasses(module, ABiobox))
     bbx = Biobox()
-    ctnr = bbx.run(argv)
+
+    try:
+        ctnr = bbx.run(argv)
+    except BioboxesException as exception:
+        sys.stderr.write(str(exception))
+        exit(1)
+
     if not '--no-rm' in argv:
         ctn.remove(ctnr)

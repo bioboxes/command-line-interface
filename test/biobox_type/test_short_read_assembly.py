@@ -17,3 +17,13 @@ def test_short_read_assembler():
     biobox.run(create_args(path))
     expected = os.path.join(path, "contigs.fa")
     assert os.path.isfile(expected)
+
+
+def test_short_read_assembler_with_missing_input_file():
+    from biobox_cli.exception import InputFileNotFound
+
+    path = tempfile.mkdtemp()
+    args = create_args(path)
+    args[4] = '--input={}/missing-file'.format(path)
+    with pytest.raises(InputFileNotFound) as excp:
+        biobox.run(args)
