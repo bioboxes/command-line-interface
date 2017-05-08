@@ -9,10 +9,10 @@ import biobox_cli.util.error as error
 import dockerpty             as pty
 
 def exit_if_no_image_available(image):
-    from biobox.exception import NoImageFound
+    from docker.errors import NotFound
     try:
         avail.get_image(image)
-    except NoImageFound:
+    except NotFound:
         error.err_exit('unknown_image', {'image': image})
 
 def create_tty(image, tty, volumes = []):
