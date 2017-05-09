@@ -23,6 +23,9 @@ from biobox_cli.biobox_helper import Biobox
 
 class Assembler_Benchmark(Biobox):
 
+    def validate_inputs(self, opts):
+        pass
+
     def copy_result_files(self, biobox_output_dir, dst):
         import shutil
         output_files = os.listdir(biobox_output_dir)
