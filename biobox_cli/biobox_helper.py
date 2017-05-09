@@ -36,15 +36,24 @@ class Biobox:
         pass
 
 
-    def run(self, argv):
+    def parse_opts(self, argv):
+        """
+        Parse the ARGV list or arguments into a map of options. Check inputs are
+        valid where necessary.
+        """
         doc = inspect.getdoc(inspect.getmodule(self))
         opts = util.parse_docopt(doc, argv, False)
-        task        = opts['--task']
-        image       = opts['<image>']
-        output      = opts['--output']
 
         # Check the given inputs are valid
         self.validate_inputs(opts)
+        return opts
+
+
+    def run(self, argv):
+        opts = self.parse_opts(argv)
+        task        = opts['--task']
+        image       = opts['<image>']
+        output      = opts['--output']
 
         # Check the image exists
         ctn.exit_if_no_image_available(image)

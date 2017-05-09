@@ -2,6 +2,8 @@ import pytest, tempfile, os.path
 import helper
 import biobox_cli.command.run as biobox
 
+from biobox_cli.biobox_type.short_read_assembler import Assembler as interface
+
 def create_args(output):
     return ["run",
             "short_read_assembler",
@@ -20,7 +22,8 @@ def test_short_read_assembler():
 
 
 def test_short_read_assembler_with_missing_input_file():
+    from biobox_cli.exception import InputFileNotFound
     args = create_args(tempfile.mkdtemp())
-    args[5] = '--input=missing-file'
-    with pytest.raises(SystemExit) as excp:
-        biobox.run(args)
+    args[4] = '--input=missing-file'
+    with pytest.raises(InputFileNotFound) as excp:
+        interface().parse_opts(args)

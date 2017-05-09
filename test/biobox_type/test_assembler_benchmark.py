@@ -2,6 +2,8 @@ import pytest, tempfile, os.path
 import helper
 import biobox_cli.command.run as biobox
 
+from biobox_cli.biobox_type.assembler_benchmark import AssemblerBenchmark as interface
+
 def create_args(output):
     return ["run",
             "assembler_benchmark",
@@ -36,3 +38,11 @@ def test_assembly_benchmark_with_no_refs():
     biobox.run(args)
     expected = os.path.join(path, "biobox.yaml")
     assert os.path.isfile(expected)
+
+
+def test_assembly_benchmark_with_missing_input_file():
+    from biobox_cli.exception import InputFileNotFound
+    args = create_args(tempfile.mkdtemp())
+    args[4] = '--input-fasta=missing-file'
+    with pytest.raises(InputFileNotFound) as excp:
+        interface().parse_opts(args)

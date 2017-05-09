@@ -89,7 +89,7 @@ def step_impl(context, code):
 @then(u'the {stream} should contain')
 def step_impl(context, stream):
     output = get_stream(context, stream)
-    assert context.text in output
+    assert context.text in output, "'{}' not found in '{}'".format(context.text, output)
 
 @then(u'the {stream} should equal')
 def step_impl(context, stream):

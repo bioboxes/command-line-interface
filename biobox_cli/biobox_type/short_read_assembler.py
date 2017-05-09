@@ -14,20 +14,16 @@ Options:
 -m=MEM, --memory=MEM      RAM that should be used
 """
 
-import biobox_cli.biobox_file as fle
-from biobox_cli.biobox_helper import Biobox
-
 import os
+import biobox_cli.biobox_file as fle
+import biobox_cli.util.check  as check
+
+from biobox_cli.biobox_helper import Biobox
 
 class Assembler(Biobox):
 
     def validate_inputs(self, opts):
-        from biobox_cli.exception import InputFileNotFound
-        input_file = os.path.abspath(opts['--input'])
-        if not os.path.isfile(input_file):
-            msg = "Given input file does not exist: {}"
-            raise InputFileNotFound(msg.format(input_file))
-
+        check.is_a_valid_file(opts['--input'])
 
     def copy_contigs_file(self,biobox_output_dir, biobox_output, dst):
         contigs = biobox_output['arguments'][0]['fasta'][0]['value']

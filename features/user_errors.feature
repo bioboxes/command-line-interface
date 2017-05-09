@@ -20,17 +20,17 @@ Feature: Providing useful errors to a user when they run the tool incorrectly
       | unknown |
 
 
-  Scenario: Trying to run short read assembly when the input file does not exist
+  Scenario Outline: Trying to run a biobox when the required input files do not exist
     When I run the command:
       """
       biobox \
         run \
-        short_read_assembler \
+        <type> \
         bioboxes/crash-test-biobox \
-        --task=short-read-assembler \
+        --task=<task> \
         --no-rm \
-        --input=missing-file \
-        --output=contigs.fa
+        --<arg>=missing-file \
+        --output=output
       """
     Then the stdout should be empty
     And the exit code should be 1
@@ -38,6 +38,11 @@ Feature: Providing useful errors to a user when they run the tool incorrectly
       """
       Given input file does not exist:
       """
+
+    Examples:
+      | type                 | task                 | arg         |
+      | short_read_assembler | short-read-assembler | input       |
+      | assembler_benchmark  | quast                | input-fasta |
 
 
   Scenario Outline: Trying to use an unknown biobox type
@@ -63,6 +68,9 @@ Feature: Providing useful errors to a user when they run the tool incorrectly
 
   @internet
   Scenario Outline: Trying to use an unknown biobox image
+    Given I copy the example data files:
+      | source                                         | dest        |
+      | short_read_assembler/genome_paired_reads.fq.gz | reads.fq.gz |
     When I run the command:
       """
       biobox <command> <type> bioboxes/unknown <args>

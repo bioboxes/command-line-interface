@@ -5,9 +5,9 @@ Usage:
 Options:
 -h, --help                     Show this screen.
 -v, --version                  Show version.
--f FILE, --input-fasta=FILE    Source FASTA file (Optional)
--i DIR, --input-ref=DIR        Source directory containing reference fasta files
--o DIR, --output=DIR            Destination output directory
+-f FILE, --input-fasta=FILE    Source FASTA file
+-i DIR, --input-ref=DIR        Source directory containing reference fasta files  (Optional)
+-o DIR, --output=DIR           Destination output directory
 -t TASK, --task=TASK           Optionally specify a biobox task to run [default: default]
 -r, --no-rm                    Don't remove the container after the process finishes
 -c=CPU, --cpu-shares=CPU       CPU shares (relative weight)
@@ -15,16 +15,18 @@ Options:
 -m=MEM, --memory=MEM           RAM that should be used
 """
 
+import os
 import biobox.image.volume    as vol
 import biobox_cli.biobox_file as fle
+import biobox_cli.util.check  as check
 
-import os
 from biobox_cli.biobox_helper import Biobox
 
-class Assembler_Benchmark(Biobox):
+class AssemblerBenchmark(Biobox):
 
     def validate_inputs(self, opts):
-        pass
+        check.is_a_valid_file(opts['--input-fasta'])
+
 
     def copy_result_files(self, biobox_output_dir, dst):
         import shutil
