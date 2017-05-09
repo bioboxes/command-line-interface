@@ -3,8 +3,6 @@ version := $(shell $(path) python setup.py --version)
 name    := $(shell $(path) python setup.py --name)
 dist    := dist/$(name)-$(version).tar.gz
 
-verifier-image := test-verify
-
 NO_COLOR=\x1b[0m
 OK_COLOR=\x1b[32;01m
 ERROR_COLOR=\x1b[31;01m
@@ -98,7 +96,6 @@ bootstrap: .images tmp/tests
 
 .images: $(shell find images -name "*")
 	docker pull bioboxes/crash-test-biobox@sha256:fdfdda8192dd919e6cac37366784ec8cfbf52c6fec53fe942a7f1940bd7642e8
-	docker build --tag $(verifier-image) images/$(verifier-image)
 	touch $@
 
 # Docker cannot access directories outside of the user home directory on OSX.
