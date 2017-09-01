@@ -39,6 +39,11 @@ def extract_file(file, out):
 def step_impl(context, directory):
     os.makedirs(get_env_path(context, directory))
 
+@given(u'I download the file "{link}" to "{dest}"')
+def step_impl(context, link, dest):
+    normalized_dest = get_env_path(context, dest)
+    download_file(link, normalized_dest)
+
 @given(u'I download and extract the file "{link}" to "{dest}"')
 def step_impl(context, link, dest):
     normalized_dest = get_env_path(context, dest)

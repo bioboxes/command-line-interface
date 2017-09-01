@@ -13,6 +13,7 @@ Available Biobox types:
   assembler_benchmark   Benchmark short reads assembler
   profiling             Profile short reads
   profiling_benchmark   Benchmark profiling tools
+  unsupervised_binning_benchmark  Benchmark unsupervised binning tools
 """
 
 
